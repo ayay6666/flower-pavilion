@@ -2,7 +2,8 @@
 <title>花信小筑</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: one-screen game. A living sky-and-meadow scene sits behind everything; the garden beds
    stand directly on the meadow, the other rooms are jade-glass sheets, a tab rail runs along the bottom. */
@@ -993,6 +994,24 @@ button:disabled:hover{transform:none}
 @media(max-width:600px){.top .brand .logo{font-size:20px}.dlg-actions{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}.dlg-actions .btn{width:100%}.action-bar{width:calc(100% - 24px)}.talk{padding-top:40px}}
 
 @media (max-width:760px){#v-studio .trayw{order:-1;margin:0 0 8px}#v-studio .st-head .h-sub{display:none}#v-studio .st-head{margin-bottom:8px}#v-studio .stagew{width:min(100%,calc((100vh - 470px)*.93))}}
+
+/* ---------- v14: phone studio / wild card / wide garden / tutorial chip ---------- */
+@media (max-width:760px){
+  #v-studio .studio-actions{position:static;transform:none;width:100%;min-height:64px;margin:10px 0 0}
+  #v-studio{padding-bottom:calc(var(--dock-room) + 20px)}
+  #v-studio .stagew{width:min(100%,calc((100vh - 400px)*.93));width:min(100%,calc((100dvh - 400px)*.93))}
+}
+@media (max-width:600px){
+  #v-wild .wstart .finds{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #v-wild .wstart .finds small{display:none}
+  #v-wild .wstart{max-height:calc(63% - 84px)}
+}
+.plots{width:min(100%,640px,max(260px,calc((100vh - 400px)*1.12)));width:min(100%,640px,max(260px,calc((100dvh - 400px)*1.12)))}
+@media (min-width:760px) and (min-aspect-ratio:11/10){
+  .plots{grid-template-columns:repeat(6,1fr);width:min(100%,900px,max(420px,calc((100vh - 380px)*2.5)));width:min(100%,900px,max(420px,calc((100dvh - 380px)*2.5)))}
+}
+.hint .tut{display:inline-block;margin-right:8px;padding:0 8px;border-radius:99px;background:var(--rouge);color:#fff6e4;font-size:11.5px;font-weight:600;line-height:20px;letter-spacing:.04em;white-space:nowrap;vertical-align:1px}
+.save-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
 /* walker: six hand-painted walk frames, no cut-out parts */
 .wj-walker{aspect-ratio:177/300;height:max(100px,26%)}
 .wj-walker .wk{position:absolute;inset:0;background:url("assets/walk.webp") 40% 0/600% 100% no-repeat;pointer-events:none}
@@ -1203,7 +1222,8 @@ const VASES={
   extra:'<g stroke="#8a6440" stroke-width="1.6" fill="none" opacity=".6"><path d="M142,412Q200,424 258,412"/><path d="M146,430Q200,442 254,430"/><path d="M151,448Q200,459 249,448"/><path d="M156,464Q200,473 244,464"/><path d="M165,400L176,478M190,402L194,478M210,402L206,478M235,400L224,478"/></g>'}
 };
 const BGS=[{n:'月白',w:['#f1f4f1','#dde6e3'],tb:'#c7b7a4',dot:'#e6ece9'},{n:'宣纸',w:['#f3ecdc','#e6dcc6'],tb:'#b9a58c',dot:'#ece3cf'},{n:'藕荷',w:['#f0e3ea','#dccbd8'],tb:'#bfa79c',dot:'#e3d2de'},{n:'黛青',w:['#48626c','#2c424d'],tb:'#6d5848',dot:'#3a525d',dk:1},{n:'玄墨',w:['#33313c','#1d1c24'],tb:'#4d403c',dot:'#27262e',dk:1}];
-const XP=[0,20,55,110,190,300,450,650,900,1250],LANDP=[0,0,0,0,0,0,80,150,260,400,600,900];
+const XP=[0,20,55,110,190,300,450,650,900,1250],MAXLV=40,LANDP=[0,0,0,0,0,0,80,150,260,400,600,900];
+for(let i=10;i<MAXLV;i++)XP.push(XP[i-1]+350+(i-9)*50);
 const WATER=75000,DAY=480;
 
 /* ================= svg drawing ================= */
@@ -1391,16 +1411,29 @@ function load(d){S=fresh();let o=d;if(!o){try{o=JSON.parse(localStorage.getItem(
   if(o&&o.dew===undefined&&o.fert)S.dew=o.fert;S.pots=(S.pots||[]).filter(q=>q&&q.r);S.pots.forEach(q=>VASES[q.id]=potVase(q));S.vases=S.vases.filter(v=>VASES[v]);
   if(!FORMS[S.form])S.form='free';S.rec=S.rec||{};S.kx=S.kx||0;
   S.plots=S.plots.map(p=>p&&F[p.id]?p:null);S.arr=S.arr.filter(s=>F[s.id]);if(!VASES[S.vase])S.vase='white'}
-let saveT;function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}},250)}
+let saveT,saveFail=false,stale=false;
+function writeSave(){if(stale)return;S.seen=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));saveFail=false}catch(e){if(!saveFail){saveFail=true;toast('存档没能写入：请到手账的「心愿」页导出一份备份')}}}
+function save(){clearTimeout(saveT);saveT=setTimeout(writeSave,250)}
+function exportSave(){S.seen=Date.now();const d=new Date(),ymd=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  try{const u=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download=`花信小筑-存档-${ymd}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('存档已导出，请收好这个文件')}catch(e){toast('导出没有成功，换个浏览器再试试')}}
+let importText='';
+function importSave(){const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
+  inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;if(f.size>5e6)return toast('这个文件太大，不像是存档');const rd=new FileReader();
+    rd.onload=()=>{let o=null;try{o=JSON.parse(rd.result)}catch(e){}
+      if(!o||typeof o!=='object'||!Array.isArray(o.plots)||typeof o.coins!=='number'||!o.seeds||typeof o.seeds!=='object')return toast('这不是花信小筑的存档文件');
+      importText=JSON.stringify(o);const lv=(()=>{let l=1;for(let i=1;i<XP.length;i++)if((o.exp||0)>=XP[i])l=i+1;return l})();
+      modal(`<div class="center"><h2 class="h-title" style="justify-content:center">导入存档</h2><p class="say">文件里是一座 Lv.${lv} 的小院，有 ${Math.round(o.coins)} 花币。<br>导入后会<b>覆盖</b>现在的小院，无法撤回。</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">取消</button><button class="btn primary" data-act="doImport">覆盖并导入</button></div></div>`)};
+    rd.readAsText(f)};inp.click()}
+function doImport(){if(!importText)return;clearTimeout(saveT);try{localStorage.setItem(KEY,importText);stale=true;location.reload()}catch(e){toast('导入没有成功：浏览器不让写入存档')}}
 const level=()=>{let l=1;for(let i=1;i<XP.length;i++)if(S.exp>=XP[i])l=i+1;return l};
 const plotCount=()=>S.land||6;
 const unlockLv=i=>i<6?1:i-4;
-function addExp(n){const b=level();S.exp+=Math.round(n);const a=level();if(a>b){toast(`升至 Lv.${a}，花铺上新`);sfx('rare')}hud()}
+function addExp(n){const b=level();S.exp+=Math.round(n);const a=level();if(a>b){if(a>8){const c=a*15;S.coins+=c;S.dew++;S.bfly++;toast(`升至 Lv.${a}，乡邻送来贺礼：${c} 花币，露水与蝴蝶各一`)}else toast(`升至 Lv.${a}，花铺上新`);sfx('rare')}hud()}
 function gotSeed(id,n=1){S.seeds[id]=(S.seeds[id]||0)+n;if(!S.codex[id])S.codex[id]=1}
 
 /* ================= ui helpers ================= */
 function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;$('#toasts').appendChild(e);setTimeout(()=>e.remove(),3300);while($('#toasts').children.length>3)$('#toasts').firstChild.remove()}
-function modal(html,wide,options={}){
+function modal(html,wide,options={}){if(stale)return;
   const m=$('#modal');m.innerHTML=`<div class="dialog${wide?' wide':''}" role="dialog" aria-modal="true">${html}</div>`;
   const d=$('.dialog',m),seedChoice=!!$('[data-act="plant"]',d);
   const actions=$$('[data-act]',d).filter(b=>b.dataset.act!=='plant'&&!b.hasAttribute('data-o'));
@@ -1426,7 +1459,7 @@ function modal(html,wide,options={}){
   }
   m.hidden=false;
 }
-function closeModal(){$('#modal').hidden=true;$('#modal').innerHTML=''}
+function closeModal(){if(stale)return;$('#modal').hidden=true;$('#modal').innerHTML=''}
 const price=n=>`<span class="price"><i class="coin"></i>${n}</span>`;
 const fmtT=t=>t<60?`${t} 秒`:`${Math.floor(t/60)} 分${t%60?` ${t%60} 秒`:''}`;
 const stars=n=>[0,1,2,3,4].map(i=>`<i style="--i:${i}">${i<n?'★':'☆'}</i>`).join('');
@@ -1520,7 +1553,7 @@ function plotClick(el){const i=+el.dataset.i,p=S.plots[i];
 function seedPicker(i){const ids=IDS.filter(id=>S.seeds[id]>0);
   if(!ids.length)return modal(`<h2 class="h-title">花种袋空了</h2><p class="h-sub">去花铺买些花种，或者等一阵花信风吹来。</p><div class="row"><button class="btn primary" data-act="goto" data-v="shop">去花铺</button><button class="btn" data-act="close">知道了</button></div>`);
   modal(`<h2 class="h-title">播下哪一粒？</h2><p class="h-sub">播种后记得浇水，土干了花就不长。</p><div class="grid">${ids.map(id=>{const f=F[id];return`<button class="card" data-act="plant" data-i="${i}" data-id="${id}">${icon(id)}<span class="nm">${f.n} ×${S.seeds[id]}</span><span class="meta">${fmtT(f.t)}开花</span><span class="rar r${f.r}">${RAR[f.r]}</span></button>`}).join('')}</div><div class="row" style="margin-top:12px"><button class="btn" data-act="close">先不种</button></div>`,true)}
-function plant(i,id){if(!(S.seeds[id]>0)||S.plots[i])return;S.seeds[id]--;const now=Date.now();S.plots[i]={id,p:0,wu:now,lt:now,fert:0,care:100,seed:rint(1,9999)};closeModal();sfx('plant');refreshPlots();hints();save()}
+function plant(i,id){if(!(S.seeds[id]>0)||S.plots[i])return;S.seeds[id]--;const now=Date.now();S.plots[i]={id,p:0,wu:now,lt:now,fert:0,care:100,seed:rint(1,9999)};closeModal();sfx('plant');refreshPlots();hints();save();preloadStems()}
 function harvest(i,el){const p=S.plots[i],f=F[p.id],g=gradeOf(p),n=Math.max(1,(f.r===0?rint(2,3):f.r===1?2:rint(1,2))+(g===2?1:g===0?-1:0));
   S.cut[p.id]=(S.cut[p.id]||0)+n;let msg=`${'下中上'[g]}品 ${f.n} +${n}`;S.best[p.id]=Math.max(S.best[p.id]||0,g+1);
   if(g>0&&Math.random()<[.35,.4,.45,.55][f.r]+(g===2?.25:0)){const sid=Math.random()<.1?pick(VARS[baseOf(p.id)]):p.id;gotSeed(sid);msg+=sid===p.id?' · 花种 +1':` · ${F[sid].n}花种`}
@@ -1536,7 +1569,7 @@ function spawnWind(){if($('.windseed'))return;const b=document.createElement('bu
     let id=pick(pool);if(Math.random()<.3)id=pick(VARS[id]);gotSeed(id);toast(`一阵花信风，带来了「${F[id].n}」的花种`);sfx(F[id].r?'rare':'coin');hints();save()};
   b.addEventListener('animationend',()=>b.remove());setTimeout(()=>b.remove(),17000);$('#v-garden').appendChild(b)}
 const IDLE=['等一阵花信风来，抓住飘过的花种','不同的花授粉，能育出花铺买不到的品种','花谱里记着每种花的花语和亲本','雨后有彩虹，彩虹下授粉必定结籽','夜里的萤火虫也喜欢花'];
-function hints(){const now=Date.now(),ps=S.plots.filter(Boolean),seeds=IDS.some(id=>S.seeds[id]>0),cut=IDS.reduce((a,id)=>a+(S.cut[id]||0),0);let t;
+function hints(){const now=Date.now(),ps=S.plots.filter(Boolean),seeds=IDS.some(id=>S.seeds[id]>0),cut=IDS.reduce((a,id)=>a+(S.cut[id]||0),0);let t,idle=false;
   const bl=ps.filter(p=>p.p>=F[p.id].t&&!p.pol).length;
   if(fertMode)t='露水：轻点一株生长中的花，滴一滴露水';
   else if(!polMode&&ps.some(p=>p.pest))t='花畦里长了杂草，或来了小蜗牛：点「照料」一次就能清理干净';
@@ -1547,8 +1580,10 @@ function hints(){const now=Date.now(),ps=S.plots.filter(Boolean),seeds=IDS.some(
   else if(!ps.length&&seeds)t='轻点空花畦，播下一粒花种';
   else if(cut>=3&&!S.done)t='带着花枝去「花艺」，插一瓶花吧';
   else if(!ps.length&&!seeds&&!cut)t='去花铺买些花种，或等花信风送来';
-  else t=IDLE[Math.floor(now/15000)%IDLE.length];
-  const hint=$('#hint');hint.textContent=t;
+  else{t=IDLE[Math.floor(now/15000)%IDLE.length];idle=true}
+  let step=0;if(!S.done&&!fertMode&&!polMode){step=cut>=3||S.arr.length?4:ps.some(p=>p.p>=F[p.id].t)?3:ps.length?2:cut?3:1;
+    if(idle)t=step===4?'花枝够了：点下方的「花艺」，插第一瓶花':step===2?'等花慢慢长。土干了会冒出水滴，点「照料」浇水':step===3?'再种几株，攒够三枝花就能去插花':t}
+  const hint=$('#hint');hint.textContent=t;if(step){const b=document.createElement('b');b.className='tut';b.textContent=`新手 ${step}/4`;hint.prepend(b)}
   if(fertMode||polMode){const x=document.createElement('button');x.className='mode-exit';x.dataset.modeExit='1';x.textContent='✕ 退出';x.setAttribute('aria-label','退出当前模式');hint.appendChild(x)}
   $('#fertBtn').classList.toggle('on',fertMode);$('#polBtn').classList.toggle('on',polMode);
   $('#fertBtn').setAttribute('aria-pressed',String(fertMode));$('#polBtn').setAttribute('aria-pressed',String(polMode));
@@ -1630,7 +1665,8 @@ function scoreArr(st,w){
   const sw=wt.reduce((a,b)=>a+b,0),dx=g.reduce((a,p,i)=>a+wt[i]*(p.x-e.cx),0)/sw,as=g.map(p=>p.a),spread=Math.max(...as)-Math.min(...as),nf=fs.filter(f=>f.role==='主').length;
   const qe=1-clamp((Math.abs(dx)-35)/70,0,1),qf=n<3?.5:clamp(spread/45,0,1),qg=nf%2===1||nf===0?1:.6,bal=20*(.5*qe+.3*qf+.2*qg);
   if(qf<.6)tips.push([bal/20,'花枝太拢，向两侧舒展开一些']);else if(qe<.6)tips.push([bal/20,'重心偏向一侧，在另一边添一枝呼应']);else if(qg<1)tips.push([bal/20,'主花取单数，更显自然']);
-  const parts=[sk,hi,den,color,bal].map(x=>Math.round(clamp(x,0,20))),total=parts.reduce((a,b)=>a+b,0);
+  const few=n<5?.55+.09*n:1;if(n>=3&&n<5)tips.push([few-.4,'花枝还少：再添一两枝，层次才立得起来']);
+  const parts=[sk,hi,den,color,bal].map(x=>Math.round(clamp(x,0,20)*few)),total=parts.reduce((a,b)=>a+b,0);
   tips.sort((a,b)=>a[0]-b[0]);
   const cnt={warm:0,cool:0,plain:0};fs.forEach(f=>cnt[f.fam]++);const tone=cnt.warm>n*.55?'warm':cnt.cool>n*.5?'cool':cnt.plain>n*.6?'plain':'mix';
   return{total,parts,tip:tips.length?tips[0][1]:`${ctip||'气韵生动'}，骨架清朗，是一瓶好花`,tone}}
@@ -1793,6 +1829,7 @@ function bind(){
   $('#snd').addEventListener('click',()=>{S.sound=!S.sound;if(S.sound){soundOn();toast('音乐已开')}else clearTimeout(AU.timer);hud();save()});
   document.addEventListener('pointerdown',()=>{if(S.sound&&!AU.ctx)soundOn()},{once:true});
   $('#modal').addEventListener('click',e=>{if(e.target.id==='modal'){$('#modal .dlg-x')?.click();return}const cv=e.target.closest('[data-cxv]');if(cv)return codexDetail(cv.dataset.cxv);const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+    if(a==='reload')return location.reload();if(a==='doImport')return doImport();
     if(a==='close')closeModal();else if(a==='goto'){closeModal();go(b.dataset.v)}
     else if(a==='plant')plant(+b.dataset.i,b.dataset.id);
     else if(a==='finish')finish(b.dataset.o?+b.dataset.o:null);
@@ -1827,7 +1864,7 @@ function bind(){
   $('#wild').addEventListener('click',e=>{if(e.target.closest('#walkGo'))startWalk();else if(e.target.closest('#walkEnd'))endWalk();
     else if(walk&&!e.target.closest('.wi')){let best=null,bd=72;$$('#witems .wi').forEach(w=>{const r=w.getBoundingClientRect(),d=Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2));if(d<bd){bd=d;best=w}});if(best)best.click()}});
   $('#folk').addEventListener('click',e=>{const b=e.target.closest('[data-folk]');if(b&&!b.disabled)folkDone(b.dataset.folk)});
-  $('#goals').addEventListener('click',e=>{const b=e.target.closest('[data-wish]');if(!b||b.disabled)return;const w=S.wishes.list[+b.dataset.wish];if(w.got)return;w.got=1;S.coins+=30;S.dew++;toast('心愿达成：30 花币，露水 +1');sfx('coin');hud();renderGoals();save()});
+  $('#goals').addEventListener('click',e=>{const sv=e.target.closest('[data-save]');if(sv)return sv.dataset.save==='export'?exportSave():importSave();const b=e.target.closest('[data-wish]');if(!b||b.disabled)return;const w=S.wishes.list[+b.dataset.wish];if(w.got)return;w.got=1;S.coins+=30;S.dew++;toast('心愿达成：30 花币，露水 +1');sfx('coin');hud();renderGoals();save()});
   $('#kiln').addEventListener('click',kilnClick);
   $('#kiln').addEventListener('pointerdown',e=>{if(e.target.closest('#ksvg')){kdrag=kilnPick(e);if(kdrag){kilnShape(e);e.preventDefault()}}});
   $('#kiln').addEventListener('pointermove',e=>{if(kdrag)kilnShape(e)});
@@ -1885,7 +1922,9 @@ function petalsFx(){const cv=$('#fx'),c=cv.getContext('2d');if(!c||matchMedia('(
   const mk=init=>({x:Math.random()*W-40,y:init?Math.random()*H:-20,s:4+Math.random()*5,vx:.15+Math.random()*.45,vy:.22+Math.random()*.4,a:Math.random()*6.28,va:(Math.random()-.5)*.03,ph:Math.random()*6.28,col:pick(['#f7c6d6','#fbe0e8','#ffffff','#f3b4c8'])});
   const ps=Array.from({length:14},()=>mk(true));
   burstFx=(x,y)=>{const r=cv.getBoundingClientRect();for(let k=0;k<9;k++){const q=mk(false),a=Math.random()*6.28,v=1.5+Math.random()*3;Object.assign(q,{x:x-r.left,y:y-r.top,bx:Math.cos(a)*v,by:Math.sin(a)*v-2,life:70});ps.push(q)}};
-  (function step(){if(!document.hidden){c.clearRect(0,0,W,H);if(raining){c.strokeStyle='rgba(222,236,246,.6)';c.lineWidth=1.2;c.beginPath();for(let i=0;i<80;i++){const x=Math.random()*W,y=Math.random()*H;c.moveTo(x,y);c.lineTo(x-5,y+17)}c.stroke()}for(let n=ps.length-1;n>=0;n--){const p=ps[n];if(p.life!==undefined){p.x+=p.bx;p.y+=p.by;p.bx*=.95;p.by=p.by*.95+.12;p.a+=p.va*4;if(--p.life<=0){ps.splice(n,1);continue}}else{p.ph+=.012;p.x+=p.vx+Math.sin(p.ph)*.4;p.y+=p.vy;p.a+=p.va;if(p.y>H+20||p.x>W+20)Object.assign(p,mk(false))}
+  let fxView='',fxOff=false;
+  (function step(){if(view!==fxView){fxView=view;const el=$('#v-'+view);fxOff=view==='wild'||(!!el&&getComputedStyle(el).backgroundImage!=='none');c.clearRect(0,0,W,H)}
+    if(!document.hidden&&!fxOff){c.clearRect(0,0,W,H);if(raining){c.strokeStyle='rgba(222,236,246,.6)';c.lineWidth=1.2;c.beginPath();for(let i=0;i<80;i++){const x=Math.random()*W,y=Math.random()*H;c.moveTo(x,y);c.lineTo(x-5,y+17)}c.stroke()}for(let n=ps.length-1;n>=0;n--){const p=ps[n];if(p.life!==undefined){p.x+=p.bx;p.y+=p.by;p.bx*=.95;p.by=p.by*.95+.12;p.a+=p.va*4;if(--p.life<=0){ps.splice(n,1);continue}}else{p.ph+=.012;p.x+=p.vx+Math.sin(p.ph)*.4;p.y+=p.vy;p.a+=p.va;if(p.y>H+20||p.x>W+20)Object.assign(p,mk(false))}
       c.save();c.translate(p.x,p.y);c.rotate(p.a);c.globalAlpha=p.life!==undefined?Math.min(.9,p.life/30):.75;c.fillStyle=p.col;c.beginPath();c.moveTo(0,-p.s);c.bezierCurveTo(p.s*.8,-p.s*.6,p.s*.6,p.s*.7,0,p.s);c.bezierCurveTo(-p.s*.6,p.s*.7,-p.s*.8,-p.s*.6,0,-p.s);c.fill();c.restore()}}
     requestAnimationFrame(step)})()}
 function tick(){sky();const now=Date.now(),app=$('#app');
@@ -2019,13 +2058,14 @@ function openTalk(id,quiet){talkId=id;const c=FOLK.find(x=>x.id===id),st=fstep(c
 
 /* ----- wishes & badges ----- */
 const WISH=[['harv',4,'采下 4 枝花'],['water',5,'浇 5 次水'],['pol',1,'请蝴蝶授粉 1 次'],['works',1,'完成 1 件插花'],['walk',1,'去山野散步 1 次'],['bfly',2,'带回 2 只蝴蝶'],['orders',1,'交付 1 张花笺'],['dewc',3,'收集 3 滴露水'],['tend',3,'除 3 次杂草或小虫']];
-const BADGE=[['b1','初绽','第一次种到开花',()=>blooms()>=1],['b2','识花','种开 10 种花',()=>blooms()>=10],['b3','群芳','种开所有的花',()=>blooms()>=BASE.length],['b4','红娘','第一次育出新品种',()=>S.st.hyb>=1],['b5','育种','育出 6 个新品种',()=>S.st.hyb>=6],['b6','妙手','一件作品拿到五星',()=>S.st.five>=1],['b7','清供','完成 10 件插花',()=>S.st.works>=10],['b8','山客','去山野散步 8 次',()=>S.st.walk>=8],['b9','扑蝶','带回 15 只蝴蝶',()=>S.st.bfly>=15],['b10','窑火','烧出第一件陶器',()=>S.st.pots>=1],['b11','知己','与一位乡邻成为知己',()=>Object.values(S.folk).some(x=>x>=4)],['b12','院主','等级达到 10',()=>level()>=10],['b14','百色','种开 30 种花色',()=>IDS.filter(id=>S.codex[id]===2).length>=30],['b13','上品','种出 10 种上品花',()=>Object.values(S.best).filter(x=>x===3).length>=10]];
+const BADGE=[['b1','初绽','第一次种到开花',()=>blooms()>=1],['b2','识花','种开 10 种花',()=>blooms()>=10],['b3','群芳','种开所有的花',()=>blooms()>=BASE.length],['b4','红娘','第一次育出新品种',()=>S.st.hyb>=1],['b5','育种','育出 6 个新品种',()=>S.st.hyb>=6],['b6','妙手','一件作品拿到五星',()=>S.st.five>=1],['b7','清供','完成 10 件插花',()=>S.st.works>=10],['b8','山客','去山野散步 8 次',()=>S.st.walk>=8],['b9','扑蝶','带回 15 只蝴蝶',()=>S.st.bfly>=15],['b10','窑火','烧出第一件陶器',()=>S.st.pots>=1],['b11','知己','与一位乡邻成为知己',()=>Object.values(S.folk).some(x=>x>=4)],['b12','院主','等级达到 10',()=>level()>=10],['b15','山长','等级达到 20',()=>level()>=20],['b14','百色','种开 30 种花色',()=>IDS.filter(id=>S.codex[id]===2).length>=30],['b13','上品','种出 10 种上品花',()=>Object.values(S.best).filter(x=>x===3).length>=10]];
 const dayNo=()=>Math.floor(((Date.now()-S.t0)/1000+34)/DAY);
 function ensureWishes(){const d=dayNo();if(!S.wishes||S.wishes.d!==d)S.wishes={d,list:[...WISH].sort(()=>Math.random()-.5).slice(0,3).map(w=>({k:w[0],n:w[1],t:w[2],base:S.st[w[0]]||0,got:0}))}}
 function checkBadges(){for(const b of BADGE)if(!S.badges[b[0]]&&b[3]()){S.badges[b[0]]=1;S.coins+=40;toast(`获得徽章「${b[1]}」，贺礼 40 花币`);hud()}}
 function renderGoals(){ensureWishes();
   $('#goals').innerHTML=subHead('goals')+`<h2 class="h-title">心愿</h2><p class="h-sub">每天三件小事，做不做都好。天亮了会换新的。</p><div class="wishes">${S.wishes.list.map((x,i)=>{const v=clamp((S.st[x.k]||0)-x.base,0,x.n),done=v>=x.n;return`<div class="wish${x.got?' got':''}"><div><b>${x.t}</b><div class="wbar"><i style="width:${v/x.n*100}%"></i></div></div>${x.got?'<span class="muted">已领</span>':`<button class="btn sm green" data-wish="${i}"${done?'':' disabled'}>${done?'领取':`${v} / ${x.n}`}</button>`}</div>`}).join('')}</div>
-  <h3 class="sec">徽章</h3><div class="bdgs">${BADGE.map(b=>`<div class="bdg${S.badges[b[0]]?' on':''}"><i>${b[1][0]}</i><b>${b[1]}</b><small>${b[2]}</small></div>`).join('')}</div>`}
+  <h3 class="sec">徽章</h3><div class="bdgs">${BADGE.map(b=>`<div class="bdg${S.badges[b[0]]?' on':''}"><i>${b[1][0]}</i><b>${b[1]}</b><small>${b[2]}</small></div>`).join('')}</div>
+  <h3 class="sec">存档</h3><p class="h-sub">存档只留在这台设备的浏览器里。清理浏览器数据或换设备之前，先导出一份。</p><div class="save-row"><button class="btn" data-save="export">导出存档</button><button class="btn" data-save="import">导入存档</button></div>`}
 
 /* ----- pottery ----- */
 const GLAZE=[['月白','#f3f1ea'],['天青','#bcd9d2'],['粉青','#a9cdb4'],['霁蓝','#2f4f9c'],['胭脂','#c9566f'],['茶末','#7d7f4a'],['乌金','#2b2a30'],['素烧','#c98f6a']],PIG=[['青花','#27408b'],['赭石','#8a4b2a'],['描金','#c9a13a'],['白彩','#ffffff'],['墨','#222222']],MOTIF=[['none','素面'],['bands','弦纹'],['wave','水波'],['dots','梅点'],['vine','缠枝']];
@@ -2142,15 +2182,29 @@ $('#hint').addEventListener('click',e=>{if(e.target.closest('[data-mode-exit]'))
 stemMid=function(s,e){const b=sbase(s,e),dx=s.x-b[0],dy=s.y-b[1],len=Math.hypot(dx,dy)||1,a=Math.atan2(dx,-dy),q=-(s.bow||0)*len/7;
   return[(b[0]+s.x)/2+Math.cos(a)*q,(b[1]+s.y)/2+Math.sin(a)*q,b,len,a]};
 
+/* ================= away report & sprite preload ================= */
+function awayReport(){const now=Date.now(),away=S.seen?now-S.seen:0;if(!S.intro||away<180000)return'';let nb=0,nd=0;
+  S.plots.forEach((q,i)=>{if(!q||i>=plotCount())return;const t=F[q.id].t,was=q.p>=t;grow(q,now);if(!was&&q.p>=t)nb++;else if(q.p<t&&q.wu<=now)nd++});
+  if(!nb&&!nd)return'';const m=Math.round(away/60000),dur=m>=1440?`${Math.floor(m/1440)} 天`:m>=60?`${Math.floor(m/60)} 小时`:`${m} 分钟`;
+  return`<div class="center"><h2 class="h-title" style="justify-content:center">小院近况</h2><p class="say">你离开了约 ${dur}。${nb?`<br>这段时间开了 <b>${nb}</b> 朵花，等你来采。`:''}${nd?`<br>有 <b>${nd}</b> 块花畦土干了，长得慢了些，浇浇水吧。`:''}</p><button class="btn primary" data-act="close">好的</button></div>`}
+const preDone=new Set();
+function preloadStems(){const ids=new Set([...IDS.filter(id=>S.cut[id]>0),...S.arr.map(s=>s.id),...S.plots.filter(Boolean).map(p=>p.id)]),urls=[];
+  ids.forEach(id=>{if(preDone.has(id))return;preDone.add(id);const g=sgOf(id);if(!g)return;if(F[id].type==='head')g.forEach((_,k)=>urls.push(`assets/st/${id}_${k}.webp`));else urls.push(`assets/st/${id}.webp`)});
+  const run=()=>{const u=urls.shift();if(!u)return;const im=new Image();im.onload=im.onerror=run;im.src=u};run();run()}
+
 /* ================= boot ================= */
 function start(data){
-  load(data&&data.S);buildDefs();addPotDefs();buildScene();bind();if(S.hire)S.plots.forEach(q=>{if(q){const u=Math.min(Date.now(),S.hire);if(u>q.lt){q.wu=Math.max(q.wu,u+waterMs(q));q.pest=null}}});ensureWishes();syncStory();fillOrders();renderGarden();hud();sky();go('garden');petalsFx();
+  load(data&&data.S);buildDefs();addPotDefs();buildScene();bind();if(S.hire)S.plots.forEach(q=>{if(q){const u=Math.min(Date.now(),S.hire);if(u>q.lt){q.wu=Math.max(q.wu,u+waterMs(q));q.pest=null}}});const awayMsg=awayReport();ensureWishes();syncStory();fillOrders();renderGarden();hud();sky();go('garden');petalsFx();setTimeout(preloadStems,1500);
   addEventListener('resize',()=>{$('#gnd').width=0;if(view==='town'){$('#app').style.setProperty('--hz',Math.round(innerHeight*.4)+'px');paintGround()}else layoutScene()});setTimeout(layoutScene,400);
-  setInterval(tick,1000);setInterval(save,15000);
-  document.addEventListener('visibilitychange',()=>{if(document.hidden){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}});
+  setInterval(()=>{if(!stale)tick()},1000);setInterval(save,15000);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(saveT);writeSave()}});
+  const bootT=Date.now();
+  addEventListener('storage',e=>{if(e.key!==KEY||stale||e.newValue===null||Date.now()-bootT<2500)return;clearTimeout(saveT);
+    modal(`<div class="center"><h2 class="h-title" style="justify-content:center">小院在别处开着</h2><p class="say">另一个窗口正在照看这座小院。为免两边的存档互相覆盖，这个窗口先歇下了。</p><button class="btn primary" data-act="reload">在这里继续</button></div>`,false,{dismissible:false});stale=true});
   window.claude?.hot?.snapshot?.(()=>({S}));
+  if(S.intro&&awayMsg)modal(awayMsg);
   if(!S.intro)modal(`<div class="center"><img class="splash" src="assets/splash.webp" width="900" height="600" alt="" draggable="false"><h2 class="logo big" style="font-size:40px;margin:4px 0">${[...'花信小筑'].map((c,i)=>`<span style="--i:${i}">${c}</span>`).join('')}</h2><p class="muted" style="margin:0">风有信，花不误。一方小院，四时花开。</p></div>
-   <ul class="steps"><li><b>种花</b>　轻点空花畦播种，土干了就浇水，慢慢等它抽芽、含苞、盛开。</li><li><b>照料</b>　花畦里会长杂草、来小蜗牛，轻点清理；照料得好，能开出上品。</li><li><b>育种</b>　请蝴蝶为两朵盛开的花授粉，育出花铺买不到的品种。</li><li><b>插花</b>　先立主、副、客三枝定骨架，再配色补空；作品装裱成立轴。</li><li><b>闲逛</b>　去山野散步，和乡邻来往，慢慢会有陶坊。不赶时间。</li></ul>
+   <p class="say" style="text-align:center;margin:12px 0 4px">跟着顶上的提示一步步来：<b>播种 → 照料 → 采花 → 插花</b>。<br>授粉育种、山野散步、乡邻往来，之后慢慢都会遇到。不赶时间。</p>
    <div class="center"><button class="btn primary" data-act="start">推开院门</button></div>`);
 }
 if(window.claude?.hot?.ready)window.claude.hot.ready(start);else start(window.claude?.hot?.data??{});

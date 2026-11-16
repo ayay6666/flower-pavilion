@@ -1025,7 +1025,10 @@ button:disabled:hover{transform:none}
 .showbar{margin:0 0 14px}.showbar .btn{flex-shrink:0}
 .showworks{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}.showworks .work{padding:2px}
 .showart{width:min(100%,300px);margin-inline:auto}
-.season-note{margin:6px 0 0}
+.season-card{display:flex;gap:12px;align-items:center;margin:8px 0 2px;padding:8px;border-radius:12px;background:rgba(249,243,229,.94);border:1px solid var(--line);box-shadow:0 2px 6px rgba(64,45,25,.1);font-size:14px;line-height:1.6}
+.season-card img{width:min(42%,150px);height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:8px;flex-shrink:0}
+.season-card b{font-family:var(--f-display);font-size:18px;font-weight:400;letter-spacing:.06em}
+.season-card small{display:block;margin-top:2px;color:var(--ink-soft);font-size:12px;line-height:1.5}
 /* ---------- v15: phone first ---------- */
 html,body{overscroll-behavior:none}
 body{touch-action:manipulation}
@@ -1243,7 +1246,7 @@ const WATER=75000,DAY=480;
 const TERMS=[[1,5,'小寒','plum'],[1,20,'大寒','camellia'],[2,4,'立春','magnolia'],[2,19,'雨水','cherry'],[3,5,'惊蛰','peach'],[3,20,'春分','tulip'],[4,4,'清明','anemone'],[4,20,'谷雨','peony'],
  [5,5,'立夏','paeonia'],[5,21,'小满','rose'],[6,5,'芒种','lilyvalley'],[6,21,'夏至','lotus'],[7,7,'小暑','jasmine'],[7,22,'大暑','waterlily'],[8,7,'立秋','sunflower'],[8,23,'处暑','platy'],
  [9,7,'白露','cosmos'],[9,23,'秋分','calendula'],[10,8,'寒露','dahlia'],[10,23,'霜降','daisy'],[11,7,'立冬','gypso'],[11,22,'小雪','lily'],[12,7,'大雪','cornflower'],[12,21,'冬至','carnation']];
-function term(){const d=new Date(),k=(d.getMonth()+1)*100+d.getDate();let t=TERMS[TERMS.length-1];for(const x of TERMS)if(x[0]*100+x[1]<=k)t=x;return{n:t[2],id:t[3]}}
+function term(){const d=new Date(),k=(d.getMonth()+1)*100+d.getDate();let t=TERMS[TERMS.length-1];for(const x of TERMS)if(x[0]*100+x[1]<=k)t=x;return{n:t[2],id:t[3],art:`assets/jq/${String(TERMS.indexOf(t)).padStart(2,'0')}.webp`}}
 const inSeason=id=>(F[id].base||id)===term().id,SEASON_GROW=1.3,SEASON_SELL=1.3;
 
 /* ================= svg drawing ================= */
@@ -1708,7 +1711,7 @@ function finish(ok){const sc=scoreArr(S.arr),name=($('#workName')?.value||'无�
 /* ================= shop / codex / gallery ================= */
 function renderShop(){const lv=level(),seeds=IDS.filter(id=>F[id].lv),sell=IDS.filter(id=>S.cut[id]>0);
   $('#shop').innerHTML=`<div class="keeper">${chibi('keep')}<p class="bubble">欢迎，慢慢看。等级越高，我进的花种越多；花枝、露水、陶土，我也都收。</p></div>
-  <p class="h-sub season-note">时令 · <b>${term().n}</b>：${F[term().id].n}当令。花种不限等级，长得快三成，入瓶售价加三成。</p>
+  <div class="season-card"><img src="${term().art}" width="720" height="480" alt="" draggable="false" onerror="this.remove()"><span><b>时令 · ${term().n}</b><br>${F[term().id].n}当令<small>花种不限等级 · 长得快三成 · 入瓶售价加三成</small></span></div>
   <h3 class="sec">花种</h3><div class="grid">${seeds.map(id=>{const f=F[id],ss=inSeason(id),lk=f.lv>lv&&!ss;return`<div class="card rr${lk?0:f.r}${lk?' seeded':''}">${ss?'<i class="top">当令</i>':''}${icon(id)}<span class="nm">${f.n}</span><span class="rar r${f.r}">${RAR[f.r]}</span><span class="meta">${fmtT(f.t)}开花 · 已有 ${S.seeds[id]||0}</span>${lk?`<span class="meta">Lv.${f.lv} 上架</span>`:`<button class="btn sm" data-buy="${id}"${S.coins<f.buy?' disabled':''}>${price(f.buy)}</button>`}</div>`}).join('')}</div>
   <h3 class="sec">花器</h3><div class="grid">${Object.keys(VASES).filter(v=>!VASES[v].pot).map(v=>{const d=VASES[v],own=S.vases.includes(v);return`<div class="card"><svg class="ico" viewBox="${d.vb||'110 250 180 240'}">${d.back||''}<ellipse cx="200" cy="${d.my}" rx="${d.mw}" ry="${d.ry}" fill="${d.inner}"/><path d="${d.body}" fill="${d.fill}"${d.stroke?` stroke="#9fc3d0" stroke-width="1.5"`:''}/>${d.extra||''}</svg><span class="nm">${d.n}</span>${own?'<span class="meta">已拥有</span>':`<button class="btn sm" data-buyv="${v}"${S.coins<d.price?' disabled':''}>${price(d.price)}</button>`}</div>`}).join('')}</div>
   <h3 class="sec">杂货</h3><div class="grid"><div class="card"><i class="bi" style="width:54px;height:83px">${DEWSVG}</i><span class="nm">露水</span><span class="meta">滴在生长中的花上，长高一截 · 已有 ${S.dew}</span><button class="btn sm" data-buyf="1"${S.coins<15?' disabled':''}>${price(15)}</button></div><div class="card"><i class="bi" style="width:64px;height:83px">${BFLY}</i><span class="nm">花蜜</span><span class="meta">摆在院里，引来一只蝴蝶 · 蝴蝶 ${S.bfly}</span><button class="btn sm" data-buyb="1"${S.coins<25?' disabled':''}>${price(25)}</button></div>${S.kiln?`<div class="card"><i class="bi" style="width:60px;height:83px">${CLAYSVG}</i><span class="nm">陶土</span><span class="meta">拉坯用 · 已有 ${S.clay}</span><button class="btn sm" data-buyc="1"${S.coins<40?' disabled':''}>${price(40)}</button></div>`:''}</div>
@@ -2107,6 +2110,9 @@ function awayReport(){const now=Date.now(),away=S.seen?now-S.seen:0;if(!S.intro|
   S.plots.forEach((q,i)=>{if(!q||i>=plotCount())return;const t=F[q.id].t,was=q.p>=t;grow(q,now);if(!was&&q.p>=t)nb++;else if(q.p<t&&q.wu<=now)nd++});
   if(!nb&&!nd)return'';const m=Math.round(away/60000),dur=m>=1440?`${Math.floor(m/1440)} 天`:m>=60?`${Math.floor(m/60)} 小时`:`${m} 分钟`;
   return`<div class="center"><h2 class="h-title" style="justify-content:center">小院近况</h2><p class="say">你离开了约 ${dur}。${nb?`<br>这段时间开了 <b>${nb}</b> 朵花，等你来采。`:''}${nd?`<br>有 <b>${nd}</b> 块花畦土干了，长得慢了些，浇浇水吧。`:''}</p><button class="btn primary" data-act="close">好的</button></div>`}
+/* 每到一个新节气，开门时提示一次当令花 */
+function termModal(){const tm=term(),f=F[tm.id];S.termSeen=tm.n;save();
+  modal(`<div class="center"><img class="splash" src="${tm.art}" width="720" height="480" alt="" draggable="false" onerror="this.remove()"><p class="muted" style="margin:0;letter-spacing:.3em">时令</p><h2 class="h-title" style="justify-content:center">${tm.n}</h2><p class="say"><b>${f.n}</b>当令：${f.lang}。<br>这个节气里，它的花种不限等级，长得快三成，入瓶售价加三成。</p><button class="btn primary" data-act="goto" data-v="shop">去花铺看看</button></div>`)}
 const preDone=new Set();
 function preloadStems(){const ids=new Set([...IDS.filter(id=>S.cut[id]>0),...S.arr.map(s=>s.id),...S.plots.filter(Boolean).map(p=>p.id)]),urls=[];
   ids.forEach(id=>{if(preDone.has(id))return;preDone.add(id);const g=sgOf(id);if(!g)return;if(F[id].type==='head')g.forEach((_,k)=>urls.push(`assets/st/${id}_${k}.webp`));else urls.push(`assets/st/${id}.webp`)});
@@ -2122,7 +2128,7 @@ function start(data){
   addEventListener('storage',e=>{if(e.key!==KEY||stale||e.newValue===null||Date.now()-bootT<2500)return;clearTimeout(saveT);
     modal(`<div class="center"><h2 class="h-title" style="justify-content:center">小院在别处开着</h2><p class="say">另一个窗口正在照看这座小院。为免两边的存档互相覆盖，这个窗口先歇下了。</p><button class="btn primary" data-act="reload">在这里继续</button></div>`,false,{dismissible:false});stale=true});
   window.claude?.hot?.snapshot?.(()=>({S}));
-  if(S.intro&&awayMsg)modal(awayMsg);
+  if(S.intro&&awayMsg)modal(awayMsg);else if(S.intro&&S.termSeen!==term().n)termModal();
   if(!S.intro)modal(`<div class="center"><img class="splash" src="assets/splash.webp" width="900" height="600" alt="" draggable="false"><h2 class="logo big" style="font-size:40px;margin:4px 0">${[...'花信小筑'].map((c,i)=>`<span style="--i:${i}">${c}</span>`).join('')}</h2><p class="muted" style="margin:0">风有信，花不误。一方小院，四时花开。</p></div>
    <p class="say" style="text-align:center;margin:12px 0 4px">跟着顶上的提示一步步来：<b>播种 → 照料 → 采花 → 插花</b>。<br>授粉育种、山野散步、乡邻往来，之后慢慢都会遇到。不赶时间。</p>
    <div class="center"><button class="btn primary" data-act="start">推开院门</button></div>`);

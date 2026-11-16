@@ -1289,14 +1289,16 @@ function stemSVG(id,bx,by,hx,hy,o={}){const f=F[id],g=sgOf(id);if(!g)return o.sp
   const href=hd?`assets/st/${id}_${st}.webp`:`assets/st/${id}.webp`;
   const img=`<image href="${href}" x="${R(-ax)}" y="${R(-ay)}" width="${W}" height="${H}" transform="rotate(${R(-th)})" pointer-events="none"/>`;
   const halo=f.r===3&&st>0?`<circle class="halo" cy="${R(-D)}" r="${R(30+20*sc)}" fill="url(#h-${id})"/>`:'';
-  /* the stem below the bloom is laid out as bands along an arc (one band when it is straight); the bloom is one rigid piece */
+  /* the stem below the bloom is laid out as bands along an arc (one band when it is straight); the bloom is one rigid piece.
+     Each band turns about 3 degrees from the one below, and reaches down far enough to cover the wedge that opens on the
+     outside of the bend at the widest leaf, so leaves bend with the stem instead of splitting into strips. */
   let t0=Math.max(0,Lc-D/sc);t0=Math.min(t0,tb-4);
-  const N=Math.abs(Phi)<1.5?1:12,pf=Phi*fl;let parts,x,y,phE,hx2,hy2;
+  const N=Math.abs(Phi)<1.5?1:clamp(Math.ceil(Math.abs(Phi)/3),6,27),pf=Phi*fl;let parts,x,y,phE,hx2,hy2;
   for(let it=0;it<3;it++){const len=tb-t0;parts=[];x=0;y=0;
     for(let i=0;i<N;i++){const s0=i/N,s1=(i+1)/N,ph=N===1?0:pf*Math.pow((s0+s1)/2,1.25),r=ph/DEG,ta=t0+len*s0,tz=t0+len*s1;parts.push([x,y,ph,ta,tz]);x+=Math.sin(r)*(tz-ta);y-=Math.cos(r)*(tz-ta)}
     phE=N===1?0:pf;hx2=x+Math.sin(phE/DEG)*(Lc-tb);hy2=y-Math.cos(phE/DEG)*(Lc-tb);
     const short=D/sc-Math.hypot(hx2,hy2);if(N===1||Math.abs(short)<.5||(short>0&&t0<=0))break;t0=clamp(t0-short,0,tb-10)}
-  const rot=a-Math.atan2(hx2*fl,-hy2)*DEG,ov=1.4,band=(px,py,ph,t,y0,h)=>{const cid='sc'+(++CLIPN);
+  const rot=a-Math.atan2(hx2*fl,-hy2)*DEG,ov=N===1?1.4:1.4+Math.max(ax,W-ax)*Math.abs(Phi)/N*1.25/DEG,band=(px,py,ph,t,y0,h)=>{const cid='sc'+(++CLIPN);
     return`<g transform="translate(${R(px)},${R(py)}) rotate(${R(ph)}) translate(0,${R(t)})"><clipPath id="${cid}"><rect x="-999" y="${R(y0)}" width="1998" height="${R(h)}"/></clipPath><g clip-path="url(#${cid})">${img}</g></g>`};
   let stem='';for(const [px,py,ph,ta,tz] of parts)stem+=band(px,py,ph,ta,-tz,tz-ta+ov);
   const bloom=band(x,y,phE,tb,-1999,1999-tb+ov);

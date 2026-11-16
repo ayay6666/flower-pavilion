@@ -1665,8 +1665,7 @@ function scoreArr(st,w){
   const sw=wt.reduce((a,b)=>a+b,0),dx=g.reduce((a,p,i)=>a+wt[i]*(p.x-e.cx),0)/sw,as=g.map(p=>p.a),spread=Math.max(...as)-Math.min(...as),nf=fs.filter(f=>f.role==='主').length;
   const qe=1-clamp((Math.abs(dx)-35)/70,0,1),qf=n<3?.5:clamp(spread/45,0,1),qg=nf%2===1||nf===0?1:.6,bal=20*(.5*qe+.3*qf+.2*qg);
   if(qf<.6)tips.push([bal/20,'花枝太拢，向两侧舒展开一些']);else if(qe<.6)tips.push([bal/20,'重心偏向一侧，在另一边添一枝呼应']);else if(qg<1)tips.push([bal/20,'主花取单数，更显自然']);
-  const few=n<5?.55+.09*n:1;if(n>=3&&n<5)tips.push([few-.4,'花枝还少：再添一两枝，层次才立得起来']);
-  const parts=[sk,hi,den,color,bal].map(x=>Math.round(clamp(x,0,20)*few)),total=parts.reduce((a,b)=>a+b,0);
+  const parts=[sk,hi,den,color,bal].map(x=>Math.round(clamp(x,0,20))),total=parts.reduce((a,b)=>a+b,0);
   tips.sort((a,b)=>a[0]-b[0]);
   const cnt={warm:0,cool:0,plain:0};fs.forEach(f=>cnt[f.fam]++);const tone=cnt.warm>n*.55?'warm':cnt.cool>n*.5?'cool':cnt.plain>n*.6?'plain':'mix';
   return{total,parts,tip:tips.length?tips[0][1]:`${ctip||'气韵生动'}，骨架清朗，是一瓶好花`,tone}}

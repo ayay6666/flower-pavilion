@@ -741,7 +741,7 @@ body{color:var(--ink)}
 #v-codex .sheet::after,#v-gallery .sheet::after,#v-goals .sheet::after{content:none;display:none}
 #v-codex .sheet,#v-gallery .sheet,#v-goals .sheet{padding:6px 4px 8px}
 #v-wild .wstart{padding:4px;gap:10px}
-.wstart .wild-info{bottom:-4px;background:var(--jade) var(--grain) center/256px;padding:8px 0;gap:8px}
+.wstart .wild-info{bottom:-4px;background:var(--jade) var(--grain) center/256px;padding:10px 10px 10px 14px;gap:8px;border:1px solid var(--line);border-radius:12px;box-shadow:0 -4px 10px -6px rgba(66,46,28,.18)}
 .talk{padding:4px;gap:10px}
 .dialog .say,.talk .say,.bubble,.ktip,.order .say,.folk .say{overflow-wrap:anywhere}
 
@@ -911,6 +911,9 @@ button:disabled:hover{transform:none}
 .studio-actions #stCount{margin-left:auto}
 .studio-actions>#finishArr{margin-left:0}
 .kfoot.action-bar{margin-top:0;justify-content:space-between}
+/* the pot preview (208×264) must fit between the step header and the fixed bottom bar */
+.kwheel{--kw-off:250px;max-width:min(420px,100%,max(200px,calc((100vh - var(--dock-room) - var(--kw-off))*.788)));max-width:min(420px,100%,max(200px,calc((100dvh - var(--dock-room) - var(--kw-off))*.788)))}
+@media (max-width:760px){.kwheel{--kw-off:292px}}
 .kfoot.action-bar .kdots{margin-left:auto}
 .mode-exit{display:inline-flex;align-items:center;justify-content:center;min-height:28px;margin-left:6px;padding:0 4px;color:var(--rouge);font-size:12px;white-space:nowrap;vertical-align:baseline}
 .dialog.has-dlg-x{padding-top:42px}
@@ -2227,7 +2230,10 @@ function spawnWild(){const box=$('#witems');if(!box)return;let r=Math.random(),k
   else if(kind==='seed'){const rare=Math.random()<(S.deep?.3:.12);let pool=BASE.filter(i=>!F[i].wild&&(rare?F[i].r===1||F[i].r===2:F[i].r<=1)),nw=pool.filter(i=>!S.codex[i]);if(nw.length&&Math.random()<.5)pool=nw;if(Math.random()<.25)pool=WILD;id=pick(pool);if(Math.random()<.3)id=pick(VARS[id]);b.innerHTML=SEEDSVG;if(rare)b.classList.add('rare');lab='花种'}
   else{b.innerHTML={bfly:BFLY,dew:DEWSVG,clay:CLAYSVG}[kind];lab={bfly:'蝴蝶',dew:'露水',clay:'陶土'}[kind]}
   b.setAttribute('aria-label',lab);box.appendChild(b);let an=null;
-  if(b.animate&&!matchMedia('(prefers-reduced-motion:reduce)').matches){an=b.animate([{left:'104%'},{left:'-16%'}],{duration:rint(13000,17000),easing:'linear'});an.onfinish=()=>b.remove()}
+  if(b.animate&&!matchMedia('(prefers-reduced-motion:reduce)').matches){const dur=rint(13000,17000);
+    // 用独立的 translate 属性做位移，走合成器；left 动画会让花枝图片+阴影每帧重绘，手机上掉帧
+    if(CSS.supports&&CSS.supports('translate','1px 0')){const W=box.clientWidth;b.style.left='0';b.style.willChange='translate';an=b.animate([{translate:`${W*1.04}px 0`},{translate:`${-W*.16}px 0`}],{duration:dur,easing:'linear',fill:'forwards'})}
+    else an=b.animate([{left:'104%'},{left:'-16%'}],{duration:dur,easing:'linear'});an.onfinish=()=>b.remove()}
   else{b.style.left=rint(8,84)+'%';setTimeout(()=>b.remove(),6000)}
   b.onclick=e=>{if(!walk)return;const g=walk.got;let txt;
     if(kind==='bfly'){S.bfly++;g.bfly=(g.bfly||0)+1;bump('bfly');txt='蝴蝶 +1'}

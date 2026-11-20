@@ -1,0 +1,63 @@
+name: Release Standalone HTML
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build standalone HTML
+        id: build
+        run: |
+          python3 build.py
+          test -s dist/花信小筑.html
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            TAG="${GITHUB_REF_NAME}"
+            ASSET="dist/flower-pavilion-${TAG}.html"
+          else
+            TAG=""
+            ASSET="dist/flower-pavilion-offline.html"
+          fi
+          cp dist/花信小筑.html "${ASSET}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "asset=${ASSET}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flower-pavilion-standalone-html
+          path: ${{ steps.build.outputs.asset }}
+          if-no-files-found: error
+
+      - name: Create or update GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.build.outputs.tag }}
+          ASSET: ${{ steps.build.outputs.asset }}
+        run: |
+          LABEL="花信小筑离线单文件版 (${TAG}).html"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${ASSET}#${LABEL}" --clobber
+          else
+            gh release create "$TAG" "${ASSET}#${LABEL}" \
+              --verify-tag \
+              --title "花信小筑 ${TAG}" \
+              --notes "下载下方单个 HTML 文件即可在浏览器中离线双击游玩（支持桌面与移动端）。" \
+              --generate-notes
+          fi

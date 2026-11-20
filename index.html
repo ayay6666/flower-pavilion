@@ -125,6 +125,7 @@ button.card{transition:transform .15s}button.card:hover{transform:translateY(-2p
 .card .ico{width:64px;height:83px}
 .card .nm{font-weight:700;font-size:13.5px}
 .card .meta{font-size:11.5px;color:var(--ink-soft);line-height:1.4}
+.grid .card>.btn:last-child{margin-top:auto}
 .rar{font-size:10.5px;padding:0 7px;border-radius:99px;line-height:17px;color:var(--white)}
 .r0{background:#7fa58c}.r1{background:#5c8fc9}.r2{background:var(--wisteria)}.r3{background:linear-gradient(90deg,#d79a2a,#d2587d)}
 .price{display:inline-flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
@@ -1939,7 +1940,7 @@ function finish(ok){const sc=arrScore(),name=($('#workName')?.value||'无题').t
   S.gallery.unshift(entry);
   while(S.gallery.length>30){let idx=-1;for(let i=S.gallery.length-1;i>=0;i--)if(!S.gallery[i].pin){idx=i;break}S.gallery.splice(idx>=0?idx:S.gallery.length-1,1)}
   let msg;
-  if(o){S.coins+=o.coins;if(o.seed)gotSeed(o.seed);S.orders=S.orders.filter(x=>x!==o);msg=o.story?`${o.who}收下了「${name}」`:`${o.who}收下了「${name}」，谢礼 ${o.coins} 花币${o.seed?`和${F[o.seed].n}花种`:''}`;addExp(o.exp+sc.total/8);bump('orders');if(o.story){const sid=o.story;setTimeout(()=>folkDone(sid),1200)}}
+  if(o){S.coins+=o.coins;if(o.seed)gotSeed(o.seed);S.orders=S.orders.filter(x=>x!==o);msg=o.story?`${o.who}收下了「${name}」`:`${o.who}收下了「${name}」，谢礼 ${o.coins} 花币${o.seed?`和${F[o.seed].n}花种`:''}`;addExp(o.exp+sc.total/8);bump('orders');if(o.story)folkDone(o.story,1200)}
   else{const v=sellValue(sc);S.coins+=v;msg=`「${name}」售出，得 ${v} 花币`;addExp(sc.total/8+S.arr.length)}
   S.arr=[];sel=null;S.done++;bump('works');if(sc.total>=90)bump('five');fillOrders();closeModal();toast(msg);sfx('coin');for(let k=0;k<7;k++)flyTo(innerWidth/2+rint(-40,40),innerHeight/2+rint(-30,30),$('#coins').parentNode,'<i class="coin"></i>',k*70);setTimeout(hud,700);renderStudio();hints();save()}
 
@@ -2278,20 +2279,20 @@ function needList(nd){const o=[];
   if(nd.stat)o.push({t:`${nd.stat[2]}（已 ${Math.min(nd.stat[1],S.st[nd.stat[0]]||0)}）`,ok:(S.st[nd.stat[0]]||0)>=nd.stat[1]});
   if(nd.codex)o.push({t:`种开 ${nd.codex} 种花（已 ${blooms()}）`,ok:blooms()>=nd.codex});
   if(nd.work)o.push({t:'在花艺台完成并交付',ok:false});return o}
-function syncStory(){FOLK.forEach(c=>{const st=fstep(c),has=S.orders.find(o=>o.story===c.id),w=st&&st.need.work;
-  if(w&&!has)S.orders.unshift({k:S.nid++,who:c.n,say:st.say,req:Object.assign({min:3},w),coins:0,exp:20,seed:null,story:c.id});
-  if(!w&&has)S.orders=S.orders.filter(o=>o!==has)})}
+function syncStory(){FOLK.forEach(c=>{const st=fstep(c),w=st&&st.need.work,lv=S.folk[c.id]||0;S.orders=S.orders.filter(o=>o.story!==c.id||(w&&(o.lv??(o.say===st.say?lv:-1))===lv));const has=S.orders.find(o=>o.story===c.id);
+  if(w&&!has)S.orders.unshift({k:S.nid++,who:c.n,say:st.say,req:Object.assign({min:3},w),coins:0,exp:20,seed:null,story:c.id,lv})})}
 function giveRw(rw){const out=[];if(rw.coins){S.coins+=rw.coins;out.push(`${rw.coins} 花币`)}
   if(rw.seeds)for(const id in rw.seeds){gotSeed(id,rw.seeds[id]);out.push(`${F[id].n}花种 ×${rw.seeds[id]}`)}
   if(rw.vase){if(S.vases.includes(rw.vase)){S.coins+=100;out.push('100 花币')}else{S.vases.push(rw.vase);out.push(`花器「${VASES[rw.vase].n}」`)}}
   if(rw.bfly){S.bfly+=rw.bfly;out.push(`蝴蝶 ×${rw.bfly}`)}if(rw.dew){S.dew+=rw.dew;out.push(`露水 ×${rw.dew}`)}if(rw.clay){S.clay+=rw.clay;out.push(`陶土 ×${rw.clay}`)}
   if(rw.kiln){S.kiln=true;out.push('陶坊开放')}if(rw.legMax){S.legMax=rw.legMax;S.legs=rw.legMax;out.push('脚力上限 +1')}if(rw.deep){S.deep=1;out.push('山野深处开放')}
   if(rw.hint){S.rec[rw.hint]=1;out.push(`花谱里记下了${F[rw.hint].n}的亲本`)}return out}
-function folkDone(id){const c=FOLK.find(x=>x.id===id),st=c&&fstep(c);if(!st)return;const nd=st.need;
+function folkDone(id,delay){const c=FOLK.find(x=>x.id===id),st=c&&fstep(c);if(!st)return;const nd=st.need;
   if(nd.give)for(const k in nd.give)takeCut(k,nd.give[k]);if(nd.bfly)S.bfly-=nd.bfly;if(nd.dew)S.dew-=nd.dew;
   const got=giveRw(st.rw);S.folk[id]=(S.folk[id]||0)+1;const done=!fstep(c);
-  modal(`<div class="center"><span class="ava big">${c.ch}</span><h2 class="h-title" style="justify-content:center">${c.n}</h2><p class="say">「${st.thx}」</p><div class="rwl">${got.map(g=>`<span class="req ok">${g}</span>`).join('')}</div>${done?`<p class="muted">${c.end}</p>`:''}<button class="btn primary" data-act="close">收下</button></div>`);
-  sfx('rare');syncStory();addExp(15);checkBadges();hud();save();if(view==='town')renderTown()}
+  syncStory();addExp(15);checkBadges();hud();save();if(view==='town')renderTown();
+  const show=()=>{modal(`<div class="center"><span class="ava big">${c.ch}</span><h2 class="h-title" style="justify-content:center">${c.n}</h2><p class="say">「${st.thx}」</p><div class="rwl">${got.map(g=>`<span class="req ok">${g}</span>`).join('')}</div>${done?`<p class="muted">${c.end}</p>`:''}<button class="btn primary" data-act="close">收下</button></div>`);sfx('rare')};
+  delay?setTimeout(show,delay):show()}
 
 /* ----- the town: buildings and neighbours you walk up to ----- */
 const LOOK={po:{w:168,h:420,s:.9},shen:{w:158,h:420},ye:{w:236,h:420},yao:{w:193,h:420},dou:{w:163,h:420,s:.78},keep:{w:152,h:420}};

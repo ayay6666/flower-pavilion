@@ -59,11 +59,11 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--wisteria);outli
 .night-on .logo{color:#f3f0ff;text-shadow:none}
 .phase{font-size:12px;padding:1px 8px;border-radius:99px;background:var(--glass);color:var(--ink-soft);white-space:nowrap}
 .stats{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.pill{display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:99px;background:var(--glass);box-shadow:0 2px 8px var(--shadow);font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
+.pill{display:flex;align-items:center;font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
 .pill b{font-weight:700}
 .coin{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffe9a6,var(--gamboge));display:inline-block;flex-shrink:0;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.5)}
 .xp{width:44px;height:5px;border-radius:9px;background:var(--line);overflow:hidden}.xp i{display:block;height:100%;background:var(--leaf);border-radius:9px;transition:width .4s}
-.snd{width:30px;height:30px;border-radius:50%;background:var(--glass);box-shadow:0 2px 8px var(--shadow);display:grid;place-items:center}
+.snd{display:grid;place-items:center}
 .snd svg{width:16px;height:16px}.snd.off{color:var(--ink-soft);opacity:.75}
 
 /* ---------- views ---------- */
@@ -97,7 +97,7 @@ h3.sec::after{content:"";flex:1;height:1px;background:var(--line)}
 .halo{animation:halo 3s ease-in-out infinite}
 @keyframes halo{50%{opacity:.45}}
 .g-tools{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:center}
-.tool{height:36px;padding:0 14px;border-radius:99px;background:var(--glass);box-shadow:0 2px 8px var(--shadow);display:flex;align-items:center;gap:6px;font-size:13px}
+.tool{display:flex;align-items:center;gap:6px;font-size:13px}
 .tool svg{width:16px;height:16px}
 .tool.on{background:var(--leaf);color:var(--white)}
 .tool:disabled{opacity:.5;cursor:default}
@@ -113,11 +113,7 @@ h3.sec::after{content:"";flex:1;height:1px;background:var(--line)}
 @keyframes drop{from{transform:translateY(-34px);opacity:0}30%{opacity:1}to{transform:translateY(8px);opacity:0}}
 
 /* buttons / cards */
-.btn{height:36px;padding:0 16px;border-radius:99px;background:var(--white);box-shadow:inset 0 0 0 1px var(--line);font-size:13px;white-space:nowrap}
-.btn.primary{background:var(--rouge);color:var(--white);box-shadow:0 4px 12px rgba(196,66,106,.35)}
-.btn.green{background:var(--leaf);color:var(--white);box-shadow:none}
-.btn.sm{height:28px;padding:0 11px;font-size:12px}
-.btn:disabled{opacity:.45;cursor:default;box-shadow:inset 0 0 0 1px var(--line)}
+.btn{font-size:13px;white-space:nowrap}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
 .card{background:rgba(255,255,255,.7);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0;position:relative}
@@ -135,7 +131,7 @@ button.card{transition:transform .15s}button.card:hover{transform:translateY(-2p
 /* studio */
 .studio{display:grid;grid-template-columns:minmax(0,600px) minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:760px){.studio{grid-template-columns:minmax(0,1fr)}#stage{width:min(100%,calc(54vh*.93));margin:0 auto}}
-@media (max-width:420px){.logo{font-size:24px}.xp{width:24px}.pill{padding:0 8px}.stats{gap:5px}}
+@media (max-width:420px){.logo{font-size:24px}.xp{width:24px}.stats{gap:5px}}
 .stage-col{min-width:0}
 #stage{border-radius:16px;overflow:hidden;touch-action:none;box-shadow:0 8px 24px var(--shadow);max-width:100%;aspect-ratio:520/560;background:var(--jade-2);user-select:none;-webkit-user-select:none}
 #stage svg{display:block;width:100%;height:100%}
@@ -146,8 +142,7 @@ button.card{transition:transform .15s}button.card:hover{transform:translateY(-2p
 .tray .ico{width:44px;height:57px}
 .tray b{font-variant-numeric:tabular-nums;color:var(--rouge)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{height:28px;padding:0 11px;border-radius:99px;background:rgba(255,255,255,.7);font-size:12px;display:flex;align-items:center;gap:5px}
-.chip.on{background:var(--ink);color:var(--jade)}
+.chip{font-size:12px;display:flex;align-items:center;gap:5px}
 .chip i{width:12px;height:12px;border-radius:50%;display:inline-block;box-shadow:inset 0 0 0 1px var(--line)}
 .meter{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;background:rgba(255,255,255,.6);border-radius:14px;padding:10px 12px}
 .meter .big{grid-row:span 5;text-align:center;padding-right:4px}
@@ -200,7 +195,6 @@ button.card{transition:transform .15s}button.card:hover{transform:translateY(-2p
 .btn,.tool,.tab,.chip,.card,.tray button,.plot{transition:transform .15s,background .2s,box-shadow .2s}
 .btn:active,.tool:active,.tab:active,.chip:active,button.card:active,.tray button:active,.plot:active{transform:scale(.94)}
 .tool:hover,.chip:hover,.tray button:hover,.plot:hover{transform:translateY(-2px)}
-.btn.primary:hover{box-shadow:0 6px 18px rgba(196,66,106,.5)}
 .hills,.cot{translate:calc(var(--px,0)*-12px) calc(var(--py,0)*-5px);transition:translate .5s ease-out}
 .orb,.cloud{translate:calc(var(--px,0)*-5px) 0;transition:translate .5s ease-out}
 .cot{position:absolute;right:9%;top:calc(34% - 62px);width:110px}
@@ -270,13 +264,8 @@ button.card{transition:transform .15s}button.card:hover{transform:translateY(-2p
 .h-sub{letter-spacing:.04em}
 h3.sec{letter-spacing:.14em;font-size:13px}
 h3.sec::before{content:"";width:5px;height:5px;background:var(--ink);transform:rotate(45deg);flex-shrink:0}
-.btn{box-shadow:inset 0 0 0 1px var(--line),0 1px 2px rgba(20,40,40,.06);letter-spacing:.05em}
-.btn.primary{background:linear-gradient(#d4587e,#b83a60);box-shadow:0 4px 12px rgba(196,66,106,.35),inset 0 1px 0 rgba(255,255,255,.35)}
-.btn.green{background:linear-gradient(#5f9f72,#467f58);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
-.pill,.snd,.tool,.hint,.phase{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 2px 10px var(--shadow),inset 0 1px 0 rgba(255,255,255,.7)}
-.lvring{width:32px;height:32px;border-radius:50%;background:conic-gradient(var(--leaf) var(--p,0%),rgba(34,57,58,.16) 0);display:grid;place-items:center;box-shadow:0 2px 10px var(--shadow);transition:--p .5s}
-.lvring span{width:25px;height:25px;border-radius:50%;background:var(--jade);display:grid;place-items:center;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
-.tool{height:38px;padding:0 16px;letter-spacing:.06em}
+.lvring{border-radius:50%;display:grid;place-items:center;transition:--p .5s}
+.lvring span{border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
 .tool.on{background:linear-gradient(#5f9f72,#467f58)}
 .hint{letter-spacing:.06em}
 .bump{animation:bump .45s}
@@ -294,8 +283,7 @@ h3.sec::before{content:"";width:5px;height:5px;background:var(--ink);transform:r
 .card .nm{font-size:14px;letter-spacing:.08em}
 .rar{letter-spacing:.1em;padding:0 8px}
 .tray button{background:linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,.6));box-shadow:0 2px 6px rgba(20,40,40,.07),inset 0 1px 0 #fff}
-.chip{box-shadow:inset 0 0 0 1px var(--line);letter-spacing:.04em}
-.chip.on{box-shadow:0 3px 8px rgba(20,40,40,.25)}
+.chip{letter-spacing:.04em}
 /* petals unfurl layer by layer */
 .popin .ly,.stem.in .ly,.big-ico .ly,.intro-fl .ly{animation:unfurl 1s cubic-bezier(.2,1.25,.4,1) both}
 @keyframes unfurl{from{transform:scale(.1) rotate(-70deg);opacity:0}}
@@ -399,7 +387,7 @@ h3.sec::before{content:"";width:5px;height:5px;background:var(--ink);transform:r
 .st-detail ul{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center;font-size:9.5px;color:var(--ink-soft)}
 .st-detail li b{display:block;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
 .st-side{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;z-index:2}
-.st-side button{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.84);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 3px 10px var(--shadow),inset 0 0 0 1px rgba(255,255,255,.8);display:grid;place-items:center;color:var(--ink);transition:transform .15s,background .2s,color .2s}
+.st-side button{display:grid;place-items:center;color:var(--ink);transition:transform .15s,background .2s,color .2s}
 .st-side button svg{width:19px;height:19px}
 .st-side button.on{background:var(--ink);color:var(--jade)}
 .st-side button:active{transform:scale(.92)}
@@ -418,7 +406,7 @@ h3.sec::before{content:"";width:5px;height:5px;background:var(--ink);transform:r
 .insp-tip{font-size:12.5px;color:var(--ink-soft);text-align:center;letter-spacing:.04em;line-height:1.6}
 .insp-h{display:flex;align-items:center;gap:8px}
 .insp-h b{font-size:15px;letter-spacing:.1em}.insp-h>i{flex:1}
-.ib{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--line);background:var(--white);transition:transform .15s}
+.ib{display:grid;place-items:center;transition:transform .15s}
 .ib svg{width:16px;height:16px}.ib:active{transform:scale(.9)}
 .insp-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
 .stp label,.seg label{display:block;font-size:10.5px;letter-spacing:.22em;color:var(--ink-soft);margin:0 0 3px 10px}
@@ -427,24 +415,22 @@ h3.sec::before{content:"";width:5px;height:5px;background:var(--ink);transform:r
 .stp button svg{width:13px;height:13px}.stp button:active{background:var(--jade-2)}
 .stp span{flex:1;text-align:center;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:0}
 .seg{grid-column:1/-1}
-.seg>div{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;height:34px;border-radius:99px;background:var(--white);box-shadow:inset 0 0 0 1px var(--line);padding:3px;gap:2px}
+.seg>div{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
 .seg button{border-radius:99px;font-size:12px;letter-spacing:.06em;transition:background .2s,color .2s}
 .seg button.on{background:var(--ink);color:var(--jade)}
 @media (min-width:1001px){.insp-g{grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.35fr)}.insp-g .seg{grid-column:auto}}
 .st-finish{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(rgba(255,255,255,.85),rgba(255,255,255,.55));border-radius:18px;padding:10px 10px 10px 18px;box-shadow:inset 0 1px 0 #fff,0 2px 8px rgba(20,40,40,.06)}
-.btn.lg{height:44px;padding:0 28px;font-size:15px}
 #stCount{font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em}
 .trayw .sec{display:none}
 @media (max-width:760px){.trayw{margin-top:10px}}
 @media (max-width:1000px){.side-col{margin-top:2px}#orders{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 10px}#orders .order{flex:0 0 min(86%,340px);scroll-snap-align:start;margin:0}}
 .g-tools{gap:14px}
-.g-tools .tool{flex-direction:column;justify-content:center;width:62px;height:62px;border-radius:50%;padding:0;gap:2px;font-size:10.5px;letter-spacing:0}
+.g-tools .tool{flex-direction:column;justify-content:center;padding:0;gap:2px;font-size:10.5px;letter-spacing:0}
 .g-tools .tool svg{width:20px;height:20px}
 
 /* ---------- v7: wild walks, neighbours, wishes, pottery ---------- */
 .subnav{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2px;padding:3px;border-radius:99px;background:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px var(--line);margin-bottom:14px}
-.subnav button{height:30px;padding:0 18px;border-radius:99px;font-size:13px;letter-spacing:.14em;color:var(--ink-soft);transition:background .2s,color .2s}
-.subnav button.on{background:var(--ink);color:var(--jade)}
+.subnav button{font-size:13px;letter-spacing:.14em;color:var(--ink-soft);transition:background .2s,color .2s}
 .chipx{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px 0 8px;border-radius:99px;background:rgba(255,255,255,.75);box-shadow:inset 0 0 0 1px var(--line);font-size:13px}
 .chipx b{font-variant-numeric:tabular-nums}
 .bi{width:24px;height:24px;display:inline-grid;place-items:center;flex-shrink:0}
@@ -515,7 +501,6 @@ h3.sec::before{content:"";width:5px;height:5px;background:var(--ink);transform:r
 .kpanel .seg{grid-column:auto}
 .ktip{margin:0;font-size:13px;line-height:1.7}
 .ksteps{display:flex;gap:4px;font-size:12px;letter-spacing:.14em}
-.ksteps button{padding:3px 12px;border-radius:99px;color:var(--ink-soft);box-shadow:inset 0 0 0 1px var(--line)}
 .ksteps .on{background:var(--ink);color:var(--jade);box-shadow:none}.ksteps .done{background:var(--jade-2)}
 .kfire{width:120px;height:120px;margin:16px auto;border-radius:50% 50% 12px 12px;background:#5a4636;position:relative;overflow:hidden;box-shadow:inset 0 -10px 20px rgba(0,0,0,.3)}
 .kfire i{position:absolute;left:25%;right:25%;bottom:12%;height:40%;border-radius:50% 50% 8px 8px;background:radial-gradient(circle at 50% 80%,#fff3b0,#ff9d3c 45%,#c9461f 80%);animation:fire .5s ease-in-out infinite alternate}
@@ -542,7 +527,7 @@ h3.sec::before{content:"";width:5px;height:5px;background:var(--ink);transform:r
 /* ---------- v8a: friendlier studio and kiln ---------- */
 .stage-box{position:relative}
 .st-quick{position:absolute;left:12px;bottom:12px;display:flex;gap:6px;z-index:2}
-.st-quick button{height:32px;padding:0 12px 0 9px;border-radius:99px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 3px 10px var(--shadow),inset 0 0 0 1px rgba(255,255,255,.8);display:flex;align-items:center;gap:5px;font-size:12px;letter-spacing:.06em;transition:transform .15s}
+.st-quick button{display:flex;align-items:center;gap:5px;font-size:12px;letter-spacing:.06em;transition:transform .15s}
 .st-quick button svg{width:15px;height:15px}.st-quick button:active{transform:scale(.93)}
 #bh{cursor:grab;filter:drop-shadow(0 1px 3px rgba(0,0,0,.3))}
 .insp-how{font-size:11.5px;color:var(--ink-soft);margin-left:4px}
@@ -570,7 +555,7 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 #v-garden{animation:fadein .5s both;padding-bottom:18px}
 .view .sheet{background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:0;padding:6px 0 20px;max-width:1040px}
 .view .sheet::before{display:none}
-.hud-back{height:32px;padding:0 13px 0 8px;border-radius:99px;background:var(--glass);box-shadow:0 2px 10px var(--shadow),inset 0 1px 0 rgba(255,255,255,.7);display:flex;align-items:center;gap:3px;font-size:13px;letter-spacing:.1em;white-space:nowrap;align-self:center;transition:transform .15s}
+.hud-back{display:flex;align-items:center;gap:3px;font-size:13px;letter-spacing:.1em;white-space:nowrap;align-self:center;transition:transform .15s}
 .hud-back svg{width:16px;height:16px}.hud-back:active{transform:scale(.94)}
 .brand{align-items:center}
 .hud-back:not([hidden])~.phase{display:none}
@@ -586,7 +571,7 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 .spot.sign.l{left:max(14px,env(safe-area-inset-left,0px));padding:0 16px 0 28px;clip-path:polygon(18px 0,100% 0,100% 100%,18px 100%,0 50%)}
 .spot.sign.r{right:max(14px,env(safe-area-inset-right,0px));padding:0 28px 0 16px;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%)}
 .spot.sign:hover{transform:translateY(-2px)}.spot.sign:active{transform:scale(.95)}
-@media (max-width:460px){.g-tools{gap:8px}.g-tools .tool{width:54px;height:54px;font-size:9.5px}.g-tools .tool svg{width:18px;height:18px}.spot.sign{font-size:16px;height:34px;bottom:28px}.spot.sign.l{padding:0 8px 0 19px;left:8px}.spot.sign.r{padding:0 19px 0 8px;right:8px}}
+@media (max-width:460px){.g-tools{gap:8px}.g-tools .tool{font-size:9.5px}.g-tools .tool svg{width:18px;height:18px}.spot.sign{font-size:16px;height:34px;bottom:28px}.spot.sign.l{padding:0 8px 0 19px;left:8px}.spot.sign.r{padding:0 19px 0 8px;right:8px}}
 @media (max-width:420px){.cot{width:100px;right:3%;bottom:calc(100% - var(--hz) + 24px)}}
 #app[data-at=town] .cot,#app[data-at=town] .bough{display:none}
 /* rooms */
@@ -607,8 +592,7 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 #v-codex .sheet,#v-gallery .sheet,#v-goals .sheet{background:#fbf7ec var(--grain);border-radius:6px 18px 18px 6px;padding:26px 22px 24px 32px;margin-top:30px;max-width:920px;position:relative;box-shadow:0 20px 44px rgba(0,0,0,.42),inset 18px 0 18px -14px rgba(120,90,50,.38)}
 #v-codex .sheet::after,#v-gallery .sheet::after,#v-goals .sheet::after{content:"";position:absolute;left:12px;top:10px;bottom:10px;border-left:2px dashed rgba(120,90,50,.28)}
 .view .subnav{position:absolute;top:-28px;right:20px;margin:0;display:flex;gap:4px;background:none;box-shadow:none;padding:0;border-radius:0}
-.view .subnav button{height:28px;border-radius:10px 10px 0 0;background:#dccaa8;color:#6a5238;padding:0 16px}
-.view .subnav button.on{background:#fbf7ec;color:var(--ink);height:32px;margin-top:-4px;font-weight:700}
+.view .subnav button.on{font-weight:700}
 /* the wild fills the whole screen */
 #v-wild{padding:0;overflow:hidden}
 #v-wild .sheet{padding:0;max-width:none;height:100%;position:relative}
@@ -660,14 +644,10 @@ body{margin:0;background:var(--jade)}
 .coin{background:url('assets/ic_coin.webp') center/contain no-repeat;border-radius:0;box-shadow:none}
 .pill,.snd,.tool,.hint,.phase,.hud-back,.btn,.chip,.chipx,.ib,.st-side button,.st-quick button,.st-score,.subnav{background:var(--jade) var(--grain) center/256px;border:1px solid var(--line);box-shadow:0 2px 6px var(--shadow);backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink)}
 .pill,.hint,.phase,.hud-back,.btn,.chip,.chipx,.subnav,.subnav button,.inp{border-radius:7px}
-.snd{border-radius:8px}.g-tools .tool{border-radius:50%}
+.g-tools .tool{border-radius:50%}
 .g-tools .tool img{display:block;width:29px;height:29px;object-fit:contain;flex-shrink:0}
-.btn.primary{background:var(--rouge);color:#fff8eb;border:1px solid rgba(107,28,24,.5);border-radius:7px;box-shadow:0 3px 8px rgba(112,38,27,.24),inset 0 0 0 2px rgba(255,244,218,.13)}
-.btn.primary:hover{box-shadow:0 5px 12px rgba(112,38,27,.3)}
-.btn.green,.tool.on,.req.ok,.bub.ok{background:var(--leaf);color:var(--ink);border-color:rgba(43,42,38,.3)}
+.req.ok,.bub.ok{background:var(--leaf);color:var(--ink);border-color:rgba(43,42,38,.3)}
 .chip.on,.st-side button.on,.seg button.on,.subnav button.on,.ksteps .on,.npc.on .tag{background:var(--ink);color:var(--jade)}
-.lvring{background:conic-gradient(var(--leaf) var(--p,0%),var(--line) 0)}
-.lvring span{background:var(--jade) var(--grain) center/256px}
 .sheet,.dialog,.order,.talk,.folk,.wstart,.bubble,.ktip,.st-pop,.st-detail{background:var(--jade) var(--grain) center/384px;backdrop-filter:none;-webkit-backdrop-filter:none}
 .dialog{border:1px solid var(--line);border-radius:12px}.dialog::before{border-radius:7px}
 .order{border-radius:3px 8px 8px 3px;border-left-color:var(--rouge)}
@@ -691,8 +671,6 @@ body{margin:0;background:var(--jade)}
 #v-shop h3.sec{background:#8a6a45;color:#fff8eb}
 #v-shop .grid,#v-shop .st-finish,#v-shop .empty-note{background:rgba(244,236,218,.8);border-top-color:#8a6a45;border-bottom-color:#a58560;box-shadow:0 4px 0 #8a6a45}
 #v-codex .sheet,#v-gallery .sheet,#v-goals .sheet{background:var(--jade) var(--grain) center/384px}
-.view .subnav button{background:var(--jade-2);color:var(--ink-soft);border:1px solid var(--line);border-bottom:0}
-.view .subnav button.on{background:var(--jade) var(--grain) center/256px;color:var(--ink)}
 .pano{container-type:size}
 #witems .wi{background:rgba(244,236,218,.79);border:1px solid rgba(43,42,38,.18);box-shadow:0 2px 8px rgba(43,42,38,.15)}
 #v-wild .walk-top,#v-wild .walk-tip{background:var(--jade) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);border-radius:7px;text-shadow:none;box-shadow:0 2px 6px var(--shadow)}
@@ -700,7 +678,7 @@ body{margin:0;background:var(--jade)}
 .toast{background:rgba(43,42,38,.94);color:#f4ecda}
 #modal{background:rgba(43,36,27,.46)}
 @media(max-width:700px){.bld>img{width:42vw}}
-@media(max-width:460px){.top{gap:6px}.brand{gap:6px}.logo{font-size:20px}.stats{gap:4px}.pill{gap:4px;padding:0 6px;max-width:96px}.pill b{min-width:0;overflow:hidden;text-overflow:ellipsis}.hud-back{padding:0 9px 0 6px;letter-spacing:0}.g-tools .tool img{width:25px;height:25px}.st-detail{flex-wrap:wrap}.kfoot .btn.lg{padding:0 16px}.ksteps{flex-wrap:wrap}.talk{gap:8px}}
+@media(max-width:460px){.top{gap:6px}.brand{gap:6px}.logo{font-size:20px}.stats{gap:4px}.pill b{min-width:0;overflow:hidden;text-overflow:ellipsis}.hud-back{padding:0 9px 0 6px;letter-spacing:0}.g-tools .tool img{width:25px;height:25px}.st-detail{flex-wrap:wrap}.kfoot .btn.lg{padding:0 16px}.ksteps{flex-wrap:wrap}.talk{gap:8px}}
 @media(prefers-reduced-motion:reduce){.mtn{translate:none}}
 
 /* v9 fixes */
@@ -726,7 +704,7 @@ body{margin:0;background:var(--jade)}
 .journey{position:absolute;inset:0;isolation:isolate;pointer-events:none;overflow:hidden}.wj-layer{position:absolute;left:0;pointer-events:none;will-change:transform}.wj-sky{top:8%;height:54%;z-index:0;mix-blend-mode:multiply;mask-image:linear-gradient(transparent,#000 20%,#000 75%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 20%,#000 75%,transparent)}.wj-sky img,.wj-hills img{display:block;width:100%;height:100%;max-width:none}.wj-sky img{object-fit:cover;object-position:center bottom}.wj-hills{bottom:35%;height:38%;z-index:1}.wj-hills img{object-fit:fill}.wj-props,.wj-crossing,.wj-front{top:0;height:100%}.wj-props{z-index:2}.wj-ground{bottom:0;height:36%;z-index:3;background:url('assets/w_path.webp') left bottom/auto 100% repeat-x}.wj-crossing{z-index:4}.wj-prop{position:absolute;bottom:35%;display:block;width:auto;height:calc(var(--s)*100cqh);max-width:none;transform:translateX(-50%) scaleX(var(--flip));transform-origin:50% 100%}.wj-crossing .wj-prop{bottom:18%}.wj-front{z-index:6}.wj-front .wj-prop{bottom:9%}
 .wj-walker{position:absolute;z-index:5;left:28%;bottom:18%;height:max(84px,22%);aspect-ratio:221/360;transform:translate3d(-50%,0,0)}.wj-shadow{position:absolute;left:14%;bottom:-2%;width:72%;height:8%;background:radial-gradient(ellipse,rgba(46,45,31,.32),transparent 70%);border-radius:50%}
 .wj-mist{position:absolute;inset:0;z-index:7;background:linear-gradient(rgba(188,216,232,.35),transparent 42%),radial-gradient(ellipse at 55% 57%,rgba(224,237,239,.8),transparent 67%);pointer-events:none;opacity:.06}.pano::after{z-index:8}#witems{z-index:10}#witems .wi{background:rgba(244,236,218,.91);border-color:rgba(43,42,38,.3);box-shadow:0 2px 9px rgba(43,42,38,.2)}#witems .k-seed svg{filter:drop-shadow(0 1px 2px #6b6558)}
-@media(max-width:600px){.top .logo{display:none}.top .brand{gap:5px}.top .stats{gap:5px}.top .phase{padding:1px 6px}.dock-tab{font-size:16px}.dock-dot{right:9px}.shop-head .btn{padding:0 9px}#v-garden .g-tools .tool{width:56px;height:56px}.talk .tface .chibi{width:58px}.talk{padding:10px;gap:7px}.talk .say{font-size:13px}}
+@media(max-width:600px){.top .logo{display:none}.top .brand{gap:5px}.top .stats{gap:5px}.top .phase{padding:1px 6px}.dock-tab{font-size:16px}.dock-dot{right:9px}.shop-head .btn{padding:0 9px}.talk .tface .chibi{width:58px}.talk{padding:10px;gap:7px}.talk .say{font-size:13px}}
 @media(max-height:580px){#v-garden{overflow-y:auto}.wstart .finds{display:none}#v-wild .wstart{max-height:calc(58% - 80px)}#v-wild .walk-tip{display:none}}
 @media(prefers-reduced-motion:reduce){.view,#v-garden,.pano.go .wj-walker img{animation:none}.dock-tab,.wpath i{transition:none}.wj-layer{will-change:auto}}
 /* ---------- v11: painted UI kit ---------- */
@@ -746,7 +724,7 @@ body{color:var(--ink)}
 .dialog .say,.talk .say,.bubble,.ktip,.order .say,.folk .say{overflow-wrap:anywhere}
 
 /* Small ivory cards. */
-.grid .card,.grid .card.rr2,.grid .card.rr3,#v-shop .card,.tray button,.order,.folk,.wish,.finds>div,.wstart .finds>div,.pkc,.steps li,.insp:not(.idle),.st-finish,#v-shop .st-finish,.kpanel,.meter,.meter2,.bubble,.ktip,.st-pop,.st-detail,.chipx,.kfoot,.bdg{--ui-edge:12px;border-style:solid;border-color:transparent;border-width:var(--ui-edge);border-image:url('assets/ui_card.webp') 40 fill / var(--ui-edge) stretch;background:none;border-radius:14px;padding:2px;box-shadow:none;filter:var(--ui-shadow);backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink);min-width:0}
+.grid .card,.grid .card.rr2,.grid .card.rr3,#v-shop .card,.tray button,.order,.folk,.wish,.finds>div,.wstart .finds>div,.pkc,.steps li,.insp:not(.idle),.st-finish,#v-shop .st-finish,.kpanel,.meter,.meter2,.bubble,.ktip,.st-pop,.st-detail,.chipx,.kfoot,.bdg,.tip-pop{--ui-edge:12px;border-style:solid;border-color:transparent;border-width:var(--ui-edge);border-image:url('assets/ui_card.webp') 40 fill / var(--ui-edge) stretch;background:none;border-radius:14px;padding:2px;box-shadow:none;filter:var(--ui-shadow);backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink);min-width:0}
 .grid .card,.grid .card.rr2,.grid .card.rr3,#v-shop .card{padding:2px 0 4px}
 .grid .card::after{display:none}
 .grid .card:hover{box-shadow:none;filter:drop-shadow(0 6px 9px rgba(66,46,28,.22))}
@@ -772,29 +750,26 @@ body{color:var(--ink)}
 
 /* Compact controls use undecorated paper edges. */
 .btn,.btn.primary,.btn.green,.btn.sm,.btn.lg,.chip,.hud-back,.ib,.st-quick button,.pill,.snd,.phase,.top .phase,.subnav button,.view .subnav button,.view .subnav button.on,.seg button,.ksteps button,.tray .tray-empty .btn{border-style:solid;border-color:transparent;border-width:8px;border-image:url('assets/ui_card.webp') 40 fill / 8px stretch;background:none;border-radius:9px;box-shadow:none;filter:drop-shadow(0 2px 3px rgba(66,46,28,.15));backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink);line-height:1.2}
-.btn,.btn.primary,.btn.green{height:36px;padding:0 8px;letter-spacing:.03em}
-.btn.sm{height:32px;padding:0 5px;font-size:12px}
-.btn.lg{height:44px;padding:0 14px;font-size:15px}
+.btn,.btn.primary,.btn.green{padding:0 8px;letter-spacing:.03em}
+.btn.sm{padding:0 5px;font-size:12px}
+.btn.lg{padding:0 14px;font-size:15px}
 .btn.green{color:#365644}
 .btn:hover,.btn.primary:hover{box-shadow:none;filter:drop-shadow(0 3px 5px rgba(66,46,28,.25))}
-.chip{height:32px;padding:0 5px;gap:4px}
-.hud-back{height:36px;padding:0 4px;letter-spacing:0;gap:2px}
-.ib{width:36px;height:36px;padding:0;flex-shrink:0}
-.st-quick button{height:36px;padding:0 4px;gap:3px;letter-spacing:0}
-.pill{height:34px;padding:0 3px;gap:4px}
-.snd{width:36px;height:36px;padding:0;flex-shrink:0}
-#bookBtn{width:40px;height:40px}
+.chip{padding:0 5px;gap:4px}
+.hud-back{padding:0 4px;letter-spacing:0;gap:2px}
+.st-quick button{padding:0 4px;gap:3px;letter-spacing:0}
+.pill{padding:0 3px;gap:4px}
 #bookBtn img{display:block;width:24px;height:24px;object-fit:contain;pointer-events:none}
 .phase,.top .phase{padding:0 2px;min-height:30px;display:inline-flex;align-items:center}
 .subnav,.view .subnav,.seg>div{background:none;border:0;box-shadow:none;filter:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-.subnav button,.view .subnav button,.view .subnav button.on{height:36px;margin-top:0;padding:0 8px;letter-spacing:.06em}
+.subnav button,.view .subnav button,.view .subnav button.on{padding:0 8px;letter-spacing:.06em}
 .view .subnav{top:-58px;right:0;max-width:100%;gap:4px}
-.seg>div{height:36px;padding:0;gap:3px}
+.seg>div{padding:0;gap:3px}
 .seg button{min-width:0;padding:0 2px;letter-spacing:0}
 .ksteps{flex-wrap:wrap;gap:4px}
-.ksteps button{padding:0 4px;min-height:32px;display:inline-flex;align-items:center;letter-spacing:.04em}
+.ksteps button{padding:0 4px;display:inline-flex;align-items:center;letter-spacing:.04em}
 .ksteps .done{background:none;color:#365644}
-.tray .tray-empty .btn{width:100%;height:auto;min-height:40px;padding:2px;white-space:normal;color:#8b3028;line-height:1.5}
+.tray .tray-empty .btn{width:100%;height:auto;min-height:var(--c-md);padding:2px;white-space:normal;color:#8b3028;line-height:1.5}
 .fin-act .btn{padding:0 4px;min-width:0;white-space:normal;line-height:1.3}
 .inp,.stp>div{background:#faf5e9 var(--grain) center/256px;border-radius:8px;border:1px solid rgba(136,105,64,.36);box-shadow:inset 0 1px 3px rgba(90,64,31,.07);color:var(--ink)}
 .stp button{color:#6c4c31}
@@ -811,21 +786,20 @@ body{color:var(--ink)}
 
 /* Porcelain tools and collectible medallions. */
 .g-tools .tool,.g-tools .tool.on,.st-side button,.st-side button.on,.st-score,#witems .wi{border:0;border-image:none;border-radius:50%;background:url('assets/ui_round.webp') center/100% 100% no-repeat;box-shadow:none;filter:drop-shadow(0 3px 4px rgba(41,66,51,.22));backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink)}
-.g-tools .tool,.st-side button{min-width:40px;min-height:40px}
 .g-tools .tool{padding:4px;gap:1px;line-height:1.2}
 .g-tools .tool.on,.st-side button.on{outline:2px solid #ad382e;outline-offset:-5px;color:#8b3028;filter:drop-shadow(0 0 4px rgba(186,131,47,.5))}
 .g-tools .tool img{width:28px;height:28px}
 .st-score::before{inset:5px;border-color:#688b7a;opacity:.35}
 .st-score[data-lv='5']{filter:drop-shadow(0 0 6px rgba(209,155,53,.65))}
 #witems .wi.rare{filter:drop-shadow(0 0 7px rgba(239,191,82,.85))}
-.lvring{background:conic-gradient(#547f68 var(--p,0%),rgba(96,81,55,.25) 0);border:0;box-shadow:none;filter:drop-shadow(0 2px 3px rgba(41,66,51,.2))}
-.lvring span{width:26px;height:26px;background:url('assets/ui_round.webp') center/100% 100% no-repeat;color:var(--ink)}
+.lvring{background:conic-gradient(#547f68 var(--p,0%),#e9dcc0 0);border:0;box-shadow:none;filter:drop-shadow(0 2px 3px rgba(41,66,51,.2))}
+.lvring span{width:calc(100% - 8px);height:calc(100% - 8px);background:url('assets/ui_round.webp') center/100% 100% no-repeat;color:var(--ink)}
 
 /* Wide painted plaques keep their decorated ends outside the text. */
 .hint{width:min(100%,720px);min-height:46px;padding:10px clamp(64px,16vw,126px);background:url('assets/ui_btn_paper.webp') center/100% 100% no-repeat;border:0;border-image:none;border-radius:0;box-shadow:none;filter:var(--ui-shadow);backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink);line-height:1.65;letter-spacing:0;overflow-wrap:anywhere}
 .st-head,.shop-head{min-height:62px;padding:8px 18%;background:url('assets/ui_btn_paper.webp') center/100% 100% no-repeat;border:0;border-image:none;border-radius:0;box-shadow:none;filter:var(--ui-shadow);align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 12px;color:var(--ink)}
 .st-head .h-sub{min-width:0;margin:0;text-align:center;line-height:1.65;overflow-wrap:anywhere}
-.shop-head .btn{padding:0 4px;max-width:100%;height:auto;min-height:32px;white-space:normal}
+.shop-head .btn{padding:0 4px;max-width:100%;height:auto;min-height:var(--c-sm);white-space:normal}
 #v-wild .walk-top{background:none;border:0;box-shadow:none;filter:none;padding:0;gap:12px}
 #v-wild .walk-top .wstretch{width:160px;min-width:0;max-width:55%;min-height:44px;padding:9px 40px;background:url('assets/ui_btn_paper.webp') center/100% 100% no-repeat;border:0;border-image:none;border-radius:0;box-shadow:none;filter:var(--ui-shadow);font-size:19px;line-height:26px;white-space:nowrap;color:var(--ink)}
 #v-wild .walk-top .wpath{min-width:0}
@@ -864,8 +838,8 @@ body{color:var(--ink)}
 .meter2,.st-detail{flex-wrap:wrap}
 .meter2 .mscore,.st-detail .mscore{flex:1 1 100px}
 .btn:focus-visible,.chip:focus-visible,.dock-tab:focus-visible,.tool:focus-visible,.st-side button:focus-visible,.pkc:focus-visible{outline:2px solid #755335;outline-offset:2px}
-button:disabled,.btn:disabled,.tool:disabled{opacity:.5;filter:grayscale(1);box-shadow:none;cursor:default}
-button:disabled:hover{transform:none}
+button:disabled,.btn:disabled,.tool:disabled,button[aria-disabled="true"]{opacity:.5;filter:grayscale(1);box-shadow:none;cursor:default}
+button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 @media(max-width:600px){
   .top{gap:5px}.top .stats{gap:4px}.top .brand{gap:4px}
   .pill{padding:0 2px;max-width:88px}.hud-back{padding:0 2px}
@@ -902,7 +876,6 @@ button:disabled:hover{transform:none}
 .action-bar{position:fixed;z-index:5;left:50%;right:auto;bottom:calc(var(--dock-room) + 4px);transform:translateX(-50%);width:min(1040px,calc(100% - 32px));min-height:84px;display:flex;align-items:center;justify-content:flex-start;flex-wrap:nowrap;gap:10px;margin:0;padding:2px 4px;border:12px solid transparent;border-image:url('assets/ui_card.webp') 40 fill / 12px stretch;border-radius:14px;background:none;box-shadow:none;filter:var(--ui-shadow);backdrop-filter:none;-webkit-backdrop-filter:none}
 .action-bar>.btn:last-child{margin-left:auto;flex-shrink:0}
 #v-garden .action-bar.g-tools{margin:0;gap:10px}
-#v-garden .action-bar.g-tools .tool{width:56px;height:56px;flex:0 0 56px}
 #waterAll{display:flex;align-items:center;justify-content:center;gap:6px}
 #waterAll img{width:24px;height:24px;object-fit:contain}
 #v-studio,#v-kiln{padding-bottom:calc(var(--dock-room) + 104px)}
@@ -915,20 +888,20 @@ button:disabled:hover{transform:none}
 #v-kiln{padding-bottom:calc(var(--dock-room) + 24px)}
 .kside{display:grid;gap:12px;align-content:start;min-width:0}
 .knav{display:flex;justify-content:space-between;gap:10px}
-.knav .btn{min-width:96px;height:40px;font-size:14px}
+.knav .btn{min-width:96px}
 @media (max-width:760px){#v-kiln{padding-bottom:calc(var(--dock-room) + 8px)}.knav{position:sticky;bottom:14px;z-index:4;justify-content:flex-end;pointer-events:none}.knav .btn{pointer-events:auto;box-shadow:0 3px 10px rgba(64,45,25,.28)}}
 .kwheel{--kw-off:178px;max-width:min(420px,100%,max(200px,calc((100vh - var(--dock-room) - var(--kw-off))*.788)));max-width:min(420px,100%,max(200px,calc((100dvh - var(--dock-room) - var(--kw-off))*.788)))}
 @media (max-width:760px){.kwheel{--kw-off:240px}}
 .mode-exit{display:inline-flex;align-items:center;justify-content:center;min-height:28px;margin-left:6px;padding:0 4px;color:var(--rouge);font-size:12px;white-space:nowrap;vertical-align:baseline}
 .dialog.has-dlg-x{padding-top:42px}
-.dlg-x,.talk-x{position:absolute;top:0;right:0;width:36px;height:36px;min-width:36px;padding:0;display:grid;place-items:center;z-index:2;font-size:18px}
+.dlg-x,.talk-x{position:absolute;top:0;right:0;display:grid;place-items:center;z-index:2;font-size:18px}
 .dlg-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:0 0 auto;width:100%;margin-top:12px}
-.dlg-actions .btn{min-width:0;white-space:normal;line-height:1.4;height:auto;min-height:36px}
-.dlg-actions .btn.lg{min-height:44px}
+.dlg-actions .btn{min-width:0;white-space:normal;line-height:1.4;height:auto;min-height:var(--c-md)}
+.dlg-actions .btn.lg{min-height:var(--c-lg)}
 .dlg-choices{display:grid;gap:8px;margin-top:12px}
-.dlg-choices .btn.green{width:100%;height:auto;min-height:44px;white-space:normal;line-height:1.4}
-.order .who{padding-right:28px}
-.order-x{position:absolute;top:2px;right:2px;width:28px;height:28px;padding:0;border-width:6px;border-image-width:6px;display:grid;place-items:center;font-size:14px}
+.dlg-choices .btn.green{width:100%;height:auto;min-height:var(--c-lg);white-space:normal;line-height:1.4}
+.order .who{padding-right:var(--c-sm)}
+.order-x{position:absolute;top:2px;right:2px;display:grid;place-items:center;font-size:14px}
 .talk{padding-top:40px}
 .tb.bld:not(button){pointer-events:none}
 .tb.bld:not(button):hover,.tb.bld:not(button):active{transform:translate(-50%,-100%)}
@@ -959,7 +932,6 @@ html,body{overscroll-behavior:none}
 body{touch-action:manipulation}
 @media (max-width:600px){
   .showart{width:min(100%,220px)}
-  .btn.sm{height:36px}
 }
 /* phones: while the third row is all unbroken ground, show two rows and let the beds grow */
 @media not all and (min-width:760px) and (min-aspect-ratio:11/10){
@@ -990,7 +962,7 @@ body{touch-action:manipulation}
   @supports (width:1cqh){#v-studio .stage-box{width:min(100cqw,calc(100cqh*.9285))}}
 }
 .st-side{top:10px;right:10px;gap:6px}
-.st-side button{position:relative;width:46px;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9.5px;line-height:1;letter-spacing:.04em}
+.st-side button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9.5px;line-height:1;letter-spacing:.04em}
 .st-side button svg{width:16px;height:16px}
 .st-side .dot{position:absolute;top:-2px;right:-2px;min-width:17px;height:17px;padding:0 3px;border-radius:9px;background:#b5322c;color:#fff6e4;font-size:10.5px;line-height:17px;font-style:normal;text-align:center}
 .st-pop{right:64px;max-height:calc(100% - 22px);overflow-y:auto}
@@ -1031,13 +1003,12 @@ body{touch-action:manipulation}
 #v-studio .stp small,.cyc small{font-size:9.5px;letter-spacing:.12em;color:var(--ink-soft)}
 .st-bar{display:flex;align-items:center;gap:6px;flex:0 0 auto}
 #v-studio .st-quick{position:static;display:flex;flex-wrap:nowrap;gap:4px;min-width:0}
-#v-studio .st-quick button{height:42px;padding:0 3px;gap:3px;font-size:12px;white-space:nowrap}
+#v-studio .st-quick button{padding:0 3px;gap:3px;font-size:12px;white-space:nowrap}
 #stCount{margin-left:auto;font-size:12px;color:var(--ink-soft);white-space:nowrap}
 #finishArr{flex-shrink:0}
 @media (max-width:480px){#stCount{display:none}#finishArr{margin-left:auto}}
 .so-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .so-head .sec{margin:0 0 8px}
-.so-x{width:36px;height:36px;padding:0;flex-shrink:0}
 @media (min-width:1001px){
   #v-studio .studio{grid-template-columns:minmax(0,1fr) minmax(280px,360px)}
   .side-col{min-width:0;min-height:0;overflow-y:auto}
@@ -1141,6 +1112,52 @@ body{touch-action:manipulation}
 .png-tip{margin:10px 0 0;font-size:13px;line-height:1.55;color:var(--ink-soft)}
 .png-tip b{color:var(--rouge)}
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;box-sizing:border-box}
+/* ================= UI 规范（按钮与窗口的唯一来源） =================
+   新界面只从这里挑现成的档位和皮肤，不再给某一个按钮或窗口单独写高度/宽度/皮肤。
+   确实需要不一样时，先在这里加一档，并写清楚为什么。
+   按钮
+   · 高度三档：--c-sm 小 / --c-md 默认 / --c-lg 一页里的主操作（“完成作品”“下一步”）；具体像素随屏幕自适应，见下方 :root
+   · 形状三种：
+       文字钮：高度取上面的档位
+       方形图标钮：宽和高都取 --c-md（顶栏、关闭按钮）
+       圆形工具钮：--c-round，图标加两个字，用在花畦工具和花艺台侧栏
+   · 皮肤三种：纸（默认，ui_card）/ 朱漆（主操作、当前选中，ui_btn_red）/ 瓷（圆形工具钮，ui_round）
+   · 两个特例，各有原因：等级环是圆的，因为外圈就是经验进度条，但高度和顶栏一致，都是 --c-md；
+     花艺台评分章是 60 的圆，因为里面要放 22px 的大分数
+   窗口
+   · 大面板 ui_panel：弹窗、手账页、出游卡、对话
+   · 小卡 ui_card：卡片、订单、浮层提示（.tip-pop）、底部操作条
+   · 牌匾 ui_btn_paper：提示语、页头
+*/
+/* 档位随屏幕连续缩放：以屏幕短边（vmin）为准，小屏 SE 约 34，常见手机约 36，平板与电脑封顶 40；
+   其余档位都由 --c-md 推出来，彼此比例不变。触屏上小档不低于 36，保证手指点得到。 */
+:root{--c-md:clamp(34px,calc(26px + 2.7vmin),40px);--c-sm:max(30px,calc(var(--c-md) - 4px));--c-lg:calc(var(--c-md) + 8px);--c-round:calc(var(--c-md)*1.45)}
+@media (pointer:coarse){:root{--c-sm:max(36px,calc(var(--c-md) - 4px))}}
+.btn,.hud-back,.pill,.subnav button,.seg>div{height:var(--c-md)}
+.btn.sm,.chip,.ksteps button{height:var(--c-sm)}
+.btn.lg,.st-quick button{height:var(--c-lg)}
+.snd,.ib,.so-x,.dlg-x,.talk-x,.lvring{width:var(--c-md);height:var(--c-md);min-width:0;padding:0;flex-shrink:0}
+.order-x{width:var(--c-sm);height:var(--c-sm);padding:0}
+.g-tools .tool,.st-side button{width:var(--c-round);height:var(--c-round);flex:0 0 var(--c-round)}
+/* 浮层提示：点等级、花币弹出，套用小卡皮肤 */
+.tip-pop{position:absolute;z-index:16;width:min(268px,calc(100% - 24px));padding:4px 6px;font-size:13px;line-height:1.6;animation:dlg .2s ease}
+.tip-pop::before{content:'';position:absolute;top:-25px;right:calc(var(--ax,20px) - 19px);border:7px solid transparent;border-bottom-color:#efe4cb}
+.tip-pop h4{margin:0 0 2px;font-family:var(--f-display);font-size:19px;font-weight:400;letter-spacing:.06em;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.tip-pop h4 small{font-family:var(--f-body);font-size:12px;color:var(--ink-soft);letter-spacing:0}
+.tip-pop p{margin:4px 0 0}
+.tip-pop .xpbar{height:6px;border-radius:6px;background:rgba(96,81,55,.2);overflow:hidden;margin:4px 0 6px}
+.tip-pop .xpbar i{display:block;height:100%;background:#547f68}
+.tip-pop b{color:var(--rouge);font-weight:600}
+/* 反馈：每次点击都要有回应
+   · 轻提示 .toast：默认墨色；.warn 朱色，用于“做不了”（钱不够、次数用完），一眼区分成功与失败
+   · 做不了的按钮不用 disabled（点了没反应），改用 aria-disabled：外观同禁用，点了说明原因并轻轻一抖（.nope）
+   · 花币变化：顶栏花币下方飘 +N / −N（.gain / .gain.spend） */
+.toast.warn{background-color:#8a3324;color:#fff3ea}
+.nope{animation:nope .38s ease}
+@keyframes nope{20%{translate:-5px 0}40%{translate:5px 0}60%{translate:-3px 0}80%{translate:2px 0}}
+.gain.spend{color:#9a3b2e}
+.snd .mute{display:none}.snd.off .mute{display:inline}
+@media (prefers-reduced-motion:reduce){.nope{animation:none}}
 </style>
 </head><body>
 
@@ -1164,10 +1181,10 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   <header class="top gut">
     <div class="brand"><button class="hud-back" id="backBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg><span id="backTxt">小院</span></button><span class="logo">花信小筑</span><span class="phase" id="phase">晨</span></div>
     <div class="stats">
-      <div class="lvring" id="lvring" title="等级"><span id="lv">1</span></div>
-      <div class="pill" title="花币"><i class="coin"></i><b id="coins">0</b></div>
+      <button class="lvring" id="lvring" aria-label="等级说明" aria-haspopup="dialog"><span id="lv">1</span></button>
+      <button class="pill" id="coinPill" aria-label="花币说明" aria-haspopup="dialog"><i class="coin"></i><b id="coins">0</b></button>
       <button class="snd" id="bookBtn" aria-label="手账" title="手账"><img src="assets/di_book.webp" width="160" height="160" alt="" draggable="false"></button>
-      <button class="snd off" id="snd" aria-label="开关音乐与音效"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></button>
+      <button class="snd off" id="snd" aria-label="开关音乐与音效"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/><path class="mute" d="M3 3l18 18"/></svg></button>
     </div>
   </header>
 
@@ -1567,7 +1584,17 @@ function addExp(n){const b=level();S.exp+=Math.round(n);const a=level();if(a>b){
 function gotSeed(id,n=1){S.seeds[id]=(S.seeds[id]||0)+n;if(!S.codex[id])S.codex[id]=1}
 
 /* ================= ui helpers ================= */
-function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;$('#toasts').appendChild(e);setTimeout(()=>e.remove(),3300);while($('#toasts').children.length>3)$('#toasts').firstChild.remove()}
+function toast(t,kind=''){const box=$('#toasts');[...box.children].forEach(x=>{if(x.textContent===t)x.remove()});const e=document.createElement('div');e.className='toast'+(kind?' '+kind:'');e.textContent=t;box.appendChild(e);setTimeout(()=>e.remove(),3300);while(box.children.length>3)box.firstChild.remove()}
+function nope(el){if(!el)return;el.classList.remove('nope');void el.offsetWidth;el.classList.add('nope');setTimeout(()=>el.classList.remove('nope'),420)}
+function deny(msg,el,coins){toast(msg,'warn');nope(el);if(coins)nope($('#coinPill'));buzz([18,50,18]);sfx('nope')}
+/* 做不了的按钮：外观禁用，但点了会说明原因。costAttr 按花币判断，点击时再核一次（期间可能攒够了） */
+const lockAttr=why=>` aria-disabled="true" data-why="${esc(why)}"`;
+const lockIf=(c,why)=>c?lockAttr(why):'';
+const costAttr=c=>S.coins<c?` aria-disabled="true" data-cost="${c}"`:'';
+function setLock(b,why){if(!b)return;if(why){b.setAttribute('aria-disabled','true');b.dataset.why=why}else{b.removeAttribute('aria-disabled');delete b.dataset.why}}
+document.addEventListener('click',e=>{const b=e.target.closest?.('[aria-disabled="true"]');if(!b)return;const c=+b.dataset.cost||0;
+  if(c&&S.coins>=c){b.removeAttribute('aria-disabled');delete b.dataset.cost;return}
+  e.preventDefault();e.stopImmediatePropagation();deny(c?`花币不够：需要 ${c}，还差 ${c-S.coins}`:b.dataset.why||'现在还不能这样做',b,!!c)},true);
 function modal(html,wide,options={}){if(stale)return;
   const m=$('#modal');m.innerHTML=`<div class="dialog${wide?' wide':''}" role="dialog" aria-modal="true">${html}</div>`;
   const d=$('.dialog',m),seedChoice=!!$('[data-act="plant"]',d);
@@ -1608,10 +1635,10 @@ const tabEl=v=>$('#dock .dock-tab[data-go="'+v+'"]')||$('#bookBtn');
 function radar(parts){const c=68,r=44,pt=(i,k)=>{const a=-Math.PI/2+i*1.2566;return R(c+Math.cos(a)*r*k)+','+R(c+Math.sin(a)*r*k)},ring=k=>[0,1,2,3,4].map(i=>pt(i,k)).join(' ');
   return`<svg class="radar" viewBox="0 0 136 136" role="img" aria-label="五项评分">${[.34,.67,1].map(k=>`<polygon points="${ring(k)}" fill="${k===1?'rgba(255,255,255,.5)':'none'}" stroke="rgba(34,57,58,.16)"/>`).join('')}${[0,1,2,3,4].map(i=>`<path d="M${c},${c}L${pt(i,1)}" stroke="rgba(34,57,58,.12)"/>`).join('')}<polygon class="rv" points="${parts.map((p,i)=>pt(i,Math.max(.08,p/20))).join(' ')}" fill="rgba(127,107,196,.32)" stroke="#7f6bc4" stroke-width="1.6" stroke-linejoin="round"/>${parts.map((p,i)=>`<circle cx="${pt(i,Math.max(.08,p/20)).split(',')[0]}" cy="${pt(i,Math.max(.08,p/20)).split(',')[1]}" r="2.4" fill="#7f6bc4"/>`).join('')}${PARTS.map((n,i)=>{const q=pt(i,1.3).split(',');return`<text x="${q[0]}" y="${+q[1]+3.5}" text-anchor="middle">${n}</text>`}).join('')}</svg>`}
 function countUp(el,to,ms=900,delay=0){if(!el)return;const t0=performance.now()+delay;el.textContent=0;(function st(t){const k=clamp((t-t0)/ms,0,1);el.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1&&el.isConnected)requestAnimationFrame(st)})(performance.now())}
-let coinShown=null;function coinAnim(){const c=$('#coins'),b=S.coins;if(coinShown===null||coinShown===b){coinShown=b;c.textContent=b;return}const a=coinShown,t0=performance.now();coinShown=b;if(b>a)gainTag(c.parentNode,`+${b-a}`,'coin');(function st(t){const k=clamp((t-t0)/600,0,1);c.textContent=Math.round(a+(b-a)*k);if(k<1&&coinShown===b)requestAnimationFrame(st)})(t0)}
+let coinShown=null;function coinAnim(){const c=$('#coins'),b=S.coins;if(coinShown===null||coinShown===b){coinShown=b;c.textContent=b;return}const a=coinShown,t0=performance.now();coinShown=b;if(b>a)gainTag(c.parentNode,`+${b-a}`,'coin');else gainTag(c.parentNode,`−${a-b}`,'spend');(function st(t){const k=clamp((t-t0)/600,0,1);c.textContent=Math.round(a+(b-a)*k);if(k<1&&coinShown===b)requestAnimationFrame(st)})(t0)}
 function hud(){const l=level();$('#lv').textContent=l;coinAnim();
   const a=XP[l-1],b=XP[l]||a;$('#lvring').style.setProperty('--p',(b>a?clamp((S.exp-a)/(b-a),0,1)*100:100)+'%');
-  $('#snd').classList.toggle('off',!S.sound);$('#fertTxt').textContent=`露水×${S.dew}`;$('#polTxt').textContent=`授粉×${S.bfly}`}
+  $('#snd').classList.toggle('off',!S.sound);$('#snd').setAttribute('aria-pressed',S.sound?'true':'false');$('#snd').setAttribute('aria-label',S.sound?'声音已开，点一下关闭':'声音已关，点一下打开');$('#fertTxt').textContent=`露水×${S.dew}`;$('#polTxt').textContent=`授粉×${S.bfly}`}
 
 /* ================= audio ================= */
 const AU={ctx:null,timer:0,idx:4,lp:null};
@@ -1623,7 +1650,7 @@ function music(){clearTimeout(AU.timer);if(!S.sound||document.hidden)return;
   AU.idx=Math.random()<.18?pick([0,3,5]):clamp(AU.idx+pick([-2,-1,-1,1,1,2]),0,SC.length-1);
   const n=SC[AU.idx];tone(n,night?3.4:2.8,.055);if(Math.random()<.35)tone(SC[clamp(AU.idx+2,0,SC.length-1)],2.4,.03,'sine',.22);if(Math.random()<.24)tone(SC[AU.idx%3]/2,4.2,.045,'triangle');
   AU.timer=setTimeout(music,rint(night?1100:750,night?2500:1950))}
-function sfx(k){({water(){tone(880,.16,.05);tone(660,.2,.05,'sine',.07)},plant(){tone(196,.3,.08,'triangle')},harvest(){tone(523,.5,.08);tone(659,.5,.08,'sine',.09);tone(784,.8,.08,'sine',.18)},coin(){tone(988,.25,.06);tone(1319,.4,.06,'sine',.08)},place(){tone(392,.3,.06,'triangle')},bloom(){tone(784,.5,.06);tone(1047,.8,.06,'sine',.1)},rare(){[523,659,784,1047].forEach((f,i)=>tone(f,.9,.07,'sine',i*.11))}})[k]?.()}
+function sfx(k){({water(){tone(880,.16,.05);tone(660,.2,.05,'sine',.07)},plant(){tone(196,.3,.08,'triangle')},harvest(){tone(523,.5,.08);tone(659,.5,.08,'sine',.09);tone(784,.8,.08,'sine',.18)},coin(){tone(988,.25,.06);tone(1319,.4,.06,'sine',.08)},place(){tone(392,.3,.06,'triangle')},bloom(){tone(784,.5,.06);tone(1047,.8,.06,'sine',.1)},rare(){[523,659,784,1047].forEach((f,i)=>tone(f,.9,.07,'sine',i*.11))},nope(){tone(330,.16,.05,'triangle');tone(247,.26,.05,'triangle',.09)}})[k]?.()}
 function soundOn(){auInit();AU.ctx?.resume?.();music()}
 
 /* ================= garden ================= */
@@ -1680,7 +1707,7 @@ function pollinate(a,b){const pa=S.plots[a],pb=S.plots[b],els=$$('#plots .plot')
     addFx('pop',B[0],B[1]-10,'',`花种 +1 ${F[res].n}`);sfx(nw?'rare':'coin');
     toast(nw?(ba===bb?`新花色：育出了「${F[res].n}」的花种`:`新品种：${F[pa.id].n} × ${F[pb.id].n}，育出了「${F[res].n}」`):`授粉成功，得到「${F[res].n}」的花种`);hints()})}
 function plotClick(el){const i=+el.dataset.i,p=S.plots[i];
-  if(i>=plotCount()){if(i>plotCount())return toast('先开垦前面那一块');const c=LANDP[i];return modal(`<div class="center"><h2 class="h-title" style="justify-content:center">开垦花畦</h2><p class="say">翻土、捡石头、围一圈卵石，需要 ${price(c)}。<br>你现在有 ${price(S.coins)}。</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">再攒攒</button><button class="btn primary" data-act="land"${S.coins<c?' disabled':''}>开垦</button></div></div>`)}
+  if(i>=plotCount()){if(i>plotCount())return toast('先开垦前面那一块');const c=LANDP[i];return modal(`<div class="center"><h2 class="h-title" style="justify-content:center">开垦花畦</h2><p class="say">翻土、捡石头、围一圈卵石，需要 ${price(c)}。<br>你现在有 ${price(S.coins)}。</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">再攒攒</button><button class="btn primary" data-act="land"${costAttr(c)}>开垦</button></div></div>`)}
   if(polMode){if(!p||p.p<F[p.id].t)return toast('只有盛开的花才能授粉');if(p.pol)return toast('这朵花已经授过粉了');
     if(polA===null){polA=i;el.classList.add('pick');hints();return toast('再选另一朵盛开的花')}
     if(polA===i){polA=null;el.classList.remove('pick');hints();return}
@@ -1958,10 +1985,10 @@ function neededCut(id){const b=baseOf(id);
 function renderShop(){const lv=level(),seeds=IDS.filter(id=>F[id].lv),sell=IDS.filter(id=>S.cut[id]>0);
   $('#shop').innerHTML=`<div class="keeper">${chibi('keep')}<p class="bubble">欢迎，慢慢看。等级越高，我进的花种越多；花枝、露水、陶土，我也都收。</p></div>
   <div class="season-card"><img src="${term().art}" width="720" height="480" alt="" draggable="false" onerror="this.remove()"><span><b>时令 · ${term().n}</b><br>${F[term().id].n}当令<small>花种不限等级 · 长得快三成 · 入瓶售价加三成</small></span></div>
-  <h3 class="sec">花种</h3><div class="grid">${seeds.map(id=>{const f=F[id],ss=inSeason(id),lk=f.lv>lv&&!ss;return`<div class="card rr${lk?0:f.r}${lk?' seeded':''}">${ss?'<i class="top">当令</i>':''}${icon(id)}<span class="nm">${f.n}</span><span class="rar r${f.r}">${RAR[f.r]}</span><span class="meta">${fmtT(f.t)}开花 · 已有 ${S.seeds[id]||0}</span>${lk?`<span class="meta">Lv.${f.lv} 上架</span>`:`<span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buy="${id}"${S.coins<f.buy?' disabled':''}>${price(f.buy)}</button><button class="btn sm" data-buy="${id}" data-n="5"${S.coins<f.buy*5?' disabled':''}>×5</button></span>`}</div>`}).join('')}</div>
-  <h3 class="sec">花器</h3><div class="grid">${Object.keys(VASES).filter(v=>!VASES[v].pot).map(v=>{const d=VASES[v],own=S.vases.includes(v);return`<div class="card"><svg class="ico" viewBox="${d.vb||'110 250 180 240'}">${d.back||''}<ellipse cx="200" cy="${d.my}" rx="${d.mw}" ry="${d.ry}" fill="${d.inner}"/><path d="${d.body}" fill="${d.fill}"${d.stroke?` stroke="#9fc3d0" stroke-width="1.5"`:''}/>${d.extra||''}</svg><span class="nm">${d.n}</span><span class="meta" title="${vtypeOf(d).tip}">${vtypeOf(d).n} · ${Math.min(d.cap||vtypeOf(d).cap,18)} 枝</span>${own?'<span class="meta">已拥有</span>':`<button class="btn sm" data-buyv="${v}"${S.coins<d.price?' disabled':''}>${price(d.price)}</button>`}</div>`}).join('')}</div>
-  <h3 class="sec">杂货</h3><div class="grid"><div class="card"><i class="bi" style="width:54px;height:83px">${DEWSVG}</i><span class="nm">露水</span><span class="meta">滴在生长中的花上，长高一截 · 已有 ${S.dew}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyf="1"${S.coins<15?' disabled':''}>${price(15)}</button><button class="btn sm" data-buyf="5"${S.coins<75?' disabled':''}>×5</button></span></div><div class="card"><i class="bi" style="width:64px;height:83px">${BFLY}</i><span class="nm">花蜜</span><span class="meta">摆在院里，引来一只蝴蝶 · 蝴蝶 ${S.bfly}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyb="1"${S.coins<25?' disabled':''}>${price(25)}</button><button class="btn sm" data-buyb="5"${S.coins<125?' disabled':''}>×5</button></span></div>${S.kiln?`<div class="card"><i class="bi" style="width:60px;height:83px">${CLAYSVG}</i><span class="nm">陶土</span><span class="meta">拉坯用 · 已有 ${S.clay}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyc="1"${S.coins<40?' disabled':''}>${price(40)}</button><button class="btn sm" data-buyc="5"${S.coins<200?' disabled':''}>×5</button></span></div>`:''}</div>
-  <h3 class="sec">雇工</h3><div class="st-finish"><span style="display:flex;align-items:center;gap:10px;min-width:0"><span class="ava big">禾</span><span><b style="letter-spacing:.1em">园丁阿禾</b><br><span class="muted" style="font-size:12.5px">${S.hire>Date.now()?`在岗，还能帮你看护 ${gameDur(S.hire-Date.now())}`:'替你浇水、拔草、请走小蜗牛。雇一天，帮你看护一整天。'}</span></span></span><button class="btn primary" data-hire="1"${S.coins<80?' disabled':''}>${S.hire>Date.now()?'续一天':'雇一天'} ${price(80)}</button></div>
+  <h3 class="sec">花种</h3><div class="grid">${seeds.map(id=>{const f=F[id],ss=inSeason(id),lk=f.lv>lv&&!ss;return`<div class="card rr${lk?0:f.r}${lk?' seeded':''}">${ss?'<i class="top">当令</i>':''}${icon(id)}<span class="nm">${f.n}</span><span class="rar r${f.r}">${RAR[f.r]}</span><span class="meta">${fmtT(f.t)}开花 · 已有 ${S.seeds[id]||0}</span>${lk?`<span class="meta">Lv.${f.lv} 上架</span>`:`<span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buy="${id}"${costAttr(f.buy)}>${price(f.buy)}</button><button class="btn sm" data-buy="${id}" data-n="5"${costAttr(f.buy*5)}>×5</button></span>`}</div>`}).join('')}</div>
+  <h3 class="sec">花器</h3><div class="grid">${Object.keys(VASES).filter(v=>!VASES[v].pot).map(v=>{const d=VASES[v],own=S.vases.includes(v);return`<div class="card"><svg class="ico" viewBox="${d.vb||'110 250 180 240'}">${d.back||''}<ellipse cx="200" cy="${d.my}" rx="${d.mw}" ry="${d.ry}" fill="${d.inner}"/><path d="${d.body}" fill="${d.fill}"${d.stroke?` stroke="#9fc3d0" stroke-width="1.5"`:''}/>${d.extra||''}</svg><span class="nm">${d.n}</span><span class="meta" title="${vtypeOf(d).tip}">${vtypeOf(d).n} · ${Math.min(d.cap||vtypeOf(d).cap,18)} 枝</span>${own?'<span class="meta">已拥有</span>':`<button class="btn sm" data-buyv="${v}"${costAttr(d.price)}>${price(d.price)}</button>`}</div>`}).join('')}</div>
+  <h3 class="sec">杂货</h3><div class="grid"><div class="card"><i class="bi" style="width:54px;height:83px">${DEWSVG}</i><span class="nm">露水</span><span class="meta">滴在生长中的花上，长高一截 · 已有 ${S.dew}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyf="1"${costAttr(15)}>${price(15)}</button><button class="btn sm" data-buyf="5"${costAttr(75)}>×5</button></span></div><div class="card"><i class="bi" style="width:64px;height:83px">${BFLY}</i><span class="nm">花蜜</span><span class="meta">摆在院里，引来一只蝴蝶 · 蝴蝶 ${S.bfly}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyb="1"${costAttr(25)}>${price(25)}</button><button class="btn sm" data-buyb="5"${costAttr(125)}>×5</button></span></div>${S.kiln?`<div class="card"><i class="bi" style="width:60px;height:83px">${CLAYSVG}</i><span class="nm">陶土</span><span class="meta">拉坯用 · 已有 ${S.clay}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyc="1"${costAttr(40)}>${price(40)}</button><button class="btn sm" data-buyc="5"${costAttr(200)}>×5</button></span></div>`:''}</div>
+  <h3 class="sec">雇工</h3><div class="st-finish"><span style="display:flex;align-items:center;gap:10px;min-width:0"><span class="ava big">禾</span><span><b style="letter-spacing:.1em">园丁阿禾</b><br><span class="muted" style="font-size:12.5px">${S.hire>Date.now()?`在岗，还能帮你看护 ${gameDur(S.hire-Date.now())}`:'替你浇水、拔草、请走小蜗牛。雇一天，帮你看护一整天。'}</span></span></span><button class="btn primary" data-hire="1"${costAttr(80)}>${S.hire>Date.now()?'续一天':'雇一天'} ${price(80)}</button></div>
   <h3 class="sec">收购</h3>${sell.length||S.dew||S.clay?`<div class="grid">${sell.map(id=>{const nd=neededCut(id);return`<div class="card">${nd?'<i class="top" style="background:#547f68">需用</i>':''}${icon(id)}<span class="nm">${F[id].n} ×${S.cut[id]}</span><span class="meta">每枝 ${price(sellP(id))}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-sell="${id}">卖一枝</button><button class="btn sm" data-sell="${id}" data-all="1">全卖</button></span></div>`}).join('')}${S.dew?`<div class="card"><i class="bi" style="width:54px;height:83px">${DEWSVG}</i><span class="nm">露水 ×${S.dew}</span><span class="meta">每滴 ${price(6)}</span><button class="btn sm" data-sell="dew">卖一滴</button></div>`:''}${S.clay?`<div class="card"><i class="bi" style="width:60px;height:83px">${CLAYSVG}</i><span class="nm">陶土 ×${S.clay}</span><span class="meta">每块 ${price(15)}</span><button class="btn sm" data-sell="clay">卖一块</button></div>`:''}</div>`:'<p class="empty-note">手头没有可以卖的东西。采下的花枝、山野带回的露水和陶土，花铺都收。</p>'}`}
 const sellP=id=>Math.max(2,Math.round(F[id].val*.6));
 function srcText(id){const f=F[id],rc=BREED.find(r=>r[2]===id);let t=f.lv?`花铺 Lv.${f.lv} 上架。`:'';
@@ -1977,7 +2004,7 @@ const today=()=>{const d=new Date();return d.getFullYear()*10000+(d.getMonth()+1
 const GRADES=[[291,'甲等',1],[279,'乙等',.8],[261,'丙等',.6],[0,'入围',.4]];
 function showBar(){const n=S.gallery.length,held=S.show&&S.show.d===today(),best=S.showBest!=null?` 历来最好：${GRADES[S.showBest][1]}。`:'';
   const txt=n<3?`花架上攒够三件作品，就能办一场花展。还差 ${3-n} 件。`:held?`今天的花展评为「${GRADES[S.show.g][1]}」，明天可以再办。${best}`:`取花架上意境最高的三件参展，每天一场。${best}`;
-  return`<div class="st-finish showbar"><span style="min-width:0"><b style="letter-spacing:.1em">花展</b><br><span class="muted" style="font-size:12.5px">${txt}</span></span><button class="btn primary" data-show="1"${n<3||held?' disabled':''}>办一场花展</button></div>`}
+  return`<div class="st-finish showbar"><span style="min-width:0"><b style="letter-spacing:.1em">花展</b><br><span class="muted" style="font-size:12.5px">${txt}</span></span><button class="btn primary" data-show="1"${lockIf(n<3||held,held?'今天已经办过花展了，明天再来':`攒够三件作品再办花展（现在 ${n} 件）`)}>办一场花展</button></div>`}
 function holdShow(){if(S.gallery.length<3)return toast('攒够三件作品再办花展');if(S.show&&S.show.d===today())return toast('今天已经办过花展了，明天再来');
   const top=[...S.gallery].sort((a,b)=>b.score-a.score).slice(0,3),sum=top.reduce((a,w)=>a+w.score,0),gi=GRADES.findIndex(g=>sum>=g[0]),coins=Math.round(sum*GRADES[gi][2]);
   S.show={d:today(),g:gi};S.showBest=Math.min(S.showBest??9,gi);S.coins+=coins;let extra='';if(gi===0){S.bfly++;S.dew++;extra='，另赠蝴蝶与露水各一'}
@@ -2102,7 +2129,10 @@ function bind(){
   gv.addEventListener('pointerdown',e=>{if(!e.target.closest('button'))burstFx(e.clientX,e.clientY)});
   for(const id of['#codex','#shop']){$(id).addEventListener('pointermove',e=>{const c=e.target.closest('.grid .card');if(!c||e.pointerType==='touch')return;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.setProperty('--ry',((x-.5)*14).toFixed(1)+'deg');c.style.setProperty('--rx',((.5-y)*12).toFixed(1)+'deg');c.style.setProperty('--mx',(x*100).toFixed(0)+'%');c.style.setProperty('--my',(y*100).toFixed(0)+'%')});
     $(id).addEventListener('pointerout',e=>{const c=e.target.closest('.grid .card');if(c&&!c.contains(e.relatedTarget)){c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg')}})}
-  $('#snd').addEventListener('click',()=>{S.sound=!S.sound;if(S.sound){soundOn();toast('音乐已开')}else clearTimeout(AU.timer);hud();save()});
+  $('#lvring').addEventListener('click',e=>hudTip(e.currentTarget,lvTipHTML()));
+  $('#coinPill').addEventListener('click',e=>hudTip(e.currentTarget,`<h4>花币<small>现有 ${S.coins}</small></h4><p>卖插花、交乡邻订单都能挣花币。</p><p>在花铺买花种、开垦新花畦要用到。</p>`));
+  document.addEventListener('pointerdown',e=>{const t=$('#hudTip');if(t&&!t.hidden&&!e.target.closest('#hudTip,#lvring,#coinPill'))t.hidden=true});
+  $('#snd').addEventListener('click',()=>{S.sound=!S.sound;if(S.sound){soundOn();toast('声音已打开：音乐和音效都会响');sfx('coin')}else{clearTimeout(AU.timer);toast('声音已关闭：再点一下音符就能打开')}hud();save()});
   document.addEventListener('pointerdown',()=>{if(S.sound&&!AU.ctx)soundOn()},{once:true});
   $('#modal').addEventListener('click',e=>{if(e.target.id==='modal'){$('#modal .dlg-x')?.click();return}const cv=e.target.closest('[data-cxv]');if(cv)return codexDetail(cv.dataset.cxv);const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
     if(a==='reload')return location.reload();if(a==='doImport')return doImport();
@@ -2156,19 +2186,20 @@ function bind(){
   $('#kiln').addEventListener('pointermove',e=>{if(kdrag)kilnShape(e)});
   addEventListener('pointerup',()=>{kdrag=null});
   $('#orders').addEventListener('click',e=>{const d=e.target.closest('[data-decline]');
-    if(d){S.orders=S.orders.filter(o=>o.k!==+d.dataset.decline);fillOrders();renderOrders();save()}});
+    if(d){S.orders=S.orders.filter(o=>o.k!==+d.dataset.decline);fillOrders();renderOrders();toast('已婉拒这份委托');save()}});
   // shop
-  $('#shop').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
-    if(d.buy){const f=F[d.buy],n=+(d.n||1),cost=f.buy*n;if(S.coins<cost)return;S.coins-=cost;gotSeed(d.buy,n);toast(`买下${n>1?` ${n} 粒`:'一粒'}${f.n}花种`)}
-    else if(d.buyv){const v=VASES[d.buyv];if(S.coins<v.price)return;S.coins-=v.price;S.vases.push(d.buyv);toast(`「${v.n}」已摆上花艺台`)}
-    else if(d.buyf){const n=+d.buyf,cost=15*n;if(S.coins<cost)return;S.coins-=cost;S.dew+=n;toast(`买下${n>1?` ${n} 瓶`:'一瓶'}露水`)}
-    else if(d.buyc){const n=+d.buyc,cost=40*n;if(S.coins<cost)return;S.coins-=cost;S.clay+=n;toast(`买下${n>1?` ${n} 块`:'一块'}陶土`)}
-    else if(d.buyb){const n=+d.buyb,cost=25*n;if(S.coins<cost)return;S.coins-=cost;S.bfly+=n;toast(n>1?`花蜜摆好了，飞来 ${n} 只蝴蝶`:'花蜜摆好了，飞来一只蝴蝶')}
-    else if(d.hire){if(S.coins<80)return;S.coins-=80;S.hire=Math.max(Date.now(),S.hire||0)+DAY*1000;toast('园丁阿禾来上工了，这一天花田交给他')}
+  $('#shop').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset,at=appXY(b);let got='';
+    const poor=c=>S.coins<c&&(deny(`花币不够：需要 ${c}，还差 ${c-S.coins}`,b,true),true);
+    if(d.buy){const f=F[d.buy],n=+(d.n||1),cost=f.buy*n;if(poor(cost))return;S.coins-=cost;gotSeed(d.buy,n);got=`花种 +${n}`;toast(`买下${n>1?` ${n} 粒`:'一粒'}${f.n}花种，已放进种子袋（共 ${S.seeds[d.buy]||0} 粒）`)}
+    else if(d.buyv){const v=VASES[d.buyv];if(poor(v.price))return;S.coins-=v.price;S.vases.push(d.buyv);got='已入手';toast(`买下「${v.n}」，已摆上花艺台`)}
+    else if(d.buyf){const n=+d.buyf,cost=15*n;if(poor(cost))return;S.coins-=cost;S.dew+=n;got=`露水 +${n}`;toast(`买下${n>1?` ${n} 瓶`:'一瓶'}露水，现在有 ${S.dew} 瓶`)}
+    else if(d.buyc){const n=+d.buyc,cost=40*n;if(poor(cost))return;S.coins-=cost;S.clay+=n;got=`陶土 +${n}`;toast(`买下${n>1?` ${n} 块`:'一块'}陶土，现在有 ${S.clay} 块`)}
+    else if(d.buyb){const n=+d.buyb,cost=25*n;if(poor(cost))return;S.coins-=cost;S.bfly+=n;got=`蝴蝶 +${n}`;toast(`${n>1?`花蜜摆好了，飞来 ${n} 只蝴蝶`:'花蜜摆好了，飞来一只蝴蝶'}，现在有 ${S.bfly} 只`)}
+    else if(d.hire){if(poor(80))return;S.coins-=80;S.hire=Math.max(Date.now(),S.hire||0)+DAY*1000;got='已雇';toast('园丁阿禾来上工了，这一天花田交给他')}
     else if(d.sell){const id=d.sell;if(id==='dew'||id==='clay'){if(S[id]<1)return;S[id]--;S.coins+=id==='dew'?6:15}
       else{if(d.all&&neededCut(id)&&(S.cut[id]||0)>0)return modal(`<div class="center"><h2 class="h-title" style="justify-content:center">全部卖出？</h2><p class="say">乡邻或花笺正需要「${F[id].n}」，确定要把手头的 ${S.cut[id]} 枝全都卖掉吗？</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">留着</button><button class="btn primary" data-act="confirmSell" data-id="${id}">全卖</button></div></div>`);
         const n=d.all?S.cut[id]:1;if(!(S.cut[id]>0))return;S.cut[id]-=n;S.coins+=n*sellP(id)}toast('卖出了，花币入袋')}else return;
-    sfx('coin');hud();renderShop();save()});
+    sfx('coin');hud();renderShop();if(got)tagAt(at[0],at[1]-at[2].height/2-22,got,'xp');save()});
   $('#codex').addEventListener('click',e=>{const b=e.target.closest('[data-cx]');if(b)codexDetail(b.dataset.cx)});
   $('#gallery').addEventListener('click',e=>{const sb=e.target.closest('[data-show]');if(sb){if(!sb.disabled)holdShow();return}const b=e.target.closest('[data-work]');if(b)workDetail(+b.dataset.work)});
 }
@@ -2224,7 +2255,7 @@ function renderWild(){if(walk)return;const l=legs(),mx=S.legMax||3;
   $('#wild').innerHTML=`${panoHTML(false)}<div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">沿着溪边慢慢走，遇见什么，就带回什么。不赶时间。</p>
   <div class="finds"><div><i class="bi">${BFLY}</i><b>蝴蝶</b><small>授粉时请它帮忙</small></div><div><i class="bi">${DEWSVG}</i><b>露水</b><small>滴在花上，长高一截</small></div><div><i class="bi">${SEEDSVG}</i><b>花种</b><small>偶尔是没见过的</small></div><div><i class="bi">${icon('wildmum')}</i><b>野花</b><small>只在这里有</small></div>${S.kiln?`<div><i class="bi">${CLAYSVG}</i><b>陶土</b><small>带回陶坊拉坯</small></div>`:''}</div>
   <div class="bag">${bagHTML()}</div>
-  <div class="wild-info"><div class="legs">${Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')}<span>${legTxt(l,mx)}</span></div><button class="btn primary lg" id="walkGo"${l?'':' disabled'}>出门散步</button></div></div>`}
+  <div class="wild-info"><div class="legs">${Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')}<span>${legTxt(l,mx)}</span></div><button class="btn primary lg" id="walkGo"${l?'':lockAttr(legTxt(0,mx))}>出门散步</button></div></div>`}
 function startWalk(){if(legs()<1||walk)return;S.legs--;
   walk={t0:Date.now(),got:{},next:0,timer:0};
   $('#wild').innerHTML=`${panoHTML(true)}<div class="walk-top"><span class="wstretch" id="wstretch">院门</span><div class="wpath" aria-label="从院门到山顶的散步进度"><i id="wdot"></i></div></div><p class="walk-tip">看见喜欢的，轻轻点一下</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn" id="walkEnd">结束散步</button></div>`;
@@ -2329,7 +2360,7 @@ const dayNo=()=>Math.floor(((Date.now()-S.t0)/1000+34)/DAY);
 function ensureWishes(){const d=dayNo();if(!S.wishes||S.wishes.d!==d)S.wishes={d,list:[...WISH].sort(()=>Math.random()-.5).slice(0,3).map(w=>({k:w[0],n:w[1],t:w[2],base:S.st[w[0]]||0,got:0}))}}
 function checkBadges(){for(const b of BADGE)if(!S.badges[b[0]]&&b[3]()){S.badges[b[0]]=1;S.coins+=40;badgeBanner(b);hud()}}
 function renderGoals(){ensureWishes();const wc=wishCoins();
-  $('#goals').innerHTML=subHead('goals')+`<h2 class="h-title">心愿</h2><p class="h-sub">每天三件小事（每件谢礼 ${wc} 花币与晨露），做不做都好。天亮了会换新的。</p><div class="wishes">${S.wishes.list.map((x,i)=>{const v=clamp((S.st[x.k]||0)-x.base,0,x.n),done=v>=x.n;return`<div class="wish${x.got?' got':''}"><div><b>${x.t}</b><div class="wbar"><i style="width:${v/x.n*100}%"></i></div></div>${x.got?'<span class="muted">已领</span>':`<button class="btn sm green" data-wish="${i}"${done?'':' disabled'}>${done?'领取':`${v} / ${x.n}`}</button>`}</div>`}).join('')}</div>
+  $('#goals').innerHTML=subHead('goals')+`<h2 class="h-title">心愿</h2><p class="h-sub">每天三件小事（每件谢礼 ${wc} 花币与晨露），做不做都好。天亮了会换新的。</p><div class="wishes">${S.wishes.list.map((x,i)=>{const v=clamp((S.st[x.k]||0)-x.base,0,x.n),done=v>=x.n;return`<div class="wish${x.got?' got':''}"><div><b>${x.t}</b><div class="wbar"><i style="width:${v/x.n*100}%"></i></div></div>${x.got?'<span class="muted">已领</span>':`<button class="btn sm green" data-wish="${i}"${done?'':lockAttr(`这件小事还没做完（${v} / ${x.n}），做完再来领谢礼`)}>${done?'领取':`${v} / ${x.n}`}</button>`}</div>`}).join('')}</div>
   <h3 class="sec">徽章</h3><div class="bdgs">${BADGE.map(b=>`<div class="bdg${S.badges[b[0]]?' on':''}"><i>${b[1][0]}</i><b>${b[1]}</b><small>${b[2]}</small></div>`).join('')}</div>
   <h3 class="sec">存档</h3><p class="h-sub">存档只留在这台设备的浏览器里。清理浏览器数据或换设备之前，先导出一份。</p><div class="save-row"><button class="btn" data-save="export">导出存档</button><button class="btn" data-save="import">导入存档</button></div>`}
 
@@ -2359,19 +2390,19 @@ function potPreview(){const clay=kstep===0,v=potVase(pot,clay),n=pot.r.length;le
   return`<svg viewBox="96 238 208 264" id="ksvg"><defs>${potDefs(pot,clay?'#b98d6f':pot.gl)}</defs><ellipse cx="200" cy="486" rx="86" ry="11" fill="#6f5a48"/><ellipse cx="200" cy="482" rx="86" ry="11" fill="#9a8168"/><ellipse cx="200" cy="482" rx="60" ry="7" fill="none" stroke="#7d6652" stroke-width="1.5"/><ellipse cx="200" cy="${v.my}" rx="${v.mw}" ry="${v.ry}" fill="${v.inner}"/><path d="${v.body}" fill="${v.fill}"/>${v.extra}<path d="M${200-v.mw},${v.my}A${v.mw},${v.ry} 0 0 0 ${200+v.mw},${v.my}" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.5"/>${clay?`<g clip-path="url(#pc-${pot.id})" class="kspin" stroke="#fff" stroke-opacity=".22" fill="none">${[0,1,2,3,4,5,6,7].map(k=>`<path d="M110,${300+k*24}q90,14 180,0"/>`).join('')}</g>`:''}${hd}</svg>`.replace(/4\.500/g,'4.5')}
 function renderKiln(){const el=$('#kiln');
   if(!S.kiln){el.innerHTML=subHead('kiln')+'<h2 class="h-title">陶坊</h2><p class="empty-note">陶坊的门还关着。<br>去「乡邻」认识陶匠老窑，帮他一个忙，他会教你拉坯。</p>';return}
-  if(!pot){el.innerHTML=subHead('kiln')+`<h2 class="h-title">陶坊</h2><p class="h-sub">拉坯、上釉、彩绘，再入窑烧成。烧好的陶器可以在花艺台当花器。</p><div class="action-bar"><span class="chipx"><i class="bi">${CLAYSVG}</i>陶土 <b>${S.clay}</b></span><button class="btn primary lg" id="potNew"${S.clay<1||S.pots.length>=8?' disabled':''}>${S.pots.length>=8?'架子摆满了':S.clay<1?'没有陶土了':'取一块陶土'}</button></div>${S.pots.length?`<h3 class="sec">我的陶器</h3><div class="grid">${S.pots.map(p=>{const d=VASES[p.id],vt=vtypeOf(d);return`<div class="card">${vaseThumb(d).replace('<svg','<svg class="ico"')}<span class="nm">${esc(p.name)}</span><span class="meta">${GLAZE.find(g=>g[1]===p.gl)?.[0]||''}釉 · ${vt.n}（${vt.cap}枝）</span><button class="btn sm" data-potdel="${p.id}">送给乡邻</button></div>`}).join('')}</div>`:'<p class="empty-note">架子上还空着。<br>陶土可以在山野的溪边捡到，花铺也有卖。</p>'}`;return}
+  if(!pot){el.innerHTML=subHead('kiln')+`<h2 class="h-title">陶坊</h2><p class="h-sub">拉坯、上釉、彩绘，再入窑烧成。烧好的陶器可以在花艺台当花器。</p><div class="action-bar"><span class="chipx"><i class="bi">${CLAYSVG}</i>陶土 <b>${S.clay}</b></span><button class="btn primary lg" id="potNew"${lockIf(S.clay<1||S.pots.length>=8,S.pots.length>=8?'陶器架子摆满了：把一件送给乡邻，就能腾出位置':'没有陶土了：花铺有卖，山野散步时也能挖到')}>${S.pots.length>=8?'架子摆满了':S.clay<1?'没有陶土了':'取一块陶土'}</button></div>${S.pots.length?`<h3 class="sec">我的陶器</h3><div class="grid">${S.pots.map(p=>{const d=VASES[p.id],vt=vtypeOf(d);return`<div class="card">${vaseThumb(d).replace('<svg','<svg class="ico"')}<span class="nm">${esc(p.name)}</span><span class="meta">${GLAZE.find(g=>g[1]===p.gl)?.[0]||''}釉 · ${vt.n}（${vt.cap}枝）</span><button class="btn sm" data-potdel="${p.id}">送给乡邻</button></div>`}).join('')}</div>`:'<p class="empty-note">架子上还空着。<br>陶土可以在山野的溪边捡到，花铺也有卖。</p>'}`;return}
   let panel;
   if(kstep===0)panel=`<p class="ktip">拖陶坯右边的圆点，把它推胖或收细；拖最上面的圆点，改高矮。</p><div class="kvtype" id="kvtype">${potTypeHTML(pot)}</div><h4>或者从一个坯形开始</h4><div class="pk">${Object.keys(SHAPES).map(k=>`<button class="pkc" data-shape="${k}"><svg viewBox="120 ${478-SHAPES[k][1]-8} 160 ${SHAPES[k][1]+12}"><path d="${potPath(SHAPES[k][0],SHAPES[k][1]).d}" fill="#b98d6f"/></svg><span>${k}</span></button>`).join('')}</div>`;
   else if(kstep===1)panel=`<h4>釉色</h4><div class="pk">${GLAZE.map((g,i)=>`<button class="pkc${pot.gl===g[1]?' on':''}" data-gl="${i}"><i class="sw" style="background:${g[1]}"></i><span>${g[0]}</span></button>`).join('')}</div><div class="seg"><label>光泽</label><div><button data-gloss="1"${pot.gloss?' class="on"':''}>亮釉</button><button data-gloss="0"${pot.gloss?'':' class="on"'}>哑光</button></div></div>`;
   else if(kstep===2)panel=`<p class="ktip">选一个纹样，然后在陶坯上上下拖动，把它挪到喜欢的位置。</p><h4>纹样</h4><div class="chips">${MOTIF.map(m=>`<button class="chip${pot.mo===m[0]?' on':''}" data-mo="${m[0]}">${m[1]}</button>`).join('')}</div><h4>颜料</h4><div class="chips">${PIG.map((g,i)=>`<button class="chip${pot.pig===g[1]?' on':''}" data-pig="${i}"><i style="background:${g[1]}"></i>${g[0]}</button>`).join('')}</div><div class="seg"><label>口沿</label><div><button data-rim="0"${pot.rim?'':' class="on"'}>本色</button><button data-rim="1"${pot.rim?' class="on"':''}>描金边</button></div></div>`;
   else panel=`<p class="ktip">起个名字，就可以入窑了。窑火要烧一小会儿。</p><label for="potName" class="muted" style="font-size:12px">陶器的名字</label><input class="inp" id="potName" maxlength="6" value="${esc(pot.name)}">`;
-  el.innerHTML=subHead('kiln')+`<div class="st-head"><h2 class="h-title">陶坊</h2><div class="ksteps">${['塑形','上釉','彩绘','入窑'].map((s,i)=>`<button class="${i===kstep?'on':i<kstep?'done':''}" data-kstep="${i}"${i===kstep?' aria-current="step"':''}>${s}</button>`).join('')}</div></div><div class="kiln"><div class="kwheel" id="kwheel">${potPreview()}</div><div class="kside"><div class="kpanel">${panel}</div><div class="knav"><button class="btn" data-kgo="-1">${kstep?'上一步':'取消'}</button><button class="btn primary" data-kgo="1">${kstep===3?'入窑烧制':'下一步'}</button></div></div></div>`}
+  el.innerHTML=subHead('kiln')+`<div class="st-head"><h2 class="h-title">陶坊</h2><div class="ksteps">${['塑形','上釉','彩绘','入窑'].map((s,i)=>`<button class="${i===kstep?'on':i<kstep?'done':''}" data-kstep="${i}"${i===kstep?' aria-current="step"':''}>${s}</button>`).join('')}</div></div><div class="kiln"><div class="kwheel" id="kwheel">${potPreview()}</div><div class="kside"><div class="kpanel">${panel}</div><div class="knav"><button class="btn lg" data-kgo="-1">${kstep?'上一步':'取消'}</button><button class="btn primary lg" data-kgo="1">${kstep===3?'入窑烧制':'下一步'}</button></div></div></div>`}
 function firePot(){pot.name=($('#potName')?.value||'无名').trim().slice(0,6)||'无名';const p=pot;p.id='p_'+S.nid++;S.clay--;
   modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">窑火正旺</p><div class="kfire"><i></i></div><p class="muted">等一等，急不得。</p></div>`,false,{dismissible:false});
   setTimeout(()=>{S.pots.push(p);VASES[p.id]=potVase(p);$('#defs').insertAdjacentHTML('beforeend',potDefs(p,p.gl));S.vases.push(p.id);pot=null;kstep=0;bump('pots');sfx('rare');save();
     modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">出窑</p><div class="reveal"><i class="rays"></i>${vaseThumb(VASES[p.id]).replace('<svg','<svg class="ico big-ico"')}</div><h2 class="h-title" style="justify-content:center">${esc(p.name)}</h2><p class="muted">已经摆上花艺台，可以在「花器」里选它。</p><button class="btn primary" data-act="close">收下</button></div>`);confetti(['#fff',p.gl,p.pig]);if(view==='kiln')renderKiln()},3600)}
 function kilnClick(e){const b=e.target.closest('button');if(!b)return;const d=b.dataset;
-  if(b.id==='potNew'){pot={id:'prev',r:[...SHAPES.瓶[0]],H:SHAPES.瓶[1],gl:GLAZE[1][1],gloss:1,mo:'none',pig:PIG[0][1],py:.5,rim:0,name:pick(['初心','春水','半月','拙','听雨','小满'])};kstep=0}
+  if(b.id==='potNew'){if(S.clay<1||S.pots.length>=8)return;pot={id:'prev',r:[...SHAPES.瓶[0]],H:SHAPES.瓶[1],gl:GLAZE[1][1],gloss:1,mo:'none',pig:PIG[0][1],py:.5,rim:0,name:pick(['初心','春水','半月','拙','听雨','小满'])};kstep=0}
   else if(d.potdel){const pt=S.pots.find(p=>p.id===d.potdel);if(!pt)return;return modal(`<div class="center"><h2 class="h-title" style="justify-content:center">送给乡邻</h2><p class="say">要把亲手烧制的「${esc(pt.name)}」送给乡邻吗？<br>乡邻会回礼 ${price(50)}，花架上已装裱的作品仍会保留它的模样。</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">留着自用</button><button class="btn primary" data-act="delpot" data-id="${pt.id}">送出</button></div></div>`)}
   else if(!pot)return;
   else if(d.shape){pot.r=[...SHAPES[d.shape][0]];pot.H=SHAPES[d.shape][1]}
@@ -2411,7 +2442,7 @@ function measureJourney(){if(!journeyScene)return;const q=journeyScene,W=q.pano.
   $$('.wj-prop',q.pano).forEach(el=>{const speed=el.parentElement===q.front?1.16:1;el.style.left=(W*.28+D*speed*Number(el.dataset.t))+'px'});paintJourney(walk?(Date.now()-walk.t0)/WALKMS:0)}
 function journeyFrame(){journeyRAF=0;if(!walk||view!=='wild'||document.hidden||!journeyScene||!journeyScene.pano.isConnected)return;const k=clamp((Date.now()-walk.t0)/WALKMS,0,1);paintJourney(k);if(k<1)journeyRAF=requestAnimationFrame(journeyFrame)}
 function mountJourney(){stopJourney();const p=$('#wild .pano');if(!p||view!=='wild')return;journeyScene={pano:p,sky:$('.wj-sky',p),hills:$('.wj-hills',p),props:$('.wj-props',p),ground:$('.wj-ground',p),cross:$('.wj-crossing',p),front:$('.wj-front',p),mist:$('.wj-mist',p)};measureJourney();if(typeof ResizeObserver!=='undefined'){journeyRO=new ResizeObserver(measureJourney);journeyRO.observe(p)}if(walk&&!document.hidden)journeyRAF=requestAnimationFrame(journeyFrame)}
-function refreshWildRest(){const box=$('#wild .legs'),btn=$('#walkGo');if(!box||!btn)return;const l=legs(),mx=S.legMax||3;box.innerHTML=Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')+`<span>${legTxt(l,mx)}</span>`;btn.disabled=!l}
+function refreshWildRest(){const box=$('#wild .legs'),btn=$('#walkGo');if(!box||!btn)return;const l=legs(),mx=S.legMax||3;box.innerHTML=Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')+`<span>${legTxt(l,mx)}</span>`;setLock(btn,l?'':legTxt(0,mx))}
 
 /* persistent navigation and contextual destinations */
 const dockPlaces=[['garden','小院','<path d="M3 20h18M6 20v-5h12v5M12 15V8M12 12C6 12 5 8 5 6c4 0 7 2 7 6zM12 10c0-4 3-6 7-6 0 4-3 6-7 6z"/>'],['studio','花艺',ICO.vase],['shop','花铺','<path d="M4 10v11h16V10M3 4h18l1 6H2zM9 21v-7h6v7M7 4v6M12 4v6M17 4v6"/>'],['town','小镇','<path d="M2 11l6-6 6 6M4 9v12h8V9M14 8l4-4 4 4M15 7v14h6V7M7 21v-6h2M17 12h2M17 16h2"/>'],['wild','山野','<path d="M2 20L9 6l5 9 3-6 5 11zM9 6l2 4M7 20c7-4 0-5 5-8"/>']];
@@ -2455,7 +2486,8 @@ function preloadStems(){const ids=new Set([...IDS.filter(id=>S.cut[id]>0),...S.a
 /* ================= v8: 新手引导、划动连采与反馈 ================= */
 function buzz(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 const appXY=el=>{const a=$('#app').getBoundingClientRect(),r=el.getBoundingClientRect();return[r.left-a.left+r.width/2,r.top-a.top+r.height/2,r]};
-function gainTag(target,txt,cls=''){if(!target||!target.isConnected)return;const[x,y,r]=appXY(target);if(!r.width)return;const e=document.createElement('span');e.className='gain '+cls;e.textContent=txt;e.style.left=x+'px';e.style.top=(y+r.height/2+2)+'px';$('#app').appendChild(e);setTimeout(()=>e.remove(),1300)}
+function gainTag(target,txt,cls=''){if(!target||!target.isConnected)return;const[x,y,r]=appXY(target);if(!r.width)return;tagAt(x,y+r.height/2+2,txt,cls)}
+function tagAt(x,y,txt,cls=''){const e=document.createElement('span');e.className='gain '+cls;e.textContent=txt;e.style.left=x+'px';e.style.top=y+'px';$('#app').appendChild(e);setTimeout(()=>e.remove(),1300)}
 function chime(n){const f=SC[Math.min(SC.length-1,Math.max(0,n))];tone(f,.45,.07);tone(f*2,.3,.025,'sine',.04)}
 function stampAt(x,y,txt){const e=document.createElement('span');e.className='stampx';e.textContent=txt;e.style.left=x+'px';e.style.top=y+'px';$('#app').appendChild(e);setTimeout(()=>e.remove(),1350)}
 
@@ -2500,6 +2532,15 @@ function nextBanner(){const b=BQ.shift();if(!b){bannerOn=false;return}bannerOn=t
 function lvBanner(a,gift){const nw=IDS.filter(id=>F[id].lv===a),lines=[nw.length?`花铺上新：${nw.map(id=>F[id].n).join('、')}`:'',gift].filter(Boolean);
   banner(`<i class="rays"></i><small>升级</small><b class="lvnum">Lv.${a}</b>${lines.map(t=>`<p>${t}</p>`).join('')}`,'hxb-lv');
   sfx('rare');setTimeout(()=>tone(1568,.9,.05),450);buzz([18,50,26]);const r=$('#lvring');r.classList.remove('bump');void r.offsetWidth;r.classList.add('bump')}
+/* 顶栏小浮窗：点等级环、花币时说明是什么；再点一次或点别处收起 */
+function hudTip(anchor,html){let t=$('#hudTip');if(t&&!t.hidden&&t.dataset.for===anchor.id){t.hidden=true;return}
+  if(!t){t=document.createElement('div');t.id='hudTip';t.className='tip-pop';t.setAttribute('role','dialog');$('#app').appendChild(t)}
+  const a=$('#app').getBoundingClientRect(),r=anchor.getBoundingClientRect();t.innerHTML=html;t.dataset.for=anchor.id;t.hidden=false;
+  t.style.top=(r.bottom-a.top+8)+'px';t.style.right='12px';t.style.setProperty('--ax',(a.right-12-(r.left+r.width/2))+'px');clearTimeout(hudTip.k);hudTip.k=setTimeout(()=>{t.hidden=true},8000)}
+function lvTipHTML(){const l=level(),a=XP[l-1],b=XP[l];
+  if(b===undefined)return`<h4>等级 ${l}<small>已到最高级</small></h4><p>收花、交订单、卖插花、花会展出都会积累经验。</p>`;
+  const nw=IDS.filter(id=>F[id].lv===l+1).map(id=>F[id].n),p=clamp((S.exp-a)/(b-a),0,1)*100;
+  return`<h4>等级 ${l}<small>经验 ${S.exp-a} / ${b-a}</small></h4><div class="xpbar"><i style="width:${p}%"></i></div><p>收花、交订单、卖插花、花会展出都会涨经验，等级环外圈就是经验进度。</p>`+(nw.length?`<p>升到 ${l+1} 级，花铺上新：<b>${nw.join('、')}</b></p>`:`<p>再升 ${b-S.exp} 点经验到 ${l+1} 级。</p>`)}
 function badgeBanner(b){banner(`<i class="bdg-i">${b[1][0]}</i><span><small>获得徽章</small><b>${b[1]}</b><em>${b[2]} · 贺礼 40 花币</em></span>`,'hxb-bd');setTimeout(()=>sfx('rare'),200);buzz([12,40,12])}
 
 /* finished work: the score ticks up, stars ring one by one, then a grade seal comes down */

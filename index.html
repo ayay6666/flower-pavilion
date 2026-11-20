@@ -910,11 +910,15 @@ button:disabled:hover{transform:none}
 .plots{width:min(100%,640px,calc((100vh - 400px)*1.12));width:min(100%,640px,calc((100dvh - 400px)*1.12))}
 .studio-actions #stCount{margin-left:auto}
 .studio-actions>#finishArr{margin-left:0}
-.kfoot.action-bar{margin-top:0;justify-content:space-between}
-/* the pot preview (208×264) must fit between the step header and the fixed bottom bar */
-.kwheel{--kw-off:250px;max-width:min(420px,100%,max(200px,calc((100vh - var(--dock-room) - var(--kw-off))*.788)));max-width:min(420px,100%,max(200px,calc((100dvh - var(--dock-room) - var(--kw-off))*.788)))}
-@media (max-width:760px){.kwheel{--kw-off:292px}}
-.kfoot.action-bar .kdots{margin-left:auto}
+/* the pot preview (208×264) must fit below the step header (and above the floating step buttons on phones) */
+/* kiln step buttons: a small pair under the panel, not a full-width bar; on phones they float bottom-right */
+#v-kiln{padding-bottom:calc(var(--dock-room) + 24px)}
+.kside{display:grid;gap:12px;align-content:start;min-width:0}
+.knav{display:flex;justify-content:space-between;gap:10px}
+.knav .btn{min-width:96px;height:40px;font-size:14px}
+@media (max-width:760px){#v-kiln{padding-bottom:calc(var(--dock-room) + 8px)}.knav{position:sticky;bottom:14px;z-index:4;justify-content:flex-end;pointer-events:none}.knav .btn{pointer-events:auto;box-shadow:0 3px 10px rgba(64,45,25,.28)}}
+.kwheel{--kw-off:178px;max-width:min(420px,100%,max(200px,calc((100vh - var(--dock-room) - var(--kw-off))*.788)));max-width:min(420px,100%,max(200px,calc((100dvh - var(--dock-room) - var(--kw-off))*.788)))}
+@media (max-width:760px){.kwheel{--kw-off:240px}}
 .mode-exit{display:inline-flex;align-items:center;justify-content:center;min-height:28px;margin-left:6px;padding:0 4px;color:var(--rouge);font-size:12px;white-space:nowrap;vertical-align:baseline}
 .dialog.has-dlg-x{padding-top:42px}
 .dlg-x,.talk-x{position:absolute;top:0;right:0;width:36px;height:36px;min-width:36px;padding:0;display:grid;place-items:center;z-index:2;font-size:18px}
@@ -1535,7 +1539,7 @@ function stageSVG(w,live){
 /* ================= state ================= */
 const KEY='huaxin-xiaozhu-v1';
 let S;
-function fresh(){return{coins:60,exp:0,seeds:{daisy:3,tulip:2,eucalyptus:1},cut:{},fert:1,plots:Array(12).fill(null),codex:{daisy:1,tulip:1,eucalyptus:1},vases:['white'],vase:'white',bg:0,arr:[],orders:[],gallery:[],sound:true,nid:1,t0:Date.now(),intro:false,tut:1,done:0,rec:{},kx:0,form:'free',v:2,bfly:2,dew:1,clay:0,legs:3,legT:Date.now(),legMax:3,folk:{},st:{},wishes:null,badges:{},pots:[],kiln:false,deep:0,best:{},land:6,hire:0}}
+function fresh(){return{coins:60,exp:0,seeds:{daisy:3,tulip:2,eucalyptus:1},cut:{},fert:1,plots:Array(12).fill(null),codex:{daisy:1,tulip:1,eucalyptus:1},vases:['white'],vase:'white',bg:0,arr:[],orders:[],gallery:[],sound:true,nid:1,t0:Date.now(),intro:false,tut:1,done:0,rec:{},kx:0,form:'free',v:2,bfly:2,dew:1,clay:0,legs:3,legD:0,legMax:3,folk:{},st:{},wishes:null,badges:{},pots:[],kiln:false,deep:0,best:{},land:6,hire:0}}
 function load(d){S=fresh();let o=d;if(!o){try{o=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}}
   if(o&&typeof o==='object'&&Array.isArray(o.plots)){const old=o.v!==2;Object.assign(S,o);if(old){[...S.arr,...S.gallery.flatMap(w=>w.stems||[])].forEach(s=>{s.x+=60;s.y+=22});S.gallery.forEach(w=>{if(w.bg>0)w.bg++});if(S.bg>0)S.bg++;S.v=2}}
   if(o&&o.land===undefined&&Array.isArray(o.plots))S.land=Math.max(6,Math.min(12,5+level()));
@@ -2207,19 +2211,21 @@ function tick(){sky();const now=Date.now(),app=$('#app');
 const WILD=['forget','wildmum'],WALKMS=42000;
 const blooms=()=>BASE.filter(b=>VARS[b].some(id=>S.codex[id]===2)).length;
 function bump(k,n=1){S.st[k]=(S.st[k]||0)+n;checkBadges();if(view==='goals')renderGoals()}
-function legs(){const mx=S.legMax||3,now=Date.now();if(S.legs>=mx){S.legT=now;return S.legs}const n=Math.floor((now-S.legT)/90000);if(n>0){S.legs=Math.min(mx,S.legs+n);S.legT+=n*90000}return S.legs}
+function legs(){const mx=S.legMax||3,d=dayNo();if(S.legD!==d){S.legD=d;S.legs=mx}return S.legs}
+const legWait=()=>{const t=Math.max(1,Math.ceil(DAY-((Date.now()-S.t0)/1000+34)%DAY));return t>60?`约 ${Math.ceil(t/60)} 分钟`:`约 ${t} 秒`};
+const legTxt=(l,mx)=>l?`今天的脚力 ${l} / ${mx}`:`今天走累了，${legWait()}后又是新的一天`;
 const DEWSVG='<svg viewBox="0 0 30 34"><path d="M15 2s10 11 10 19a10 10 0 0 1-20 0C5 13 15 2 15 2z" fill="#bfe6f7" stroke="#fff" stroke-width="1.5"/><path d="M10 21a5 5 0 0 0 4 5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
 const CLAYSVG='<svg viewBox="0 0 34 28"><path d="M4 20c-2-8 5-15 13-15s15 6 13 14c-1 5-6 7-13 7S5 25 4 20z" fill="#b98d6f" stroke="#8a654b" stroke-width="1.2"/><path d="M10 12c3-3 8-3 11-1" stroke="#d9b598" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
 const SEEDSVG='<svg viewBox="-30 -30 60 60"><g stroke="#fff" stroke-width="1.4" stroke-linecap="round">'+Array.from({length:11},(_,k)=>{const a=(-160+k*14)/57.3;return`<path d="M0,2L${R(Math.cos(a)*22)},${R(2+Math.sin(a)*22)}"/><circle cx="${R(Math.cos(a)*22)}" cy="${R(2+Math.sin(a)*22)}" r="1.6" fill="#fff"/>`}).join('')+'<path d="M0,2L0,18"/></g><ellipse cx="0" cy="21" rx="2.6" ry="5" fill="#8a6a45"/></svg>';
 const panoHTML=go=>journeyHTML(go);
 const bagHTML=()=>`<span class="chipx"><i class="bi">${BFLY}</i>蝴蝶 <b>${S.bfly}</b></span><span class="chipx"><i class="bi">${DEWSVG}</i>露水 <b>${S.dew}</b></span>${S.kiln?`<span class="chipx"><i class="bi">${CLAYSVG}</i>陶土 <b>${S.clay}</b></span>`:''}`;
 let walk=null;
-function renderWild(){if(walk)return;const l=legs(),mx=S.legMax||3,wait=Math.max(1,90-Math.floor((Date.now()-S.legT)/1000));
+function renderWild(){if(walk)return;const l=legs(),mx=S.legMax||3;
   $('#wild').innerHTML=`${panoHTML(false)}<div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">沿着溪边慢慢走，遇见什么，就带回什么。不赶时间。</p>
   <div class="finds"><div><i class="bi">${BFLY}</i><b>蝴蝶</b><small>授粉时请它帮忙</small></div><div><i class="bi">${DEWSVG}</i><b>露水</b><small>滴在花上，长高一截</small></div><div><i class="bi">${SEEDSVG}</i><b>花种</b><small>偶尔是没见过的</small></div><div><i class="bi">${icon('wildmum')}</i><b>野花</b><small>只在这里有</small></div>${S.kiln?`<div><i class="bi">${CLAYSVG}</i><b>陶土</b><small>带回陶坊拉坯</small></div>`:''}</div>
   <div class="bag">${bagHTML()}</div>
-  <div class="wild-info"><div class="legs">${Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')}<span>${l?`脚力 ${l} / ${mx}`:`歇一会儿，约 ${wait} 秒后能再走`}</span></div><button class="btn primary lg" id="walkGo"${l?'':' disabled'}>出门散步</button></div></div>`}
-function startWalk(){if(legs()<1||walk)return;if(S.legs>=(S.legMax||3))S.legT=Date.now();S.legs--;
+  <div class="wild-info"><div class="legs">${Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')}<span>${legTxt(l,mx)}</span></div><button class="btn primary lg" id="walkGo"${l?'':' disabled'}>出门散步</button></div></div>`}
+function startWalk(){if(legs()<1||walk)return;S.legs--;
   walk={t0:Date.now(),got:{},next:0,timer:0};
   $('#wild').innerHTML=`${panoHTML(true)}<div class="walk-top"><span class="wstretch" id="wstretch">院门</span><div class="wpath" aria-label="从院门到山顶的散步进度"><i id="wdot"></i></div></div><p class="walk-tip">看见喜欢的，轻轻点一下</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn" id="walkEnd">结束散步</button></div>`;
   $('#wbag').innerHTML=bagHTML();walk.timer=setInterval(walkTick,400);walkTick();sfx('place');save()}
@@ -2359,7 +2365,7 @@ function renderKiln(){const el=$('#kiln');
   else if(kstep===1)panel=`<h4>釉色</h4><div class="pk">${GLAZE.map((g,i)=>`<button class="pkc${pot.gl===g[1]?' on':''}" data-gl="${i}"><i class="sw" style="background:${g[1]}"></i><span>${g[0]}</span></button>`).join('')}</div><div class="seg"><label>光泽</label><div><button data-gloss="1"${pot.gloss?' class="on"':''}>亮釉</button><button data-gloss="0"${pot.gloss?'':' class="on"'}>哑光</button></div></div>`;
   else if(kstep===2)panel=`<p class="ktip">选一个纹样，然后在陶坯上上下拖动，把它挪到喜欢的位置。</p><h4>纹样</h4><div class="chips">${MOTIF.map(m=>`<button class="chip${pot.mo===m[0]?' on':''}" data-mo="${m[0]}">${m[1]}</button>`).join('')}</div><h4>颜料</h4><div class="chips">${PIG.map((g,i)=>`<button class="chip${pot.pig===g[1]?' on':''}" data-pig="${i}"><i style="background:${g[1]}"></i>${g[0]}</button>`).join('')}</div><div class="seg"><label>口沿</label><div><button data-rim="0"${pot.rim?'':' class="on"'}>本色</button><button data-rim="1"${pot.rim?' class="on"':''}>描金边</button></div></div>`;
   else panel=`<p class="ktip">起个名字，就可以入窑了。窑火要烧一小会儿。</p><label for="potName" class="muted" style="font-size:12px">陶器的名字</label><input class="inp" id="potName" maxlength="6" value="${esc(pot.name)}">`;
-  el.innerHTML=subHead('kiln')+`<div class="st-head"><h2 class="h-title">陶坊</h2><div class="ksteps">${['塑形','上釉','彩绘','入窑'].map((s,i)=>`<button class="${i===kstep?'on':i<kstep?'done':''}" data-kstep="${i}"${i===kstep?' aria-current="step"':''}>${s}</button>`).join('')}</div></div><div class="kiln"><div class="kwheel" id="kwheel">${potPreview()}</div><div class="kpanel">${panel}</div></div><div class="kfoot action-bar"><button class="btn lg" data-kgo="-1">${kstep?'上一步':'取消'}</button><span class="kdots">${[0,1,2,3].map(i=>`<i class="${i<=kstep?'on':''}"></i>`).join('')}</span><button class="btn primary lg" data-kgo="1">${kstep===3?'入窑烧制':'下一步'}</button></div>`}
+  el.innerHTML=subHead('kiln')+`<div class="st-head"><h2 class="h-title">陶坊</h2><div class="ksteps">${['塑形','上釉','彩绘','入窑'].map((s,i)=>`<button class="${i===kstep?'on':i<kstep?'done':''}" data-kstep="${i}"${i===kstep?' aria-current="step"':''}>${s}</button>`).join('')}</div></div><div class="kiln"><div class="kwheel" id="kwheel">${potPreview()}</div><div class="kside"><div class="kpanel">${panel}</div><div class="knav"><button class="btn" data-kgo="-1">${kstep?'上一步':'取消'}</button><button class="btn primary" data-kgo="1">${kstep===3?'入窑烧制':'下一步'}</button></div></div></div>`}
 function firePot(){pot.name=($('#potName')?.value||'无名').trim().slice(0,6)||'无名';const p=pot;p.id='p_'+S.nid++;S.clay--;
   modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">窑火正旺</p><div class="kfire"><i></i></div><p class="muted">等一等，急不得。</p></div>`,false,{dismissible:false});
   setTimeout(()=>{S.pots.push(p);VASES[p.id]=potVase(p);$('#defs').insertAdjacentHTML('beforeend',potDefs(p,p.gl));S.vases.push(p.id);pot=null;kstep=0;bump('pots');sfx('rare');save();
@@ -2405,7 +2411,7 @@ function measureJourney(){if(!journeyScene)return;const q=journeyScene,W=q.pano.
   $$('.wj-prop',q.pano).forEach(el=>{const speed=el.parentElement===q.front?1.16:1;el.style.left=(W*.28+D*speed*Number(el.dataset.t))+'px'});paintJourney(walk?(Date.now()-walk.t0)/WALKMS:0)}
 function journeyFrame(){journeyRAF=0;if(!walk||view!=='wild'||document.hidden||!journeyScene||!journeyScene.pano.isConnected)return;const k=clamp((Date.now()-walk.t0)/WALKMS,0,1);paintJourney(k);if(k<1)journeyRAF=requestAnimationFrame(journeyFrame)}
 function mountJourney(){stopJourney();const p=$('#wild .pano');if(!p||view!=='wild')return;journeyScene={pano:p,sky:$('.wj-sky',p),hills:$('.wj-hills',p),props:$('.wj-props',p),ground:$('.wj-ground',p),cross:$('.wj-crossing',p),front:$('.wj-front',p),mist:$('.wj-mist',p)};measureJourney();if(typeof ResizeObserver!=='undefined'){journeyRO=new ResizeObserver(measureJourney);journeyRO.observe(p)}if(walk&&!document.hidden)journeyRAF=requestAnimationFrame(journeyFrame)}
-function refreshWildRest(){const box=$('#wild .legs'),btn=$('#walkGo');if(!box||!btn)return;const l=legs(),mx=S.legMax||3,wait=Math.max(1,90-Math.floor((Date.now()-S.legT)/1000));box.innerHTML=Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')+`<span>${l?`脚力 ${l} / ${mx}`:`歇一会儿，约 ${wait} 秒后能再走`}</span>`;btn.disabled=!l}
+function refreshWildRest(){const box=$('#wild .legs'),btn=$('#walkGo');if(!box||!btn)return;const l=legs(),mx=S.legMax||3;box.innerHTML=Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')+`<span>${legTxt(l,mx)}</span>`;btn.disabled=!l}
 
 /* persistent navigation and contextual destinations */
 const dockPlaces=[['garden','小院','<path d="M3 20h18M6 20v-5h12v5M12 15V8M12 12C6 12 5 8 5 6c4 0 7 2 7 6zM12 10c0-4 3-6 7-6 0 4-3 6-7 6z"/>'],['studio','花艺',ICO.vase],['shop','花铺','<path d="M4 10v11h16V10M3 4h18l1 6H2zM9 21v-7h6v7M7 4v6M12 4v6M17 4v6"/>'],['town','小镇','<path d="M2 11l6-6 6 6M4 9v12h8V9M14 8l4-4 4 4M15 7v14h6V7M7 21v-6h2M17 12h2M17 16h2"/>'],['wild','山野','<path d="M2 20L9 6l5 9 3-6 5 11zM9 6l2 4M7 20c7-4 0-5 5-8"/>']];

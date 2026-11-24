@@ -811,7 +811,8 @@ body{color:var(--ink)}
 
 /* Wide painted plaques keep their decorated ends outside the text. */
 .hint{width:min(100%,720px);min-height:46px;padding:10px clamp(64px,16vw,126px);background:url('assets/ui_btn_paper.webp') center/100% 100% no-repeat;border:0;border-image:none;border-radius:0;box-shadow:none;filter:var(--ui-shadow);backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink);line-height:1.65;letter-spacing:0;overflow-wrap:anywhere}
-.st-head,.shop-head{min-height:62px;padding:8px 18%;background:url('assets/ui_btn_paper.webp') center/100% 100% no-repeat;border:0;border-image:none;border-radius:0;box-shadow:none;filter:var(--ui-shadow);align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 12px;color:var(--ink)}
+/* 页头只挂一块店招（ui_plaque），外层不再铺牌匾，免得“牌匾套卷轴”、宽屏被拉变形 */
+.st-head,.shop-head{min-height:0;padding:0;background:none;border:0;border-image:none;border-radius:0;box-shadow:none;filter:none;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 12px;color:var(--ink)}
 .st-head .h-sub{min-width:0;margin:0;text-align:center;line-height:1.65;overflow-wrap:anywhere}
 .shop-head .btn{padding:0 4px;max-width:100%;height:auto;min-height:var(--c-sm);white-space:normal}
 #v-wild .walk-top{background:none;border:0;box-shadow:none;filter:none;padding:0;gap:12px}
@@ -822,7 +823,8 @@ body{color:var(--ink)}
 .view .h-title,.dialog .center .h-title,.dialog .h-title.center{display:flex;align-items:center;justify-content:center;width:min(100%,320px);min-width:0;min-height:52px;padding:10px 72px;background:url('assets/ui_ribbon.webp') center/100% 100% no-repeat;border:0;border-radius:0;box-shadow:none;filter:drop-shadow(0 2px 3px rgba(66,46,28,.16));color:var(--ink);text-align:center;font-size:26px;line-height:1.3;gap:0;overflow-wrap:anywhere;text-shadow:none}
 .h-title::after{content:none;display:none}
 .dialog .center .h-title,.dialog .h-title.center{margin-inline:auto}
-.st-head .h-title,.shop-head .h-title{width:240px;max-width:100%;padding-inline:54px;flex-shrink:1;font-size:25px}
+/* 内边距按牌匾自身宽度算（百分比会按外层算，宽屏下字被挤成竖排）；多一层 .view 是为了压过窄屏下通用标题的内边距 */
+.view .st-head .h-title,.view .shop-head .h-title{--pw:min(100%,clamp(220px,62vw,320px));width:var(--pw);aspect-ratio:960/220;min-height:0;margin:0;padding:0 calc(var(--pw)*.2);background:url('assets/ui_plaque.webp') center/100% 100% no-repeat;filter:var(--ui-shadow);flex-shrink:1;font-size:clamp(22px,calc(16px + 1.6vmin),27px);letter-spacing:.2em;text-indent:.2em}
 .wstart .h-title{margin-inline:auto}
 
 /* Mineral-pigment seals and quiet paper labels. */
@@ -857,8 +859,6 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 @media(max-width:600px){
   .top{gap:5px}.top .stats{gap:4px}.top .brand{gap:4px}
   .pill{padding:0 2px;max-width:88px}.hud-back{padding:0 2px}
-  .st-head,.shop-head{padding-inline:18%}
-  .st-head .h-title,.shop-head .h-title{padding-inline:50px;font-size:24px}
   .st-head .ksteps{justify-content:center}
   .talk{padding:4px;gap:7px}
   .talk .say{font-size:13px}
@@ -869,7 +869,6 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 }
 @media(max-width:360px){
   .view .h-title,.dialog .center .h-title,.dialog .h-title.center{padding-inline:60px;font-size:24px}
-  .st-head .h-title,.shop-head .h-title{padding-inline:40px;font-size:22px}
   .hint{padding-inline:58px;font-size:12px}
   #dock{gap:3px}.top .phase{padding-inline:0}
   .tface .chibi,.talk .tface .chibi{width:44px}
@@ -1148,7 +1147,8 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
    窗口
    · 大面板 ui_panel：弹窗、手账页、出游卡、对话
    · 小卡 ui_card：卡片、订单、浮层提示（.tip-pop）、底部操作条
-   · 牌匾 ui_btn_paper：提示语、页头
+   · 牌匾 ui_btn_paper：提示语
+   · 店招 ui_plaque：页头标题（花铺、花艺台）。整块木匾按原图比例显示，不拉伸，外层不再叠牌匾或卷轴
 */
 /* 档位随屏幕连续缩放：以屏幕短边（vmin）为准，小屏 SE 约 34，常见手机约 36，平板与电脑封顶 40；
    其余档位都由 --c-md 推出来，彼此比例不变。触屏上小档不低于 36，保证手指点得到。 */

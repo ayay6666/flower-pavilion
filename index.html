@@ -1047,8 +1047,6 @@ body{touch-action:manipulation}
 .combo{position:absolute;z-index:31;pointer-events:none;transform:translate(-50%,-50%);font-family:'Ma Shan Zheng',serif;font-size:22px;color:#fff6e4;white-space:nowrap;text-shadow:0 0 1px #6b2a17,0 2px 0 #b5322c,0 3px 8px rgba(0,0,0,.35);animation:combo .9s cubic-bezier(.2,1.5,.4,1) forwards}
 .combo b{font-size:32px;margin-left:2px;color:#ffe08a;font-weight:400}
 @keyframes combo{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}25%{opacity:1;transform:translate(-50%,-60%) scale(1.15)}70%{opacity:1;transform:translate(-50%,-80%) scale(1)}100%{opacity:0;transform:translate(-50%,-110%) scale(.95)}}
-.stampx{position:absolute;z-index:31;pointer-events:none;transform:translate(-50%,-50%) rotate(-12deg);padding:0 8px;border:2.5px solid #b5322c;border-radius:6px;color:#b5322c;background:rgba(255,246,228,.88);font-family:'Ma Shan Zheng',serif;font-size:20px;line-height:1.4;animation:stampx 1.3s ease-out forwards}
-@keyframes stampx{0%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scale(2.4)}15%{opacity:1;transform:translate(-50%,-50%) rotate(-12deg) scale(.94)}22%{transform:translate(-50%,-50%) rotate(-12deg) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-90%) rotate(-12deg)}}
 #modal .mscore{position:relative}
 .seal-g{position:absolute;right:-4px;top:-6px;padding:4px 5px;border:3px double #b5322c;border-radius:6px;color:#b5322c;font-style:normal;font-family:'Ma Shan Zheng',serif;font-size:21px;line-height:1.05;writing-mode:vertical-rl;background:rgba(255,246,228,.7);rotate:10deg;pointer-events:none;animation:seal .42s cubic-bezier(.2,1.4,.4,1) both}
 .seal-g.s5{background:#b5322c;color:#fff6e4;border-color:#fff6e4;box-shadow:0 0 0 2px #b5322c}
@@ -1111,7 +1109,7 @@ body{touch-action:manipulation}
 #v-studio .insp-nm{font-weight:700;font-size:15px;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 210px);flex-shrink:0;text-align:left}
 #v-studio .insp-nm em{font-style:normal;font-size:11px;color:var(--ink-soft);margin-left:2px}
 #v-studio .insp-h:has(>.cyc~.cyc~.cyc) .insp-nm{flex-shrink:1;letter-spacing:0;max-width:none}
-@media (prefers-reduced-motion:reduce){.co-hand,.co-spot::after,.plot.bloom .pinfo,.plot.sown svg,.hxb,.hxb::after,.hxb .rays,.combo,.stampx,.seal-g,.gifts span{animation:none}}
+@media (prefers-reduced-motion:reduce){.co-hand,.co-spot::after,.plot.bloom .pinfo,.plot.sown svg,.hxb,.hxb::after,.hxb .rays,.combo,.seal-g,.gifts span{animation:none}}
 /* v18: mobile-friendly PNG scroll preview & save overlay */
 #pngView{position:absolute;inset:0;z-index:18;background:rgba(28,22,16,.74);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px}
 .png-dlg{max-width:400px;background-color:var(--jade);background-clip:padding-box}
@@ -1674,7 +1672,7 @@ function importSave(){const inp=document.createElement('input');inp.type='file';
 function doImport(){if(!importText)return;clearTimeout(saveT);try{localStorage.setItem(KEY,importText);stale=true;location.reload()}catch(e){toast('导入没有成功：浏览器不让写入存档')}}
 const level=()=>{let l=1;for(let i=1;i<XP.length;i++)if(S.exp>=XP[i])l=i+1;return l};
 const plotCount=()=>S.land||6;
-function addExp(n){const b=level();S.exp+=Math.round(n);const a=level();if(a>b){let gift='';if(a>8){const c=a*15;S.coins+=c;S.dew++;S.bfly++;gift=`乡邻送来贺礼：${c} 花币，露水与蝴蝶各一`}lvBanner(a,gift)}else if(n>=1)gainTag($('#lvring'),`+${Math.round(n)}`,'xp');hud()}
+function addExp(n,showGain=true){const b=level();S.exp+=Math.round(n);const a=level();if(a>b){let gift='';if(a>8){const c=a*15;S.coins+=c;S.dew++;S.bfly++;gift=`乡邻送来贺礼：${c} 花币，露水与蝴蝶各一`}lvBanner(a,gift)}else if(showGain&&n>=1)gainTag($('#lvring'),`+${Math.round(n)}`,'xp');hud()}
 function gotSeed(id,n=1){S.seeds[id]=(S.seeds[id]||0)+n;if(!S.codex[id])S.codex[id]=1}
 
 /* ================= ui helpers ================= */
@@ -1809,8 +1807,9 @@ function plotClick(el){const i=+el.dataset.i,p=S.plots[i];
   if(!p)return seedPicker(i);
   const f=F[p.id];
   if(p.p>=f.t)return harvest(i,el);
+  harvestSummary=null;
   if(fertMode){if(S.dew<1){fertMode=false;$('#fertBtn').classList.remove('on');hints();return toast('露水用完了，去山野散步时收一些')}
-    S.dew--;tutFlag.dew=1;grow(p,Date.now());p.p=Math.min(f.t,p.p+f.t*.35);fxAt(el,(x,y)=>{for(let k=0;k<6;k++)addFx('spark',x,y,`--dx:${rint(-30,30)}px;--dy:${rint(-70,-20)}px;animation-delay:${k*.05}s`)});buzz(10);toast(`一滴晨露，${f.n}又长高了一截`);sfx('water');if(S.dew<1){fertMode=false;hints()}hud();refreshPlots();save();return}
+    S.dew--;tutFlag.dew=1;grow(p,Date.now());p.p=Math.min(f.t,p.p+f.t*.35);fxAt(el,(x,y)=>{for(let k=0;k<6;k++)addFx('spark',x,y,`--dx:${rint(-30,30)}px;--dy:${rint(-70,-20)}px;animation-delay:${k*.05}s`)});buzz(10);sfx('water');if(S.dew<1){fertMode=false;hints()}hud();refreshPlots();save();return}
   if(p.pest){const w=p.pest==='weed';p.pest=null;bump('tend');fxAt(el,(x,y)=>addFx('pop',x,y+10,'',w?'拔掉了杂草':'小蜗牛慢慢爬走了'));sfx('plant');refreshPlots();hints();save();return}
   if(water(i,el)){refreshPlots();save()}else toast(`${f.n}长势正好，已长成 ${Math.round(p.p/f.t*100)}%`)}
 function seedPicker(i){const ids=IDS.filter(id=>S.seeds[id]>0);
@@ -1818,21 +1817,30 @@ function seedPicker(i){const ids=IDS.filter(id=>S.seeds[id]>0);
   modal(`<h2 class="h-title">播下哪一粒？</h2><p class="h-sub">播种后记得浇水，土干了花就不长。</p><div class="grid">${ids.map(id=>{const f=F[id];return`<button class="card" data-act="plant" data-i="${i}" data-id="${id}">${icon(id)}<span class="nm">${f.n} ×${S.seeds[id]}</span><span class="meta">${fmtT(f.t)}开花${inSeason(id)?' · 当令':''}</span><span class="rar r${f.r}">${RAR[f.r]}</span></button>`}).join('')}</div><div class="row" style="margin-top:12px"><button class="btn" data-act="close">先不种</button></div>`,true)}
 function plant(i,id){if(!(S.seeds[id]>0)||S.plots[i])return;S.seeds[id]--;const now=Date.now();S.plots[i]={id,p:0,wu:now,lt:now,fert:0,care:100,seed:rint(1,9999)};closeModal();sfx('plant');refreshPlots();hints();save();preloadStems()}
 function harvest(i,el){const p=S.plots[i],f=F[p.id],g=gradeOf(p),n=Math.max(1,(f.r===0?rint(2,3):f.r===1?2:rint(1,2))+(g===2?1:g===0?-1:0));
-  S.cut[p.id]=(S.cut[p.id]||0)+n;let msg=`${'下中上'[g]}品 ${f.n} +${n}`;S.best[p.id]=Math.max(S.best[p.id]||0,g+1);
-  if(g>0&&Math.random()<[.35,.4,.45,.55][f.r]+(g===2?.25:0)){const sid=Math.random()<.1?pick(VARS[baseOf(p.id)]):p.id;gotSeed(sid);msg+=sid===p.id?' · 花种 +1':` · ${F[sid].n}花种`}
+  S.cut[p.id]=(S.cut[p.id]||0)+n;S.best[p.id]=Math.max(S.best[p.id]||0,g+1);
+  let seed=null;
+  if(g>0&&Math.random()<[.35,.4,.45,.55][f.r]+(g===2?.25:0)){
+    seed=Math.random()<.1?pick(VARS[baseOf(p.id)]):p.id;gotSeed(seed)}
   if(polA===i)polA=null;
-  fxAt(el,(x,y)=>{addFx('pop',x,y-10,'',msg);for(let k=0;k<10;k++)addFx('pt',x,y,`background:${f.c[k%2]};--dx:${rint(-70,70)}px;--dy:${rint(-90,10)}px`)});
+  fxAt(el,(x,y)=>{for(let k=0;k<10;k++)addFx('pt',x,y,`background:${f.c[k%2]};--dx:${rint(-70,70)}px;--dy:${rint(-90,10)}px`)});
   const hr=el.getBoundingClientRect();for(let k=0;k<n;k++)flyTo(hr.left+hr.width/2,hr.top+hr.height*.35,tabEl('studio'),icon(p.id),k*110);
-  const newSp=!VARS[baseOf(p.id)].some(v=>S.codex[v]===2),first=S.codex[p.id]!==2;S.codex[p.id]=2;S.plots[i]=null;sfx('harvest');bump('harv',n);addExp([3,6,12,25][f.r]+(first?10:0));
-  refreshPlots();hints();save();
-  if(first)revealLater(()=>modal(`<div class="center"><p class="muted" style="margin:0;letter-spacing:.3em">${newSp?'新花入谱':'新花色入谱'}</p><div class="reveal"><i class="rays"></i>${icon(p.id,'big-ico')}</div><h2 class="h-title" style="justify-content:center">${f.n}</h2><p><span class="rar r${f.r}" style="display:inline-block">${RAR[f.r]}</span></p><p class="lang">${f.lang}</p><p class="muted">${ROLE[f.role]}花材，已收入花谱。</p><button class="btn primary" data-act="close">收下</button></div>`))}
+  const first=S.codex[p.id]!==2;S.codex[p.id]=2;S.plots[i]=null;sfx('harvest');bump('harv',n);addExp([3,6,12,25][f.r]+(first?10:0),false);
+  const chain=comboHit(el);if(chain>=2)addExp(chain-1,false);buzz(g===2?[10,30,14]:12);
+  const now=Date.now();
+  if(!harvestSummary||now>=harvestSummary.until)harvestSummary={beds:0,stems:0,seeds:0,discoveries:0};
+  const h=harvestSummary;h.beds++;h.stems+=n;if(seed)h.seeds++;if(first)h.discoveries++;
+  const parts=[h.beds===1?`采得${'下中上'[g]}品${f.n} ${n} 枝`:`已采 ${h.beds} 畦，共 ${h.stems} 枝`];
+  if(h.seeds)parts.push(h.beds===1?`${F[seed].n}花种 +1`:`花种 +${h.seeds}`);
+  if(h.discoveries)parts.push(h.beds===1?'新花入谱':`${h.discoveries} 款新花入谱`);
+  h.text=parts.join(' · ');h.until=now+3000;
+  refreshPlots();hints();save()}
 function spawnWind(){if($('.windseed'))return;const b=document.createElement('button');b.className='windseed';b.setAttribute('aria-label','抓住飘来的花种');b.style.top=rint(6,30)+'%';
   b.innerHTML='<svg viewBox="-30 -30 60 60"><g stroke="#fff" stroke-width="1.4" stroke-linecap="round">'+Array.from({length:11},(_,k)=>{const a=(-160+k*14)*Math.PI/180;return`<path d="M0,2L${R(Math.cos(a)*22)},${R(2+Math.sin(a)*22)}"/><circle cx="${R(Math.cos(a)*22)}" cy="${R(2+Math.sin(a)*22)}" r="1.6" fill="#fff"/>`}).join('')+'<path d="M0,2L0,18"/></g><ellipse cx="0" cy="21" rx="2.6" ry="5" fill="#8a6a45"/></svg>';
   b.onclick=ev=>{flyTo(ev.clientX,ev.clientY,tabEl('garden'),'<i class="sd"></i>');b.remove();let r=Math.random();const lv=level();r=r<.5?0:r<.86||lv<3?1:2;let pool=BASE.filter(id=>F[id].r===r&&!F[id].wild),nw=pool.filter(id=>!S.codex[id]);if(nw.length&&Math.random()<.55)pool=nw;
     let id=pick(pool);if(Math.random()<.3)id=pick(VARS[id]);gotSeed(id);toast(`一阵花信风，带来了「${F[id].n}」的花种`);sfx(F[id].r?'rare':'coin');hints();save()};
   b.addEventListener('animationend',()=>b.remove());setTimeout(()=>b.remove(),17000);$('#v-garden').appendChild(b)}
 const IDLE=['等一阵花信风来，抓住飘过的花种','不同的花授粉，能育出花铺买不到的品种','花谱里记着每种花的花语和亲本','雨后有彩虹，彩虹下授粉必定结籽','夜里的萤火虫也喜欢花'];
-let lastHintKey='';
+let lastHintKey='',harvestSummary=null;
 function polHint(){if(polA===null||!S.plots[polA])return'授粉：选一朵盛开的花';const pa=S.plots[polA],ba=baseOf(pa.id),kn=[];
   S.plots.slice(0,plotCount()).forEach((pb,j)=>{if(!pb||j===polA||pb.pol||pb.p<F[pb.id].t)return;const bb=baseOf(pb.id);
     if(ba===bb&&pa.id!==pb.id){const bl=VARS[ba].find(v=>F[v].cn===BLEND[[F[pa.id].cn,F[pb.id].cn].sort().join('')]);if(bl&&S.codex[bl])kn.push(`${F[pb.id].n}→${F[bl].n}`)}
@@ -1840,7 +1848,9 @@ function polHint(){if(polA===null||!S.plots[polA])return'授粉：选一朵盛�
   const u=[...new Set(kn)];return u.length?`已选${F[pa.id].n}：可配 ${u.slice(0,2).join('、')}`:`已选${F[pa.id].n}：再选另一朵盛开的花，蝴蝶会飞过去`}
 function hints(){const now=Date.now(),ps=S.plots.filter(Boolean),seeds=IDS.some(id=>S.seeds[id]>0),cut=IDS.reduce((a,id)=>a+(S.cut[id]||0),0);let t,idle=false;
   const bl=ps.filter(p=>p.p>=F[p.id].t&&!p.pol).length;
-  if(fertMode)t='露水：轻点一株生长中的花，滴一滴露水';
+  if(harvestSummary&&now>=harvestSummary.until)harvestSummary=null;
+  if(harvestSummary)t=harvestSummary.text;
+  else if(fertMode)t='露水：轻点一株生长中的花，滴一滴露水';
   else if(!polMode&&ps.some(p=>p.pest))t='花畦里长了杂草，或来了小蜗牛：点「照料」一次就能清理干净';
   else if(polMode)t=polHint();
   else if(bl>=2&&!Object.keys(S.rec).length)t='两朵花都开了：点「授粉」，让蝴蝶为它们结缘';
@@ -1850,7 +1860,7 @@ function hints(){const now=Date.now(),ps=S.plots.filter(Boolean),seeds=IDS.some(
   else if(cut>=3&&!S.done)t='带着花枝去「花艺」，插一瓶花吧';
   else if(!ps.length&&!seeds&&!cut)t='去花铺买些花种，或等花信风送来';
   else{const tm=term(),idl=[...IDLE,`时令「${tm.n}」：${F[tm.id].n}当令，长得快，入瓶也更值钱`];t=idl[Math.floor(now/15000)%idl.length];idle=true}
-  let step=0;if(!S.done&&!fertMode&&!polMode&&S.tut>=99){step=cut>=3||S.arr.length?4:ps.some(p=>p.p>=F[p.id].t)?3:ps.length?2:cut?3:1;
+  let step=0;if(!S.done&&!fertMode&&!polMode&&S.tut>=99&&!harvestSummary){step=cut>=3||S.arr.length?4:ps.some(p=>p.p>=F[p.id].t)?3:ps.length?2:cut?3:1;
     if(idle)t=step===4?'花枝够了：点下方的「花艺」，插第一瓶花':step===2?'等花慢慢长。土干了会冒出水滴，点「照料」浇水':step===3?'再种几株，攒够三枝花就能去插花':t}
   const hk=`${step}|${fertMode?1:0}|${polMode?1:0}|${t}`;
   if(hk!==lastHintKey){lastHintKey=hk;const hint=$('#hint');hint.textContent=t;
@@ -2216,8 +2226,8 @@ function bind(){
   $('#waterAll').addEventListener('click',()=>{let n=0,c=0;$$('#plots .plot').forEach((el,i)=>{const q=S.plots[i];if(!q||i>=plotCount())return;
       if(q.pest&&q.p<F[q.id].t){q.pest=null;c++;fxAt(el,(x,y)=>addFx('pop',x,y+10,'','清理干净了'))}if(water(i,el,true))n++});
     if(c)bump('tend',c);if(n||c){sfx('water');toast(n&&c?`浇了 ${n} 畦水，清理了 ${c} 处杂草小虫`:n?`浇了 ${n} 畦水`:`清理了 ${c} 处杂草小虫`);refreshPlots();hints();save()}else toast('花田一切都好，不用操心')});
-  $('#fertBtn').addEventListener('click',()=>{if(!fertMode&&S.dew<1)return toast('没有露水了，去山野散步时收一些');fertMode=!fertMode;polMode=false;polA=null;refreshPlots();hints()});
-  $('#polBtn').addEventListener('click',()=>{if(!polMode&&S.bfly<1)return toast('没有蝴蝶了，去山野散步时带几只回来');polMode=!polMode;polA=null;fertMode=false;$('#fertBtn').classList.remove('on');$('#polBtn').classList.toggle('on',polMode);refreshPlots();hints()});
+  $('#fertBtn').addEventListener('click',()=>{if(!fertMode&&S.dew<1)return toast('没有露水了，去山野散步时收一些');harvestSummary=null;fertMode=!fertMode;polMode=false;polA=null;refreshPlots();hints()});
+  $('#polBtn').addEventListener('click',()=>{if(!polMode&&S.bfly<1)return toast('没有蝴蝶了，去山野散步时带几只回来');harvestSummary=null;polMode=!polMode;polA=null;fertMode=false;$('#fertBtn').classList.remove('on');$('#polBtn').classList.toggle('on',polMode);refreshPlots();hints()});
   let pm=0;$('#app').addEventListener('pointermove',e=>{if(pm||e.pointerType==='touch')return;pm=requestAnimationFrame(()=>{pm=0;const st=$('.scene').style;st.setProperty('--px',(e.clientX/innerWidth-.5).toFixed(2));st.setProperty('--py',(e.clientY/innerHeight-.5).toFixed(2))})});
   let lm=0;const gv=$('#v-garden');
   gv.addEventListener('pointermove',e=>{if(lm||e.pointerType==='touch')return;lm=requestAnimationFrame(()=>{lm=0;$$('#plots .plot').forEach(el=>{const r=el.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),d=Math.hypot(dx,e.clientY-(r.top+r.height*.5));el.style.setProperty('--lean',d<120?((dx<0?1:-1)*(1-d/120)*17).toFixed(1)+'deg':'0deg')})})});
@@ -2622,6 +2632,7 @@ tick=()=>{tickBase();refreshDock()};
 addEventListener('resize',()=>{if(view==='wild')measureJourney()});
 
 function resetGardenModes(){
+  harvestSummary=null;
   fertMode=false;polMode=false;polA=null;
   for(const id of['fertBtn','polBtn']){const b=$('#'+id);b.classList.remove('on');b.setAttribute('aria-pressed','false')}
 }
@@ -2646,23 +2657,13 @@ const appXY=el=>{const a=$('#app').getBoundingClientRect(),r=el.getBoundingClien
 function gainTag(target,txt,cls=''){if(!target||!target.isConnected)return;const[x,y,r]=appXY(target);if(!r.width)return;tagAt(x,y+r.height/2+2,txt,cls)}
 function tagAt(x,y,txt,cls=''){const e=document.createElement('span');e.className='gain '+cls;e.textContent=txt;e.style.left=x+'px';e.style.top=y+'px';$('#app').appendChild(e);setTimeout(()=>e.remove(),1300)}
 function chime(n){const f=SC[Math.min(SC.length-1,Math.max(0,n))];tone(f,.45,.07);tone(f*2,.3,.025,'sine',.04)}
-function stampAt(x,y,txt){const e=document.createElement('span');e.className='stampx';e.textContent=txt;e.style.left=x+'px';e.style.top=y+'px';$('#app').appendChild(e);setTimeout(()=>e.remove(),1350)}
 
 /* combos: several actions in quick succession climb the scale */
 const combo={n:0,t:0};
 function comboHit(el,label){const now=Date.now();combo.n=now-combo.t<1600?combo.n+1:1;combo.t=now;chime(combo.n+1);
-  if(combo.n>=2){const[x,y]=appXY(el);$('#app>.combo')?.remove();const e=document.createElement('div');e.className='combo';e.innerHTML=`${label}<b>×${combo.n}</b>`;e.style.left=x+'px';e.style.top=(y-54)+'px';$('#app').appendChild(e);setTimeout(()=>e.remove(),900);buzz(Math.min(30,8+combo.n*3))}
+  if(label&&combo.n>=2){const[x,y]=appXY(el);$('#app>.combo')?.remove();const e=document.createElement('div');e.className='combo';e.innerHTML=`${label}<b>×${combo.n}</b>`;e.style.left=x+'px';e.style.top=(y-54)+'px';$('#app').appendChild(e);setTimeout(()=>e.remove(),900);buzz(Math.min(30,8+combo.n*3))}
   return combo.n}
 
-/* new-flower reveals wait until the hand is lifted, then come one at a time */
-const RQ=[];let rqT=0;
-function revealLater(fn){RQ.push(fn);clearTimeout(rqT);rqT=setTimeout(pumpReveal,600)}
-function pumpReveal(){if(!RQ.length)return;if(sweep||Date.now()-combo.t<900||!$('#modal').hidden){rqT=setTimeout(pumpReveal,400);return}RQ.shift()();if(RQ.length)rqT=setTimeout(pumpReveal,400)}
-
-/* harvest / plant with more weight */
-const harvest0=harvest;
-harvest=(i,el)=>{const p=S.plots[i];if(!p)return;const g=gradeOf(p);harvest0(i,el);const n=comboHit(el,'连采');if(n>=2)addExp(n-1);
-  if(g===2){const[x,y]=appXY(el);stampAt(x,y-34,'上品');buzz([10,30,14])}else buzz(12)};
 let lastSeed=null;const plant0=plant;
 plant=(i,id)=>{const had=!!S.plots[i];plant0(i,id);if(had||!S.plots[i])return;lastSeed=id;const el=$$('#plots .plot')[i];
   if(el){el.classList.remove('sown');void el.offsetWidth;el.classList.add('sown');fxAt(el,(x,y)=>{for(let k=0;k<7;k++)addFx('pt',x,y+22,`background:${k%2?'#8a6a45':'#b08a5e'};width:6px;height:6px;--dx:${rint(-28,28)}px;--dy:${rint(-30,-6)}px`)})}buzz(8)};

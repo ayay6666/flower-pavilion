@@ -492,7 +492,7 @@ h3.sec::before{content:"";width:5px;height:5px;background:var(--ink);transform:r
 .bdg b{font-size:12.5px;letter-spacing:.14em;margin-top:4px}.bdg small{font-size:10.5px;color:var(--ink-soft);line-height:1.4}
 .kiln{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:760px){.kiln{grid-template-columns:minmax(0,1fr)}}
-.kwheel{border-radius:18px;background:linear-gradient(#efe9df,#d9cfc0);box-shadow:0 10px 26px var(--shadow),0 0 0 6px rgba(255,255,255,.55),0 0 0 7px var(--line);touch-action:none;max-width:420px;margin:0 auto;width:100%}
+.kwheel{border-radius:18px;background:linear-gradient(#efe9df,#d9cfc0);box-shadow:0 10px 26px var(--shadow),0 0 0 6px rgba(255,255,255,.55),0 0 0 7px var(--line);max-width:420px;margin:0 auto;width:100%}
 .kwheel svg{display:block;width:100%}
 .kspin path{animation:kspin 1.1s linear infinite}
 .kspin path:nth-child(odd){animation-delay:-.5s}
@@ -2372,7 +2372,9 @@ function bind(){
   $('#kiln').addEventListener('click',kilnClick);
   $('#kiln').addEventListener('pointerdown',e=>{if(e.target.closest('#ksvg')){kdrag=kilnPick(e);if(kdrag){kilnShape(e);e.preventDefault()}}});
   $('#kiln').addEventListener('pointermove',e=>{if(kdrag)kilnShape(e)});
-  addEventListener('pointerup',()=>{kdrag=null});
+  addEventListener('pointerup',()=>{kdrag=null});addEventListener('pointercancel',()=>{kdrag=null});
+  // only a grabbed handle blocks page scrolling; anywhere else on the wheel scrolls as usual
+  ['touchstart','touchmove'].forEach(t=>$('#kiln').addEventListener(t,e=>{if(kdrag&&e.cancelable)e.preventDefault()},{passive:false}));
   $('#orders').addEventListener('click',e=>{const d=e.target.closest('[data-decline]');
     if(d){S.orders=S.orders.filter(o=>o.k!==+d.dataset.decline);fillOrders();renderOrders();toast('已婉拒这份委托');save()}});
   // shop
@@ -2607,8 +2609,9 @@ function kilnClick(e){const b=e.target.closest('button');if(!b)return;const d=b.
   renderKiln()}
 function kilnPt(e){const sv=$('#ksvg');return sv?new DOMPoint(e.clientX,e.clientY).matrixTransform(sv.getScreenCTM().inverse()):null}
 function kilnPick(e){if(!pot)return null;const p=kilnPt(e);if(!p)return null;const my=478-pot.H,n=pot.r.length;
-  if(kstep===0){if(Math.hypot(p.x-200,p.y-(my-13))<22)return{m:'H',y0:p.y,H0:pot.H};return{m:'r',row:clamp(Math.round((476-p.y)/(pot.H-2)*(n-1)),0,n-1)}}
-  if(kstep===2&&pot.mo!=='none')return{m:'py'};return null}
+  if(kstep===0){if(Math.hypot(p.x-200,p.y-(my-13))<22)return{m:'H',y0:p.y,H0:pot.H};
+    let best=null,bd=20;pot.r.forEach((q,i)=>{const d=Math.hypot(p.x-200-q,p.y-(476-(pot.H-2)*i/(n-1)));if(d<bd){bd=d;best={m:'r',row:i}}});return best}
+  if(kstep===2&&pot.mo!=='none'&&Math.abs(p.y-(my+(478-my)*(1-pot.py)))<20)return{m:'py'};return null}
 function kilnShape(e){if(!pot||!kdrag)return;const p=kilnPt(e);if(!p)return;
   if(kdrag.m==='H')pot.H=clamp(Math.round(kdrag.H0+(kdrag.y0-p.y)),60,190);
   else if(kdrag.m==='r')pot.r[kdrag.row]=R(clamp(Math.abs(p.x-200),10,68));

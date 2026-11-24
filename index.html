@@ -606,12 +606,16 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 #v-town{padding:0;overflow:hidden}
 #town{position:absolute;inset:0}
 .street{position:absolute;left:-6%;right:-6%;top:calc(var(--hz) + 9%);height:19%;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#f3e8d1,#dccdae);opacity:.92;box-shadow:inset 0 -6px 14px rgba(120,90,50,.18)}
-.tb{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;transition:transform .2s}
+.tb{position:absolute;left:var(--x);top:var(--y);width:max-content;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;transition:transform .2s}
+.npc{z-index:var(--z)}
+/* foot shadow so each neighbour stands on the street, in front of the houses */
+.npc::before{content:"";position:absolute;left:50%;bottom:16px;width:calc(min(54px,7vh)*var(--d,1));height:12px;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(70,50,30,.32),transparent);z-index:-1}
+/* shop signs hang above the roof, where no one can stand in front of them */
+.bld .tag{order:-1;margin:0 0 3px}
 .tb:hover{transform:translate(-50%,-100%) translateY(-4px)}
 .tb:active{transform:translate(-50%,-100%) scale(.96)}
-.bld svg{width:min(26vw,240px);display:block;filter:drop-shadow(0 8px 10px rgba(30,50,40,.22))}
 .chibi{display:block;overflow:visible}
-.npc .chibi{width:calc(68px*var(--s,1));animation:bobc 2.8s ease-in-out infinite}
+.npc .chibi{width:calc(min(68px,9vh)*var(--s,1)*var(--d,1));animation:bobc 2.8s ease-in-out infinite}
 .npc:nth-of-type(odd) .chibi{animation-delay:-1.3s}
 @keyframes bobc{50%{transform:translateY(-3px)}}
 .tb .tag{font-size:12px;letter-spacing:.1em;padding:1px 9px;border-radius:99px;background:rgba(255,255,255,.9);box-shadow:0 2px 6px var(--shadow);margin-top:2px;white-space:nowrap}
@@ -632,7 +636,7 @@ main{position:absolute;inset:0;flex:none;z-index:2}
   border-radius:48% 43% 46% 40%;background:#a34839;box-shadow:inset 0 1px 1px #cb8060
 }
 .bub.done{background:var(--rouge);color:#fff;animation:none}
-@media (max-width:700px){.tb{left:var(--xm);top:var(--ym)}.bld svg{width:42vw}.npc .chibi{width:calc(58px*var(--s,1))}}
+@media (max-width:700px){.tb{left:var(--xm);top:var(--ym)}.npc{z-index:var(--zm)}.npc::before{width:calc(min(46px,6vh)*var(--dm,1))}.npc .chibi{width:calc(min(50px,6.5vh)*var(--s,1)*var(--dm,1))}}
 .talk{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(94%,680px);display:flex;gap:12px;align-items:flex-end;background:#fffdf6 var(--grain);border-radius:22px;padding:14px 16px 14px 10px;box-shadow:0 14px 34px rgba(20,40,40,.3),inset 0 0 0 2px rgba(255,255,255,.8);z-index:4;animation:talkin .3s cubic-bezier(.2,1.3,.4,1)}
 @keyframes talkin{from{transform:translate(-50%,24px);opacity:0}}
 .tface{flex-shrink:0;margin-top:-48px}.tface .chibi{width:92px}
@@ -678,7 +682,7 @@ body{margin:0;background:var(--jade)}
 .spot .tagw,.tb .tag,.hire,.pop{background:var(--jade) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);border-radius:5px;box-shadow:0 2px 6px var(--shadow);text-shadow:none}
 .pop{padding:2px 7px}.hire{color:#36533e}
 .spot.sign{background:var(--jade-2) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);filter:drop-shadow(0 3px 2px rgba(64,45,25,.22));text-shadow:none}
-.bld>img{width:min(26vw,240px);height:auto;object-fit:contain;display:block;filter:drop-shadow(0 6px 8px rgba(64,45,25,.2))}
+.bld>img{width:min(30vw,46vh);height:auto;object-fit:contain;display:block;filter:drop-shadow(0 6px 8px rgba(64,45,25,.2))}
 .chibi{width:60px;height:auto;object-fit:contain}
 #v-studio{background:linear-gradient(rgba(244,236,218,.76),rgba(244,236,218,.62)),url('assets/studio.webp') center/cover no-repeat}
 #v-shop,#v-kiln{--view-bg:linear-gradient(rgba(244,236,218,.77),rgba(244,236,218,.65)),url('assets/shopin.webp') center/cover no-repeat}
@@ -691,7 +695,7 @@ body{margin:0;background:var(--jade)}
 #v-wild .walk-tip{left:16px;right:16px;padding:4px 8px}
 .toast{background:rgba(43,42,38,.94);color:#f4ecda}
 #modal{background:rgba(43,36,27,.46)}
-@media(max-width:700px){.bld>img{width:42vw}}
+@media(max-width:700px){.bld>img{width:46vw}}
 @media(max-width:460px){.top{gap:6px}.brand{gap:6px}.logo{font-size:20px}.stats{gap:4px}.pill b{min-width:0;overflow:hidden;text-overflow:ellipsis}.hud-back{padding:0 9px 0 6px;letter-spacing:0}.g-tools .tool img{width:25px;height:25px}.st-detail{flex-wrap:wrap}.kfoot .btn.lg{padding:0 16px}.ksteps{flex-wrap:wrap}.talk{gap:8px}}
 @media(prefers-reduced-motion:reduce){.mtn{translate:none}}
 
@@ -2526,13 +2530,15 @@ function folkDone(id,delay){const c=FOLK.find(x=>x.id===id),st=c&&fstep(c);if(!s
 /* ----- the town: buildings and neighbours you walk up to ----- */
 const LOOK={po:{w:168,h:420,s:.9},shen:{w:158,h:420},ye:{w:236,h:420},yao:{w:193,h:420},dou:{w:163,h:420,s:.78},keep:{w:152,h:420}};
 const chibi=id=>{const k=LOOK[id];return k?`<img class="chibi" src="${A(`assets/n_${id}.webp`)}" width="${k.w}" height="${k.h}" style="--s:${k.s||1}" alt="" draggable="false">`:''};
-const TPOS={po:[31,78,20,72],shen:[43,67,50,66],ye:[58,80,80,72],yao:[70,67,32,89],dou:[50,92,68,89]};
+const TPOS={po:[33,80,16,78],shen:[50,74,50,77],ye:[67,80,84,78],yao:[40,93,32,95],dou:[60,93,68,95]};
+/* depth: farther back (smaller y) → smaller, drawn behind */
+const tdep=y=>Math.min(1.1,Math.max(.7,.35+y/150)).toFixed(2);
 let talkId=null,typeT=0;
 function typeText(el,txt){clearInterval(typeT);if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent='「'+txt+'」';return}let i=0;el.textContent='「';
   typeT=setInterval(()=>{i++;if(!el.isConnected)return clearInterval(typeT);el.textContent='「'+txt.slice(0,i)+(i>=txt.length?'」':'');if(i>=txt.length)clearInterval(typeT)},32)}
 function renderTown(){syncStory();
-  $('#town').innerHTML=`<div class="street"></div><button class="tb bld" style="--x:16%;--y:62%;--xm:26%;--ym:54%" data-go="shop" aria-label="花铺"><img src="${A('assets/shop.webp')}" width="640" height="431" alt="" draggable="false"><span class="tag">花铺</span></button><button class="tb bld" style="--x:85%;--y:62%;--xm:74%;--ym:54%" data-go="kiln" aria-label="陶坊"><img src="${A('assets/kiln.webp')}" width="640" height="423" alt="" draggable="false"><span class="tag">陶坊</span>${S.kiln?'':'<span class="tag">门还关着</span>'}</button>`+FOLK.map(c=>{const st=fstep(c),nl=st?needList(st.need):[],ok=nl.length&&nl.every(x=>x.ok),q=TPOS[c.id];
-    return`<button class="tb npc${talkId===c.id?' on':''}" style="--x:${q[0]}%;--y:${q[1]}%;--xm:${q[2]}%;--ym:${q[3]}%" data-talk="${c.id}" aria-label="${c.n}${ok?'，委托可交付':''}"${ok?' title="委托可交付"':''}><i class="bub${!st?' done':ok?' ok':''}">${!st?'知':ok?'':st.need.work?'花':'…'}</i>${chibi(c.id)}<span class="tag">${c.n}</span></button>`}).join('')+'<div class="talk" id="talk" hidden></div>';
+  $('#town').innerHTML=`<div class="street"></div><button class="tb bld" style="--x:22%;--y:64%;--xm:26%;--ym:60%" data-go="shop" aria-label="花铺"><img src="${A('assets/shop.webp')}" width="640" height="431" alt="" draggable="false"><span class="tag">花铺</span></button><button class="tb bld" style="--x:78%;--y:64%;--xm:75%;--ym:60%" data-go="kiln" aria-label="陶坊"><img src="${A('assets/kiln.webp')}" width="640" height="423" alt="" draggable="false"><span class="tag">陶坊${S.kiln?'':' · 门还关着'}</span></button>`+FOLK.map(c=>{const st=fstep(c),nl=st?needList(st.need):[],ok=nl.length&&nl.every(x=>x.ok),q=TPOS[c.id];
+    return`<button class="tb npc${talkId===c.id?' on':''}" style="--x:${q[0]}%;--y:${q[1]}%;--xm:${q[2]}%;--ym:${q[3]}%;--d:${tdep(q[1])};--dm:${tdep(q[3])};--z:${q[1]};--zm:${q[3]}" data-talk="${c.id}" aria-label="${c.n}${ok?'，委托可交付':''}"${ok?' title="委托可交付"':''}><i class="bub${!st?' done':ok?' ok':''}">${!st?'知':ok?'':st.need.work?'花':'…'}</i>${chibi(c.id)}<span class="tag">${c.n}</span></button>`}).join('')+'<div class="talk" id="talk" hidden></div>';
   if(talkId)openTalk(talkId,true)}
 function openTalk(id,quiet){talkId=id;const c=FOLK.find(x=>x.id===id),st=fstep(c),lv=S.folk[id]||0,nl=st?needList(st.need):[],ok=nl.length&&nl.every(x=>x.ok),work=st&&st.need.work,t=$('#talk');if(!t)return;
   t.hidden=false;t.innerHTML=`<div class="tface">${chibi(id)}</div><div class="tbody"><div class="tname"><b>${c.n}</b><small>${c.role}</small><span class="hearts">${[0,1,2,3].map(i=>`<i class="${i<lv?'on':''}"></i>`).join('')}</span></div><p class="say" id="tsay"></p>${st?`<div class="treq">${nl.filter(x=>!st.need.give||ok||!x.ok).map(x=>`<span class="req${x.ok?' ok':''}">${x.ok?'✓ ':''}${x.t}</span>`).join('')}</div>`:'<div class="treq"><span class="req ok">♥ 知己 · 偶寄时令花笺</span></div>'}<div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button>${st?(work?'<button class="btn primary" data-go="studio">去花艺</button>':ok?`<button class="btn primary" data-folk="${id}">交给${c.n}</button>`:''):''}</div></div>`;

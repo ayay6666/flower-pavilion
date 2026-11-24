@@ -638,6 +638,35 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 .bub.done{background:var(--rouge);color:#fff;animation:none}
 @media (max-width:700px){.tb{left:var(--xm);top:var(--ym)}.npc{z-index:var(--zm)}.npc::before{width:calc(min(46px,6vh)*var(--dm,1))}.npc .chibi{width:calc(min(50px,6.5vh)*var(--s,1)*var(--dm,1))}}
 .talk{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(94%,680px);display:flex;gap:12px;align-items:flex-end;background:#fffdf6 var(--grain);border-radius:22px;padding:14px 16px 14px 10px;box-shadow:0 14px 34px rgba(20,40,40,.3),inset 0 0 0 2px rgba(255,255,255,.8);z-index:4;animation:talkin .3s cubic-bezier(.2,1.3,.4,1)}
+/* 小镇整图：世界层按地平线以下的空间缩放；手机上比屏幕宽，左右滑动看 */
+.tscroll{position:absolute;inset:0 0 calc(-1*var(--dock-room));overflow:auto;overscroll-behavior:contain;scrollbar-width:none;touch-action:pan-x pan-y}
+/* 装裱：画四周是宣纸，画本身一圈细木色边和投影 */
+#app[data-at=town] .scene{background:#efe5cf var(--grain) center/384px}
+.tworld.mount{border-radius:4px;box-shadow:0 0 0 1px rgba(120,86,52,.35),0 0 0 7px #f7f0e0,0 0 0 8px rgba(120,86,52,.25),0 14px 34px rgba(70,48,24,.28)}
+.tworld.mount .tplate{border-radius:4px}
+.tscroll::-webkit-scrollbar{display:none}
+.tworld{position:absolute;container-type:size}
+.tplate{position:absolute;inset:0;width:100%;height:100%;max-width:none}
+/* 小镇是俯视的一整张画，不再叠在平视的远山、草地和角花上；夜色和雨天照样罩在画上 */
+#app[data-at=town] .scene>:not(#fx){display:none}
+.tworld::after,.tworld::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:300}
+.tworld::after{background:#141a44;opacity:calc(var(--night,0)*.46)}
+.tworld::before{background:#5d7186;opacity:0;transition:opacity 2s}.rain .tworld::before{opacity:.32}
+.tspot{position:absolute;left:var(--l);top:var(--t);width:var(--w);height:var(--h);padding:0;border:0;background:none;border-radius:18px;cursor:pointer;z-index:1}
+.tspot:focus-visible{outline:2px solid var(--rouge);outline-offset:2px}
+.tworld .tag{font-size:12px;letter-spacing:.1em;padding:1px 9px;white-space:nowrap}
+.tspot .tag{position:absolute;left:var(--sx);top:var(--sy);translate:-50% -50%;transition:transform .2s}
+.tspot:hover .tag{transform:translateY(-2px)}.tspot:active .tag{transform:scale(.95)}
+.tspot .bub{top:-15px;right:-17px}
+.tfig{position:absolute;left:var(--fx);top:var(--fy);height:var(--fh);translate:-50% -100%;padding:0;border:0;background:none;display:block;cursor:pointer}
+.tfig.still{pointer-events:none}
+.tfig::before{content:"";position:absolute;left:50%;bottom:-4px;width:100%;height:10px;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(70,50,30,.32),transparent)}
+.tfig .chibi{position:relative;display:block;height:100%;width:auto;max-width:none;animation:bobc 2.8s ease-in-out infinite}
+.tfig:nth-of-type(odd) .chibi{animation-delay:-1.3s}
+.tfig .tag{position:absolute;top:calc(100% + 3px);left:50%;translate:-50% 0}
+.tfig .bub{top:-12px;right:-16px}
+.ava.face{background:#efe4cc url('assets/n_he.webp') 50% 3%/190% auto no-repeat;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
+@media (prefers-reduced-motion:reduce){.tfig .chibi{animation:none}}
 @keyframes talkin{from{transform:translate(-50%,24px);opacity:0}}
 .tface{flex-shrink:0;margin-top:-48px}.tface .chibi{width:92px}
 .tbody{flex:1;min-width:0;display:grid;gap:6px}
@@ -679,7 +708,7 @@ body{margin:0;background:var(--jade)}
 .inp,.stp>div,.seg>div{background:#faf5e9;border-radius:7px}
 .seg button{border-radius:5px}.pkc.on{background:#fff9ec;box-shadow:inset 0 0 0 2px var(--rouge)}
 .h-title,h3.sec{font-family:var(--f-display)}
-.spot .tagw,.tb .tag,.hire,.pop{background:var(--jade) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);border-radius:5px;box-shadow:0 2px 6px var(--shadow);text-shadow:none}
+.spot .tagw,.tb .tag,.tworld .tag,.hire,.pop{background:var(--jade) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);border-radius:5px;box-shadow:0 2px 6px var(--shadow);text-shadow:none}
 .pop{padding:2px 7px}.hire{color:#36533e}
 .spot.sign{background:var(--jade-2) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);filter:drop-shadow(0 3px 2px rgba(64,45,25,.22));text-shadow:none}
 .bld>img{width:min(30vw,46vh);height:auto;object-fit:contain;display:block;filter:drop-shadow(0 6px 8px rgba(64,45,25,.2))}
@@ -843,7 +872,7 @@ body{color:var(--ink)}
 .toast{background:#2b2a26 var(--grain) center/256px;background-blend-mode:multiply;color:#fff6e4;border:0;border-radius:5px;box-shadow:none;filter:drop-shadow(0 5px 7px rgba(43,32,23,.25));backdrop-filter:none;-webkit-backdrop-filter:none}
 .pop:not(.rate){border-style:solid;border-color:transparent;border-width:6px;border-image:url('assets/ui_card.webp') 40 fill / 6px stretch;background:none;border-radius:7px;padding:0 3px;box-shadow:none;filter:var(--ui-shadow);color:var(--ink);text-shadow:none;max-width:calc(100% - 24px);white-space:normal;text-align:center;line-height:1.4}
 .spot .tagw,.tb .tag,.hire{background:#f7f0df var(--grain) center/256px;border-color:rgba(136,105,64,.3);color:var(--ink)}
-.npc.on .tag{background:#ad382e;color:#fff6e4}
+.npc.on .tag,.tworld .on .tag{background:#ad382e;color:#fff6e4}
 
 /* Preserve the existing grids and scrolling regions at narrow widths. */
 .grid{grid-template-columns:repeat(auto-fill,minmax(min(132px,100%),1fr))}
@@ -1799,7 +1828,7 @@ function tend(now){let shown=false;S.plots.forEach((q,i)=>{if(!q||i>=plotCount()
     if(q.pest){q.pest=null;if(el){shown=true;fxAt(el,(x,y)=>addFx('pop',x,y+10,'','阿禾清理了花畦'))}}
     else if(q.wu<=now+1500){grow(q,now);q.wu=now+waterMs(q);if(el){shown=true;fxAt(el,(x,y)=>{addFx('can',x+16,y-34,'','',CAN);addFx('pop',x,y+10,'','阿禾浇了水')})}}})}
 const gameDur=ms=>{const h=Math.ceil(ms/1000/DAY*24),d=Math.floor(h/24),r=h%24;return d?`${d} 天${r?` ${r} 小时`:''}`:`${h} 小时`};
-function hireTag(){const t=$('#hireTag'),left=(S.hire||0)-Date.now();t.hidden=left<=0;if(left>0)t.textContent=`园丁阿禾在岗 · 还能看护 ${gameDur(left)}`}
+function hireTag(){const t=$('#hireTag'),left=(S.hire||0)-Date.now();t.hidden=left<=0;if(left>0)t.textContent=`花匠阿禾在岗 · 还能看护 ${gameDur(left)}`}
 function bloomFx(el,f){fxAt(el,(x,y)=>{for(let k=0;k<8;k++)addFx('spark',x,y-10,`--dx:${rint(-55,55)}px;--dy:${rint(-70,20)}px;animation-delay:${k*.04}s`);addFx('pop',x,y-24,'',`${f.n}开了`)});sfx('bloom');buzz(8)}
 function flyBfly(ea,eb,done){const v=$('#v-garden').getBoundingClientRect(),pt=el=>{const r=el.getBoundingClientRect();return[r.left-v.left+r.width/2,r.top-v.top+r.height*.3]},A=pt(ea),B=pt(eb),M=[(A[0]+B[0])/2,Math.min(A[1],B[1])-56];
   const b=document.createElement('span');b.className='bfly';b.innerHTML=BFLY;b.style.left=A[0]+'px';b.style.top=A[1]+'px';$('#v-garden').appendChild(b);
@@ -2114,7 +2143,7 @@ function renderShop(){const lv=level(),seeds=IDS.filter(id=>F[id].lv),sell=IDS.f
   <h3 class="sec">花种</h3><div class="grid">${seeds.map(id=>{const f=F[id],ss=inSeason(id),lk=f.lv>lv&&!ss;return`<div class="card rr${lk?0:f.r}${lk?' seeded':''}">${ss?'<i class="card-tag">当令</i>':''}${icon(id)}<span class="nm">${f.n}</span><span class="rar r${f.r}">${RAR[f.r]}</span><span class="meta">${fmtT(f.t)}开花 · 已有 ${S.seeds[id]||0}</span>${lk?`<span class="meta">Lv.${f.lv} 上架</span>`:`<span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buy="${id}"${costAttr(f.buy)}>${price(f.buy)}</button><button class="btn sm" data-buy="${id}" data-n="5"${costAttr(f.buy*5)}>×5</button></span>`}</div>`}).join('')}</div>
   <h3 class="sec">花器</h3><div class="grid">${Object.keys(VASES).filter(v=>!VASES[v].pot).map(v=>{const d=VASES[v],own=S.vases.includes(v);return`<div class="card"><svg class="ico" viewBox="${d.vb||'110 250 180 240'}">${d.back||''}<ellipse cx="200" cy="${d.my}" rx="${d.mw}" ry="${d.ry}" fill="${d.inner}"/><path d="${d.body}" fill="${d.fill}"${d.stroke?` stroke="#9fc3d0" stroke-width="1.5"`:''}/>${d.extra||''}</svg><span class="nm">${d.n}</span><span class="meta" title="${vtypeOf(d).tip}">${vtypeOf(d).n} · ${Math.min(d.cap||vtypeOf(d).cap,18)} 枝</span>${own?'<span class="meta">已拥有</span>':`<button class="btn sm" data-buyv="${v}"${costAttr(d.price)}>${price(d.price)}</button>`}</div>`}).join('')}</div>
   <h3 class="sec">杂货</h3><div class="grid"><div class="card"><i class="bi" style="width:54px;height:83px">${DEWSVG}</i><span class="nm">露水</span><span class="meta">滴在生长中的花上，长高一截 · 已有 ${S.dew}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyf="1"${costAttr(15)}>${price(15)}</button><button class="btn sm" data-buyf="5"${costAttr(75)}>×5</button></span></div><div class="card"><i class="bi" style="width:64px;height:83px">${BFLY}</i><span class="nm">花蜜</span><span class="meta">摆在院里，引来一只蝴蝶 · 蝴蝶 ${S.bfly}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyb="1"${costAttr(25)}>${price(25)}</button><button class="btn sm" data-buyb="5"${costAttr(125)}>×5</button></span></div>${S.kiln?`<div class="card"><i class="bi" style="width:60px;height:83px">${CLAYSVG}</i><span class="nm">陶土</span><span class="meta">拉坯用 · 已有 ${S.clay}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyc="1"${costAttr(40)}>${price(40)}</button><button class="btn sm" data-buyc="5"${costAttr(200)}>×5</button></span></div>`:''}</div>
-  <h3 class="sec">雇工</h3><div class="st-finish"><span style="display:flex;align-items:center;gap:10px;min-width:0"><span class="ava big">禾</span><span><b style="letter-spacing:.1em">园丁阿禾</b><br><span class="muted" style="font-size:12.5px">${S.hire>Date.now()?`在岗，还能帮你看护 ${gameDur(S.hire-Date.now())}`:'替你浇水、拔草、请走小蜗牛。雇一天，帮你看护一整天。'}</span></span></span><button class="btn primary" data-hire="1"${costAttr(80)}>${S.hire>Date.now()?'续一天':'雇一天'} ${price(80)}</button></div>
+  <h3 class="sec">雇工</h3><div class="st-finish"><span style="display:flex;align-items:center;gap:10px;min-width:0"><span class="ava big face" aria-hidden="true"></span><span><b style="letter-spacing:.1em">花匠阿禾</b><br><span class="muted" style="font-size:12.5px">${S.hire>Date.now()?`在岗，还能帮你看护 ${gameDur(S.hire-Date.now())}`:'替你浇水、拔草、请走小蜗牛。雇一天，帮你看护一整天。'}</span></span></span><button class="btn primary" data-hire="1"${costAttr(80)}>${S.hire>Date.now()?'续一天':'雇一天'} ${price(80)}</button></div>
   <h3 class="sec">收购</h3>${sell.length||S.dew||S.clay?`<div class="grid">${sell.map(id=>{const nd=neededCut(id);return`<div class="card">${nd?'<i class="card-tag" style="background:#547f68">需用</i>':''}${icon(id)}<span class="nm">${F[id].n} ×${S.cut[id]}</span><span class="meta">每枝 ${price(sellP(id))}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-sell="${id}">卖一枝</button><button class="btn sm" data-sell="${id}" data-all="1">全卖</button></span></div>`}).join('')}${S.dew?`<div class="card"><i class="bi" style="width:54px;height:83px">${DEWSVG}</i><span class="nm">露水 ×${S.dew}</span><span class="meta">每滴 ${price(6)}</span><button class="btn sm" data-sell="dew">卖一滴</button></div>`:''}${S.clay?`<div class="card"><i class="bi" style="width:60px;height:83px">${CLAYSVG}</i><span class="nm">陶土 ×${S.clay}</span><span class="meta">每块 ${price(15)}</span><button class="btn sm" data-sell="clay">卖一块</button></div>`:''}</div>`:'<p class="empty-note">手头没有可以卖的东西。采下的花枝、山野带回的露水和陶土，花铺都收。</p>'}`}
 const sellP=id=>Math.max(2,Math.round(F[id].val*.6));
 function srcText(id){const f=F[id],rc=BREED.find(r=>r[2]===id);let t=f.lv?`花铺 Lv.${f.lv} 上架。`:'';
@@ -2241,8 +2270,8 @@ function go(v){if(SUBS[v])v=subSel[v];if(v==='folk')v='town';const par=parOf(v);
 function bind(){
   $('#backBtn').addEventListener('click',()=>go($('#backBtn').dataset.to||'garden'));
   $('#bookBtn').addEventListener('click',()=>{if(parOf(view)!=='book')go('book')});
-  $('#town').addEventListener('click',e=>{const f=e.target.closest('[data-folk]'),x=e.target.closest('[data-talkx]'),n=e.target.closest('[data-talk]');
-    if(f&&!f.disabled)folkDone(f.dataset.folk);else if(x){talkId=null;$('#talk').hidden=true;$$('#town .npc').forEach(q=>q.classList.remove('on'))}else if(n){sfx('place');openTalk(n.dataset.talk)}});
+  $('#town').addEventListener('click',e=>{if(e.target.closest('[data-hire]')){if(payHire()){sfx('coin');hud();save();talkId=null;renderTown();hireTag();toast('花匠阿禾去你的小院上工了，这一天花田交给他')}return}const f=e.target.closest('[data-folk]'),x=e.target.closest('[data-talkx]'),n=e.target.closest('[data-talk]');
+    if(f&&!f.disabled)folkDone(f.dataset.folk);else if(x){talkId=null;$('#talk').hidden=true;$$('#town [data-own]').forEach(q=>q.classList.remove('on'))}else if(n){sfx('place');openTalk(n.dataset.talk)}});
   $('#plots').addEventListener('click',e=>{if(Date.now()-sweepJust<400)return;const p=e.target.closest('.plot');if(p)plotClick(p)});initSweep();
   $('#waterAll').addEventListener('click',()=>{let n=0,c=0;$$('#plots .plot').forEach((el,i)=>{const q=S.plots[i];if(!q||i>=plotCount())return;
       if(q.pest&&q.p<F[q.id].t){q.pest=null;c++;fxAt(el,(x,y)=>addFx('pop',x,y+10,'','清理干净了'))}if(water(i,el,true))n++});
@@ -2383,7 +2412,7 @@ function bind(){
     else if(d.buyf){const n=+d.buyf,cost=15*n;if(poor(cost))return;S.coins-=cost;S.dew+=n;receipt=`买下${n>1?` ${n} 瓶`:'一瓶'}露水，现在有 ${S.dew} 瓶`}
     else if(d.buyc){const n=+d.buyc,cost=40*n;if(poor(cost))return;S.coins-=cost;S.clay+=n;receipt=`买下${n>1?` ${n} 块`:'一块'}陶土，现在有 ${S.clay} 块`}
     else if(d.buyb){const n=+d.buyb,cost=25*n;if(poor(cost))return;S.coins-=cost;S.bfly+=n;receipt=`${n>1?`花蜜摆好了，飞来 ${n} 只蝴蝶`:'花蜜摆好了，飞来一只蝴蝶'}，现在有 ${S.bfly} 只`}
-    else if(d.hire){if(poor(80))return;S.coins-=80;S.hire=Math.max(Date.now(),S.hire||0)+DAY*1000;receipt='园丁阿禾来上工了，这一天花田交给他'}
+    else if(d.hire){if(!payHire())return;receipt='花匠阿禾来上工了，这一天花田交给他'}
     else if(d.sell){const id=d.sell;if(id==='dew'||id==='clay'){if(S[id]<1)return;S[id]--;S.coins+=id==='dew'?6:15}
       else{if(d.all&&neededCut(id)&&(S.cut[id]||0)>0)return modal(`<div class="center"><h2 class="h-title" style="justify-content:center">全部卖出？</h2><p class="say">乡邻或花笺正需要「${F[id].n}」，确定要把手头的 ${S.cut[id]} 枝全都卖掉吗？</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">留着</button><button class="btn primary" data-act="confirmSell" data-id="${id}">全卖</button></div></div>`);
         const n=d.all?S.cut[id]:1;if(!(S.cut[id]>0))return;S.cut[id]-=n;S.coins+=n*sellP(id)}receipt='已卖出，余额 '+S.coins+' 花币'}else return;
@@ -2528,21 +2557,74 @@ function folkDone(id,delay){const c=FOLK.find(x=>x.id===id),st=c&&fstep(c);if(!s
   delay?setTimeout(show,delay):show()}
 
 /* ----- the town: buildings and neighbours you walk up to ----- */
-const LOOK={po:{w:168,h:420,s:.9},shen:{w:158,h:420},ye:{w:236,h:420},yao:{w:193,h:420},dou:{w:163,h:420,s:.78},keep:{w:152,h:420}};
+const LOOK={he:{w:181,h:420},po:{w:168,h:420,s:.9},shen:{w:158,h:420},ye:{w:236,h:420},yao:{w:193,h:420},dou:{w:163,h:420,s:.78},keep:{w:152,h:420}};
 const chibi=id=>{const k=LOOK[id];return k?`<img class="chibi" src="${A(`assets/n_${id}.webp`)}" width="${k.w}" height="${k.h}" style="--s:${k.s||1}" alt="" draggable="false">`:''};
-const TPOS={po:[33,80,16,78],shen:[50,74,50,77],ye:[67,80,84,78],yao:[40,93,32,95],dou:[60,93,68,95]};
-/* depth: farther back (smaller y) → smaller, drawn behind */
-const tdep=y=>Math.min(1.1,Math.max(.7,.35+y/150)).toFixed(2);
+/* 小镇是一整张画：横屏/电脑用 town.webp（1536×1024），手机竖屏用 town_p.webp（1024×1536），同一座小镇的两种排布。
+   房子和书店、花铺的招牌字都画在图里，代码只在上面放可点的热区、纸签和人物。
+   坐标都是整图的百分比。spot r=[左,上,宽,高]，s=纸签中心（painted 表示图里已有招牌字）；folk=[x,脚底 y,身高]。
+   豆豆是小邮差，站在小溪木桥边，不挡在大路正中。 */
+const TOWNS={
+ l:{img:'assets/town.webp',w:1536,h:1024,
+  spots:[
+   {own:'shen',sign:'沈记书店',r:[4,8,26,29],painted:1},
+   {own:'he',sign:'阿禾苗圃',r:[35,7,25,26],s:[47,11]},
+   {own:'po',sign:'桂婆婆家',r:[71,5,26,27],s:[84,9]},
+   {go:'shop',sign:'花铺',r:[1,40,42,52],painted:1},
+   {go:'kiln',sign:'陶坊',r:[56,46,43,40],s:[63,59]}],
+  folk:{shen:[19.5,37,12],he:[47,31.5,12],po:[74,31.5,12],yao:[70,85,16],keep:[26,87,16],ye:[42,47,13],dou:[75,44,12.5]}},
+ p:{img:'assets/town_p.webp',w:1024,h:1536,
+  spots:[
+   {own:'shen',sign:'沈记书店',r:[8,7,34,18],painted:1},
+   {own:'po',sign:'桂婆婆家',r:[61,5,36,18],s:[78,8]},
+   {own:'he',sign:'阿禾苗圃',r:[5,29,39,18],s:[21,31]},
+   {go:'shop',sign:'花铺',r:[1,52,47,29],painted:1},
+   {go:'kiln',sign:'陶坊',r:[50,54,49,24],s:[72,55]}],
+  folk:{shen:[29,24,6.8],po:[64,23,6.8],he:[32,44,7.2],ye:[47,27.5,7],dou:[78,42.5,7],keep:[32,77,9],yao:[64.5,75.5,9]}}};
+const TOWN_NAMED=['yao','ye','dou'];
+let TOWN=TOWNS.l;
+const townPick=()=>innerWidth<innerHeight?TOWNS.p:TOWNS.l;
+/* 花匠阿禾：不是乡邻委托线上的人，在苗圃门口接活，雇了就去你的小院 */
+const HE={id:'he',n:'阿禾',role:'花匠'};
+const fstate=c=>{const st=fstep(c),nl=st?needList(st.need):[];return{st,ok:!!(nl.length&&nl.every(x=>x.ok))}};
+const bubHTML=c=>{const{st,ok}=fstate(c);return`<i class="bub${!st?' done':ok?' ok':''}">${!st?'知':ok?'':st.need.work?'花':'…'}</i>`};
+const folkLabel=c=>c.n+(fstate(c).ok?'，委托可交付':'');
+const hired=()=>(S.hire||0)>Date.now();
+function payHire(){if(S.coins<80){toast(`花币不够：需要 80，还差 ${80-S.coins}`);return false}S.coins-=80;S.hire=Math.max(Date.now(),S.hire||0)+DAY*1000;return true}
+let townX=null;
 let talkId=null,typeT=0;
 function typeText(el,txt){clearInterval(typeT);if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent='「'+txt+'」';return}let i=0;el.textContent='「';
   typeT=setInterval(()=>{i++;if(!el.isConnected)return clearInterval(typeT);el.textContent='「'+txt.slice(0,i)+(i>=txt.length?'」':'');if(i>=txt.length)clearInterval(typeT)},32)}
-function renderTown(){syncStory();
-  $('#town').innerHTML=`<div class="street"></div><button class="tb bld" style="--x:22%;--y:64%;--xm:26%;--ym:60%" data-go="shop" aria-label="花铺"><img src="${A('assets/shop.webp')}" width="640" height="431" alt="" draggable="false"><span class="tag">花铺</span></button><button class="tb bld" style="--x:78%;--y:64%;--xm:75%;--ym:60%" data-go="kiln" aria-label="陶坊"><img src="${A('assets/kiln.webp')}" width="640" height="423" alt="" draggable="false"><span class="tag">陶坊${S.kiln?'':' · 门还关着'}</span></button>`+FOLK.map(c=>{const st=fstep(c),nl=st?needList(st.need):[],ok=nl.length&&nl.every(x=>x.ok),q=TPOS[c.id];
-    return`<button class="tb npc${talkId===c.id?' on':''}" style="--x:${q[0]}%;--y:${q[1]}%;--xm:${q[2]}%;--ym:${q[3]}%;--d:${tdep(q[1])};--dm:${tdep(q[3])};--z:${q[1]};--zm:${q[3]}" data-talk="${c.id}" aria-label="${c.n}${ok?'，委托可交付':''}"${ok?' title="委托可交付"':''}><i class="bub${!st?' done':ok?' ok':''}">${!st?'知':ok?'':st.need.work?'花':'…'}</i>${chibi(c.id)}<span class="tag">${c.n}</span></button>`}).join('')+'<div class="talk" id="talk" hidden></div>';
+function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==TOWN){TOWN=pick;townX=null}if(away&&talkId==='he')talkId=null;
+  const pc=(v,base,size)=>((v-base)/size*100).toFixed(2)+'%';
+  const spot=t=>{const who=t.own==='he'?HE:t.own&&FOLK.find(x=>x.id===t.own),r=t.r,lock=t.go==='kiln'&&!S.kiln,
+      sign=t.sign+(lock?' · 门还关着':'')+(t.own==='he'&&away?' · 在你的小院':''),
+      lab=who?(t.own==='he'?`${t.sign}，花匠阿禾`:`${t.sign}，${folkLabel(who)}`):sign.replace(' · ','，');
+    return`<button class="tspot${who&&talkId===who.id?' on':''}" ${who?`data-own="${who.id}" data-talk="${who.id}"`:`data-go="${t.go}"`} style="--l:${r[0]}%;--t:${r[1]}%;--w:${r[2]}%;--h:${r[3]}%" aria-label="${lab}">`+
+      (t.painted?'':`<span class="tag" style="--sx:${pc(t.s[0],r[0],r[2])};--sy:${pc(t.s[1],r[1],r[3])}">${sign}</span>`)+'</button>'};
+  const fig=id=>{const q=TOWN.folk[id],c=id==='he'?HE:FOLK.find(x=>x.id===id);if(id==='he'&&away)return'';
+    const st=`style="--fx:${q[0]}%;--fy:${q[1]}%;--fh:${q[2]}%;z-index:${Math.round(q[1])}"`;
+    if(!c)return`<span class="tfig still" ${st}>${chibi(id)}</span>`;
+    const bub=id==='he'?'<i class="bub">…</i>':bubHTML(c),tag=TOWN_NAMED.includes(id)?`<span class="tag">${c.n}</span>`:'';
+    return`<button class="tfig${talkId===id?' on':''}" data-own="${id}" data-talk="${id}" ${st} aria-label="${id==='he'?'花匠阿禾':folkLabel(c)}">${bub}${chibi(id)}${tag}</button>`};
+  $('#town').innerHTML=`<div class="tscroll" id="tscroll"><div class="tworld" id="tworld"><img class="tplate" src="${A(TOWN.img)}" width="${TOWN.w}" height="${TOWN.h}" alt="" draggable="false">`+
+    TOWN.spots.map(spot).join('')+Object.keys(TOWN.folk).map(fig).join('')+'</div></div><div class="talk" id="talk" hidden></div>';
+  layoutTown();$('#tscroll').addEventListener('scroll',e=>{const t=e.currentTarget;townX=[t.scrollLeft,t.scrollTop]},{passive:true});
   if(talkId)openTalk(talkId,true)}
-function openTalk(id,quiet){talkId=id;const c=FOLK.find(x=>x.id===id),st=fstep(c),lv=S.folk[id]||0,nl=st?needList(st.need):[],ok=nl.length&&nl.every(x=>x.ok),work=st&&st.need.work,t=$('#talk');if(!t)return;
+/* 小镇整图只放在顶栏和底栏之间，不被按钮压住。高度正好卡满这块区域、只是略宽时铺满（多出的部分左右滑），
+   差得多时整张完整显示，像一幅装裱的画摆在宣纸上。初次进入居中，之后记住看到的位置 */
+function layoutTown(){const w=$('#tworld'),sc=$('#tscroll');if(!w||!sc)return;const R=sc.getBoundingClientRect();if(!R.height)return;
+  const top=($('header.top')?.getBoundingClientRect().bottom||0)-R.top+6,bot=($('#dock')?.getBoundingClientRect().top||R.bottom)-R.top-8,
+    pad=R.width>700?24:0,aw=R.width-pad*2,ah=Math.max(120,bot-top),
+    sIn=Math.min(aw/TOWN.w,ah/TOWN.h),sH=ah/TOWN.h,s=TOWN.w*sH>aw&&TOWN.w*sH<=aw*1.3?sH:sIn,W=TOWN.w*s,H=TOWN.h*s,mount=W<=aw&&H<ah-1;
+  Object.assign(w.style,{width:W+'px',height:H+'px',left:Math.max(pad,(R.width-W)/2)+'px',top:(top+Math.max(0,(ah-H)/2))+'px'});
+  w.classList.toggle('mount',mount);
+  sc.scrollLeft=townX?townX[0]:Math.max(0,(W-aw)/2);sc.scrollTop=townX?townX[1]:Math.max(0,(H-ah)/2)}
+function openHe(quiet){talkId='he';const t=$('#talk');if(!t)return;
+  t.hidden=false;t.innerHTML=`<div class="tface">${chibi('he')}</div><div class="tbody"><div class="tname"><b>${HE.n}</b><small>${HE.role}</small></div><p class="say" id="tsay"></p><div class="treq"><span class="req">雇一天：浇水、拔草、请走小蜗牛</span></div><div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button><button class="btn primary" data-hire="1">雇我一天 ${price(80)}</button></div></div>`;
+  const say='花要有人看着才长得好。你忙的时候，我去小院替你照料。';if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town [data-own]').forEach(n=>n.classList.toggle('on',n.dataset.own==='he'))}
+function openTalk(id,quiet){if(id==='he')return openHe(quiet);talkId=id;const c=FOLK.find(x=>x.id===id),st=fstep(c),lv=S.folk[id]||0,nl=st?needList(st.need):[],ok=nl.length&&nl.every(x=>x.ok),work=st&&st.need.work,t=$('#talk');if(!t)return;
   t.hidden=false;t.innerHTML=`<div class="tface">${chibi(id)}</div><div class="tbody"><div class="tname"><b>${c.n}</b><small>${c.role}</small><span class="hearts">${[0,1,2,3].map(i=>`<i class="${i<lv?'on':''}"></i>`).join('')}</span></div><p class="say" id="tsay"></p>${st?`<div class="treq">${nl.filter(x=>!st.need.give||ok||!x.ok).map(x=>`<span class="req${x.ok?' ok':''}">${x.ok?'✓ ':''}${x.t}</span>`).join('')}</div>`:'<div class="treq"><span class="req ok">♥ 知己 · 偶寄时令花笺</span></div>'}<div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button>${st?(work?'<button class="btn primary" data-go="studio">去花艺</button>':ok?`<button class="btn primary" data-folk="${id}">交给${c.n}</button>`:''):''}</div></div>`;
-  const say=st?st.say:c.end;if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town .npc').forEach(n=>n.classList.toggle('on',n.dataset.talk===id))}
+  const say=st?st.say:c.end;if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town [data-own]').forEach(n=>n.classList.toggle('on',n.dataset.own===id))}
 
 /* ----- wishes & badges ----- */
 const WISH=[['harv',4,'采下 4 枝花'],['water',5,'浇 5 次水'],['pol',1,'请蝴蝶授粉 1 次'],['works',1,'完成 1 件插花'],['walk',1,'去山野散步 1 次'],['bfly',2,'带回 2 只蝴蝶'],['orders',1,'交付 1 张花笺'],['dewc',3,'收集 3 滴露水'],['tend',3,'除 3 次杂草或小虫']];
@@ -2795,7 +2877,7 @@ setInterval(coachTick,250);
 /* ================= boot ================= */
 function start(data){
   load(data&&data.S);buildDefs();addPotDefs();bind();if(S.hire)S.plots.forEach(q=>{if(q){const u=Math.min(Date.now(),S.hire);if(u>q.lt){q.wu=Math.max(q.wu,u+waterMs(q));q.pest=null}}});const awayMsg=awayReport();ensureWishes();syncStory();fillOrders();renderGarden();hud();sky();go('garden');petalsFx();setTimeout(preloadStems,1500);
-  addEventListener('resize',()=>{if(view==='town')$('#app').style.setProperty('--hz',Math.round(innerHeight*.4)+'px');else layoutScene()});setTimeout(layoutScene,400);
+  addEventListener('resize',()=>{if(view==='town'){$('#app').style.setProperty('--hz',Math.round(innerHeight*.4)+'px');townPick()!==TOWN?renderTown():layoutTown()}else layoutScene()});setTimeout(layoutScene,400);
   setInterval(()=>{if(!stale)tick()},1000);setInterval(save,15000);
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){clearTimeout(saveT);writeSave();stopJourney();clearTimeout(AU.timer);AU.ctx?.suspend?.()}

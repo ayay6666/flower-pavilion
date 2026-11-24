@@ -895,7 +895,7 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 .dlg-x,.talk-x{position:absolute;top:0;right:0;display:grid;place-items:center;z-index:2;font-size:18px}
 .dlg-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:0 0 auto;width:100%;margin-top:12px}
 .dlg-actions .btn{min-width:0;white-space:normal;line-height:1.4;height:auto;min-height:var(--c-md)}
-.dlg-actions .btn.lg{min-height:var(--c-lg)}
+.dlg-actions .btn.lg{height:auto;min-height:var(--c-lg)}
 .dlg-choices{display:grid;gap:8px;margin-top:12px}
 .dlg-choices .btn.green{width:100%;height:auto;min-height:var(--c-lg);white-space:normal;line-height:1.4}
 .order .who{padding-right:var(--c-sm)}
@@ -904,6 +904,10 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 .tb.bld:not(button){pointer-events:none}
 .tb.bld:not(button):hover,.tb.bld:not(button):active{transform:translate(-50%,-100%)}
 @media(max-width:600px){.top .brand .logo{font-size:20px}.dlg-actions{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}.dlg-actions .btn{width:100%}.action-bar{width:calc(100% - 24px)}.talk{padding-top:40px}}
+@media(max-width:600px){
+  .findlg .dlg-actions{display:flex;flex-wrap:wrap;align-items:stretch}
+  .findlg .dlg-actions .btn{flex:1 1 auto;width:auto;max-width:100%;padding-inline:6px}
+}
 
 
 /* ---------- v14: wild card / wide garden / tutorial chip ---------- */

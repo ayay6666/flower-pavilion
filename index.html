@@ -975,7 +975,7 @@ body{touch-action:manipulation}
 .st-panel>*{position:absolute;inset:0}
 .st-deck[data-mode=stem] .trayw,.st-deck[data-mode=tray] .insp{visibility:hidden;pointer-events:none}
 #v-studio .trayw{margin:0;order:0}
-#v-studio .tray{flex-direction:row;align-items:center;gap:6px;height:100%;max-height:none;padding:0 8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+#v-studio .tray{flex-direction:row;align-items:center;gap:6px;height:100%;max-height:none;padding:0 8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;touch-action:pan-x}
 #v-studio .tray::-webkit-scrollbar{display:none}
 #v-studio .tray button{position:relative;flex:0 0 auto;width:66px;gap:0;font-size:11px;line-height:1.3;touch-action:pan-x}
 #v-studio .tray .ico{width:40px;height:48px}
@@ -2241,14 +2241,75 @@ function bind(){
   $('#seltools').addEventListener('click',e=>{const b=e.target.closest('[data-st]');if(b)stemTool(b.dataset.st)});
   $('#stTabs').addEventListener('click',e=>{const b=e.target.closest('[data-deck]');if(!b)return;if(b.dataset.deck==='stem'&&!stemOf(sel))return toast('先轻点瓶里的一枝花，再来调整');deck=b.dataset.deck;updSel()});
   $('#ordersX').addEventListener('click',()=>$('#studio').classList.remove('orders-open'));
-  let td=null,tdJust=0;
-  $('#tray').addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(b&&Date.now()-tdJust>400)addStem(b.dataset.add)});
-  $('#tray').addEventListener('pointerdown',e=>{const b=e.target.closest('[data-add]');if(b)td={id:b.dataset.add,x:e.clientX,y:e.clientY,g:null}});
-  addEventListener('pointermove',e=>{if(!td)return;if(!td.g){if(Math.hypot(e.clientX-td.x,e.clientY-td.y)<12)return;td.g=document.createElement('div');td.g.className='ghost';td.g.innerHTML=icon(td.id);$('#app').appendChild(td.g)}
-    const a=$('#app').getBoundingClientRect();td.g.style.left=(e.clientX-a.left)+'px';td.g.style.top=(e.clientY-a.top)+'px'});
-  addEventListener('pointerup',e=>{if(!td)return;const t=td;td=null;if(!t.g)return;t.g.remove();tdJust=Date.now();const r=$('#stage').getBoundingClientRect();
-    if(e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top&&e.clientY<r.bottom){const q=svgPt(e);addStem(t.id,{x:clamp(q.x,12,508),y:clamp(q.y,14,548)})}});
-  addEventListener('pointercancel',()=>{if(td){td.g&&td.g.remove();td=null}});
+  const tray=$('#tray');
+  let gesture=null,ignoreTrayClick=false;
+  tray.addEventListener('click',e=>{
+    const button=e.target.closest('[data-add]');
+    if(button&&(!e.detail||!ignoreTrayClick))addStem(button.dataset.add);
+  });
+  tray.addEventListener('pointerdown',e=>{
+    if(!e.isPrimary||e.button!==0||gesture)return;
+    ignoreTrayClick=false;
+    const id=e.target.closest('[data-add]')?.dataset.add;
+    if(!id&&e.target!==tray)return;
+    gesture={pointer:e.pointerId,id,x:e.clientX,y:e.clientY,left:tray.scrollLeft,mode:null,ghost:null};
+  });
+  addEventListener('pointermove',e=>{
+    if(gesture?.pointer!==e.pointerId)return;
+    const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;
+    if(!gesture.mode){
+      if(Math.hypot(dx,dy)<12)return;
+      if(Math.abs(dx)>Math.abs(dy)&&tray.scrollWidth>tray.clientWidth)gesture.mode='scroll';
+      else if(gesture.id)gesture.mode='flower';
+      else return;
+      ignoreTrayClick=true;
+      tray.setPointerCapture(e.pointerId);
+    }
+    if(gesture.mode==='scroll'){
+      // Touch uses the tray's native horizontal pan, including momentum.
+      if(e.pointerType==='touch')return;
+      if(!gesture.id||e.clientY>=tray.getBoundingClientRect().top-8){
+        tray.scrollLeft=gesture.left-dx;
+        return;
+      }
+      // A diagonal mouse drag can start along the row before leaving it for the vase.
+      tray.scrollLeft=gesture.left;
+      gesture.mode='flower';
+    }
+    if(!gesture.ghost){
+      gesture.ghost=document.createElement('div');
+      gesture.ghost.className='ghost';
+      gesture.ghost.innerHTML=icon(gesture.id);
+      $('#app').appendChild(gesture.ghost);
+    }
+    const a=$('#app').getBoundingClientRect();
+    gesture.ghost.style.left=(e.clientX-a.left)+'px';
+    gesture.ghost.style.top=(e.clientY-a.top)+'px';
+  });
+  addEventListener('pointerup',e=>{
+    if(gesture?.pointer!==e.pointerId)return;
+    const drag=gesture;
+    gesture=null;
+    if(!drag.ghost)return;
+    drag.ghost.remove();
+    const r=$('#stage').getBoundingClientRect();
+    if(e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top&&e.clientY<r.bottom){
+      const q=svgPt(e);
+      addStem(drag.id,{x:clamp(q.x,12,508),y:clamp(q.y,14,548)});
+    }
+  });
+  function cancelTrayGesture(){
+    if(!gesture)return;
+    ignoreTrayClick=true;
+    gesture.ghost?.remove();
+    if(tray.hasPointerCapture(gesture.pointer))tray.releasePointerCapture(gesture.pointer);
+    gesture=null;
+  }
+  addEventListener('pointercancel',e=>{if(gesture?.pointer===e.pointerId)cancelTrayGesture()});
+  tray.addEventListener('lostpointercapture',e=>{
+    if(e.target===tray&&gesture?.pointer===e.pointerId)cancelTrayGesture();
+  });
+  addEventListener('blur',cancelTrayGesture);
   $('#stQuick').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const a=b.dataset.q;if(a==='undo')undo();else if(a==='wand')tidy();
     else if(S.arr.length){pushHist();S.arr.forEach(q=>S.cut[q.id]=(S.cut[q.id]||0)+1);S.arr=[];sel=null;renderStage();renderTray();updMeter();save()}});
   $('#stScore').addEventListener('click',()=>{const m=$('#meter');m.hidden=!m.hidden;pop=null;renderChips()});

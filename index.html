@@ -595,7 +595,8 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 #v-wild{padding:0;overflow:hidden}
 #v-wild .sheet{padding:0;max-width:none;height:100%;position:relative}
 #v-wild .pano{position:absolute;inset:0;height:auto;border-radius:0;box-shadow:none}
-.wstart{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(92%,540px);max-height:calc(100% - 90px);overflow-y:auto;display:grid;gap:12px;padding:20px;border-radius:22px;background:rgba(250,252,249,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 16px 40px rgba(20,40,40,.28),inset 0 0 0 2px rgba(255,255,255,.8)}
+.wild-rest{position:absolute;z-index:12;inset:var(--top-room) 0 var(--dock-room);overflow-y:auto;overscroll-behavior:contain;padding:clamp(6px,2vh,18px) max(10px,env(safe-area-inset-right)) 12px max(10px,env(safe-area-inset-left))}
+.wstart{display:grid;width:min(100%,540px);margin-inline:auto}
 .wstart .h-sub{margin:0}.wstart .finds{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
 #v-wild .walk-top{position:absolute;top:64px;left:16px;right:16px;margin:0;padding:6px 14px;border-radius:99px;background:rgba(255,255,255,.78);z-index:2}
 #v-wild .walk-bot{position:absolute;left:16px;right:16px;bottom:max(16px,env(safe-area-inset-bottom,0px));margin:0;z-index:2}
@@ -696,14 +697,14 @@ body{margin:0;background:var(--jade)}
 .view,#v-garden{padding-bottom:calc(var(--dock-room) + 14px);animation:placeFade .18s ease-out both;clip-path:none}@keyframes placeFade{from{opacity:.35}to{opacity:1}}
 #v-garden .g-tools{flex-shrink:0;margin-top:10px;gap:10px}#v-garden .hint{flex-shrink:0}.kfoot{bottom:0}#v-town,#v-wild{padding:0}#town{bottom:var(--dock-room)}.talk{bottom:12px;max-height:calc(100% - 170px);overflow-y:auto;overscroll-behavior:contain}.hud-back:not([hidden])~.phase{display:inline-block}
 .shop-head{position:sticky;top:0;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;margin-bottom:12px;background:#f4ecda var(--grain) center/256px;border:1px solid var(--line);border-radius:7px}.shop-head .h-title{font-size:25px}.tray-empty{min-width:0;font-size:12px}.tray-empty p{margin:6px 2px}.tray .tray-empty .btn{display:flex;align-items:center;justify-content:center;width:100%;height:auto;min-height:36px;padding:6px 8px;white-space:normal;border-radius:7px;font-size:12px;background:var(--jade) var(--grain) center/256px;border:1px solid var(--line);color:var(--rouge);cursor:pointer}
-#v-wild .wstart{z-index:12;top:76px;transform:translateX(-50%);max-height:calc(52% - 84px);padding:14px;gap:8px;border:1px solid var(--line);border-radius:7px;overscroll-behavior:contain}.wstart .wild-info{position:sticky;bottom:-14px;z-index:1;padding:8px 0;background:#f4ecda var(--grain) center/256px}.wstart .finds{gap:6px}.wstart .finds>div{padding:7px 9px}.wstart .h-title{font-size:25px}
+.wstart .finds{gap:6px}.wstart .finds>div{padding:7px 9px}.wstart .h-title{font-size:25px}
 #v-wild .walk-top{z-index:12;top:64px;gap:16px;padding:8px 14px;background:none;border:0;box-shadow:none}.wstretch{flex-shrink:0;min-width:64px;text-align:center;padding:3px 12px;background:#f4ecda var(--grain) center/256px;border:1px solid var(--line);border-radius:7px;color:var(--ink);font:20px/1.3 var(--f-display);box-shadow:0 2px 6px var(--shadow)}.walk-top .wpath{margin-right:9px;background:repeating-linear-gradient(90deg,#615d50 0 6px,transparent 6px 12px);filter:drop-shadow(0 1px 1px #f4ecda)}
 #v-wild .walk-bot{z-index:12;bottom:calc(var(--dock-room) + max(16px,env(safe-area-inset-bottom,0px)));display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:8px}#v-wild .walk-bot .bag{gap:5px}#v-wild .walk-bot .chipx{height:32px;padding:0 9px 0 6px;font-size:12px;gap:4px}#v-wild .walk-tip{z-index:12;top:118px;bottom:auto;left:50%;right:auto;transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);font-size:12px}
 .journey{position:absolute;inset:0;isolation:isolate;pointer-events:none;overflow:hidden}.wj-layer{position:absolute;left:0;pointer-events:none;will-change:transform}.wj-sky{top:8%;height:54%;z-index:0;mix-blend-mode:multiply;mask-image:linear-gradient(transparent,#000 20%,#000 75%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 20%,#000 75%,transparent)}.wj-sky img,.wj-hills img{display:block;width:100%;height:100%;max-width:none}.wj-sky img{object-fit:cover;object-position:center bottom}.wj-hills{bottom:35%;height:38%;z-index:1}.wj-hills img{object-fit:fill}.wj-props,.wj-crossing,.wj-front{top:0;height:100%}.wj-props{z-index:2}.wj-ground{bottom:0;height:36%;z-index:3;background:url('assets/w_path.webp') left bottom/auto 100% repeat-x}.wj-crossing{z-index:4}.wj-prop{position:absolute;bottom:35%;display:block;width:auto;height:calc(var(--s)*100cqh);max-width:none;transform:translateX(-50%) scaleX(var(--flip));transform-origin:50% 100%}.wj-crossing .wj-prop{bottom:18%}.wj-front{z-index:6}.wj-front .wj-prop{bottom:9%}
 .wj-walker{position:absolute;z-index:5;left:28%;bottom:18%;height:max(84px,22%);aspect-ratio:221/360;transform:translate3d(-50%,0,0)}.wj-shadow{position:absolute;left:14%;bottom:-2%;width:72%;height:8%;background:radial-gradient(ellipse,rgba(46,45,31,.32),transparent 70%);border-radius:50%}
 .wj-mist{position:absolute;inset:0;z-index:7;background:linear-gradient(rgba(188,216,232,.35),transparent 42%),radial-gradient(ellipse at 55% 57%,rgba(224,237,239,.8),transparent 67%);pointer-events:none;opacity:.06}.pano::after{z-index:8}#witems{z-index:10}#witems .wi{background:rgba(244,236,218,.91);border-color:rgba(43,42,38,.3);box-shadow:0 2px 9px rgba(43,42,38,.2)}#witems .k-seed svg{filter:drop-shadow(0 1px 2px #6b6558)}
 @media(max-width:600px){.top .logo{display:none}.top .brand{gap:5px}.top .stats{gap:5px}.top .phase{padding:1px 6px}.dock-tab{font-size:16px}.dock-dot{right:9px}.shop-head .btn{padding:0 9px}.talk .tface .chibi{width:58px}.talk{padding:10px;gap:7px}.talk .say{font-size:13px}}
-@media(max-height:580px){#v-garden{overflow-y:auto}.wstart .finds{display:none}#v-wild .wstart{max-height:calc(58% - 80px)}#v-wild .walk-tip{display:none}}
+@media(max-height:580px){#v-garden{overflow-y:auto}#v-wild .walk-tip{display:none}}
 @media(prefers-reduced-motion:reduce){.view,#v-garden,.pano.go .wj-walker img{animation:none}.dock-tab,.wpath i{transition:none}.wj-layer{will-change:auto}}
 /* ---------- v11: painted UI kit ---------- */
 /* Painted UI chrome */
@@ -717,7 +718,7 @@ body{color:var(--ink)}
 #v-codex .sheet::after,#v-gallery .sheet::after,#v-goals .sheet::after{content:none;display:none}
 #v-codex .sheet,#v-gallery .sheet,#v-goals .sheet{padding:6px 4px 8px}
 #v-wild .wstart{padding:4px;gap:10px}
-.wstart .wild-info{bottom:-4px;background:var(--jade) var(--grain) center/256px;padding:10px 10px 10px 14px;gap:8px;border:1px solid var(--line);border-radius:12px;box-shadow:0 -4px 10px -6px rgba(66,46,28,.18)}
+.wstart .wild-info{background:var(--jade) var(--grain) center/256px;padding:10px 10px 10px 14px;gap:8px;border:1px solid var(--line);border-radius:12px;box-shadow:0 -4px 10px -6px rgba(66,46,28,.18)}
 .talk{padding:4px;gap:10px}
 .dialog .say,.talk .say,.bubble,.ktip,.order .say,.folk .say{overflow-wrap:anywhere}
 
@@ -912,9 +913,14 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 
 /* ---------- v14: wild card / wide garden / tutorial chip ---------- */
 @media (max-width:600px){
-  #v-wild .wstart .finds{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #v-wild .wstart .finds small{display:none}
-  #v-wild .wstart{max-height:calc(63% - 84px)}
+  #v-wild .wstart{border-width:clamp(14px,4vw,24px);border-image-width:clamp(14px,4vw,24px);gap:8px}
+  .wstart .finds{grid-template-columns:repeat(auto-fit,minmax(min(128px,100%),1fr))}
+}
+@media (min-width:600px) and (max-height:580px){
+  #v-wild .wstart{width:min(100%,900px);border-width:16px;border-image-width:16px;gap:6px 12px;grid-template-columns:auto minmax(0,1fr);align-items:center}
+  .wstart .h-title{width:auto;margin:0}
+  .wstart .finds{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(min(135px,100%),1fr))}
+  .wstart .wild-info{justify-self:end}
 }
 .plots{width:min(100%,640px,max(260px,calc((100vh - 400px)*1.12)));width:min(100%,640px,max(260px,calc((100dvh - 400px)*1.12)))}
 @media (min-width:760px) and (min-aspect-ratio:11/10){
@@ -2403,10 +2409,10 @@ const panoHTML=go=>journeyHTML(go);
 const bagHTML=()=>`<span class="chipx"><i class="bi">${BFLY}</i>蝴蝶 <b>${S.bfly}</b></span><span class="chipx"><i class="bi">${DEWSVG}</i>露水 <b>${S.dew}</b></span>${S.kiln?`<span class="chipx"><i class="bi">${CLAYSVG}</i>陶土 <b>${S.clay}</b></span>`:''}`;
 let walk=null;
 function renderWild(){if(walk)return;const l=legs(),mx=S.legMax||3;
-  $('#wild').innerHTML=`${panoHTML(false)}<div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">沿着溪边慢慢走，遇见什么，就带回什么。不赶时间。</p>
+  $('#wild').innerHTML=`${panoHTML(false)}<div class="wild-rest"><div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">沿着溪边慢慢走，遇见什么，就带回什么。不赶时间。</p>
   <div class="finds"><div><i class="bi">${BFLY}</i><b>蝴蝶</b><small>授粉时请它帮忙</small></div><div><i class="bi">${DEWSVG}</i><b>露水</b><small>滴在花上，长高一截</small></div><div><i class="bi">${SEEDSVG}</i><b>花种</b><small>偶尔是没见过的</small></div><div><i class="bi">${icon('wildmum')}</i><b>野花</b><small>只在这里有</small></div>${S.kiln?`<div><i class="bi">${CLAYSVG}</i><b>陶土</b><small>带回陶坊拉坯</small></div>`:''}</div>
   <div class="bag">${bagHTML()}</div>
-  <div class="wild-info"><div class="legs">${Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')}<span>${legTxt(l,mx)}</span></div><button class="btn primary lg" id="walkGo"${l?'':lockAttr(legTxt(0,mx))}>出门散步</button></div></div>`}
+  <div class="wild-info"><div class="legs">${Array.from({length:mx},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')}<span>${legTxt(l,mx)}</span></div><button class="btn primary lg" id="walkGo"${l?'':lockAttr(legTxt(0,mx))}>出门散步</button></div></div></div>`}
 function startWalk(){if(legs()<1||walk)return;S.legs--;
   walk={t0:Date.now(),got:{},next:0,timer:0};
   $('#wild').innerHTML=`${panoHTML(true)}<div class="walk-top"><span class="wstretch" id="wstretch">院门</span><div class="wpath" aria-label="从院门到山顶的散步进度"><i id="wdot"></i></div></div><p class="walk-tip">看见喜欢的，轻轻点一下</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn" id="walkEnd">结束散步</button></div>`;

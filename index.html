@@ -902,6 +902,11 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 /* the pot preview (208×264) must fit below the step header (and above the floating step buttons on phones) */
 /* kiln step buttons: a small pair under the panel, not a full-width bar; on phones they float bottom-right */
 #v-kiln{padding-bottom:calc(var(--dock-room) + 24px)}
+.motif-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.motif-card{display:grid;gap:3px;padding:3px 3px 5px;border:1px solid var(--line);border-radius:7px;background:#faf4e7;color:var(--ink);overflow:hidden;font:inherit;font-size:12px;cursor:pointer}
+.motif-card svg{display:block;width:100%;height:44px;border-radius:4px}
+.motif-card[aria-pressed=true]{border-color:var(--rouge);box-shadow:inset 0 0 0 1px var(--rouge);color:var(--rouge);font-weight:700}
+.motif-card:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .kside{display:grid;gap:12px;align-content:start;min-width:0}
 .knav{display:flex;justify-content:space-between;gap:10px}
 .knav .btn{min-width:96px}
@@ -2674,7 +2679,164 @@ function renderGoals(){ensureWishes();const wc=wishCoins();
   <h3 class="sec">存档</h3><p class="h-sub">存档只留在这台设备的浏览器里。清理浏览器数据或换设备之前，先导出一份。</p><div class="save-row"><button class="btn" data-save="export">导出存档</button><button class="btn" data-save="import">导入存档</button></div>`}
 
 /* ----- pottery ----- */
-const GLAZE=[['月白','#f3f1ea'],['天青','#bcd9d2'],['粉青','#a9cdb4'],['霁蓝','#2f4f9c'],['胭脂','#c9566f'],['茶末','#7d7f4a'],['乌金','#2b2a30'],['素烧','#c98f6a']],PIG=[['青花','#27408b'],['赭石','#8a4b2a'],['描金','#c9a13a'],['白彩','#ffffff'],['墨','#222222']],MOTIF=[['none','素面'],['bands','弦纹'],['wave','水波'],['dots','梅点'],['vine','缠枝']];
+const ENAMEL_INK='#405954';
+const GLAZE=[['月白','#f3f1ea'],['天青','#bcd9d2'],['粉青','#a9cdb4'],['霁蓝','#2f4f9c'],['胭脂','#c9566f'],['茶末','#7d7f4a'],['乌金','#2b2a30'],['素烧','#c98f6a']],PIG=[['青花','#27408b'],['赭石','#8a4b2a'],['描金','#c9a13a'],['白彩','#ffffff'],['墨','#222222'],['五彩',ENAMEL_INK]],MOTIF=[['none','素面'],['bands','弦纹'],['wave','水波'],['dots','梅点'],['vine','缠枝']];
+// Compositions are drawn around the origin. Glaze showing through the washes
+// supplies a second value of the selected pigment even on a dark vessel.
+const kilnMotifs={
+  landscape:{name:'烟江独钓',py:.43,draw(ground,colors){
+    const pine=`<path d="M0,2Q-1,-5 1,-15M0,-5L-4,-8M0,-9L4,-12" stroke-width=".85"/><path fill="currentColor" stroke="none" d="M-7,-7q1,-4 5,-4l3,2 -1,2zM0,-11q1,-4 6,-4l2,2 -3,2zM-2,-14q1,-5 5,-4l2,2z"/>`;
+    return `<g stroke="none" fill="currentColor"><path opacity=".17" d="M-52,0q8,-1 14,-9t13,-6q7,-1 11,-9q4,-6 9,0t9,8q5,4 14,5t14,6q7,4 17,3q-18,5 -47,2t-54,0Z"/><path opacity=".32" d="M-52,4q8,-2 17,-12q5,-6 8,-5q6,2 9,-5q5,-7 10,1q5,8 12,10l11,5q-21,-1 -30,4t-37,2Z"/></g>
+      <path d="M-51,12Q-39,10 -33,3Q-28,0 -21,3L-15,8Q-8,12 1,12Q-14,16 -27,13T-51,16" fill="${colors.leaf}" stroke-width=".85"/>
+      <g transform="translate(-22 5)">${pine}</g><g transform="translate(-28 6) scale(.67)">${pine}</g>
+      <g stroke-width=".75"><path d="M-14,15q5,2 10,0m-42,2q6,-1 11,0m27,-25q3,-2 5,-6m-2,7 4,-4" opacity=".6"/>
+      <path d="M5,11q8,4 21,-1q-4,6 -16,5Z" fill="currentColor"/><path d="M13,12l2,-5 3,2 1,3M18,9l11,-6q2,3 1,10"/><path d="M12,6l3,-3 3,2z" fill="currentColor"/>
+      <path d="M1,17q8,-1 15,0m4,-2q6,-1 13,-1M17,-15q2,-1 4,1q1,-3 4,-3m2,-2q1,-1 3,0l2,-2" opacity=".7"/></g>`;
+  }},
+  crane:{name:'云中仙鹤',py:.5,draw(ground,colors){
+    const cloud='<path d="M-11,2q6,2 11,-1q5,-3 2,-5q-3,-2 -4,1q-1,-5 -5,-3q-3,2 0,4q-4,-1 -6,2zm3,3q5,2 11,0t9,-1" stroke-width=".85"/>';
+    return `<g opacity=".55" transform="translate(-22 -11)">${cloud}</g><g opacity=".68" transform="translate(22 14) scale(1.1)">${cloud}</g>
+      <path d="M-9,3C-14,-1 -20,-6 -22,-17Q-17,-12 -15,-13L-16,-18L-7,-9L-8,-15Q-2,-9 0,-3Z" fill="${colors.leaf}"/>
+      <path d="M-13,4C-8,5 -7,-2 -1,-3Q3,-4 8,-2Q14,-1 19,-7Q23,-11 27,-9L28,-7L36,-8L28,-5Q25,-7 23,-6Q13,6 6,6Q0,12 -10,9L-18,11Z" fill="${ground}" stroke-width="1"/>
+      <path d="M-8,5C-2,0 1,-8 3,-24Q5,-20 5,-15L8,-23Q10,-19 8,-13L12,-18Q13,-13 9,-6Q12,-8 13,-8Q7,4 -3,6Z" fill="${ground}"/>
+      <path d="M3,-24q2,7 0,14l2,-5 3,-8q1,5 -2,12l6,-7q0,5 -5,11l-7,8q5,-11 3,-25Z" fill="currentColor" stroke="none"/>
+      <path d="M-8,8L-24,16l-6,1m20,-10 -17,5 -6,1" stroke-width="1"/><path d="M23,-8q2,-4 5,-1" stroke="${colors.flower}" stroke-width="2.2"/><circle cx="26" cy="-7.5" r=".6" fill="currentColor"/>`;
+  }},
+  bamboo:{name:'疏竹听风',py:.43,draw(ground,colors){
+    const spray='<path d="M0,0Q5,-2 11,-1M4,-1Q9,-5 15,-4" stroke-width=".55"/><path d="M0,0Q3,-6 10,-8Q6,-2 0,0ZM4,-1Q11,-3 18,1Q9,2 4,-1ZM8,-3Q13,-10 20,-11Q14,-4 8,-3ZM10,-2Q16,-4 22,-2Q16,0 10,-2Z" fill="currentColor" stroke="none"/>';
+    return `<g fill="${colors.leaf}" stroke="none"><path d="M-24,34Q-22,16 -20,9L-18,9L-21,34ZM-20,8L-18,-7L-16,-7L-18,8ZM-18,-8Q-17,-19 -14,-30L-16,-8Z"/>
+      <path opacity=".55" d="M-30,34L-31,13L-30,13L-28,34ZM-31,12L-33,-13Q-30,-6 -30,12Z"/></g>
+      <path d="M-20,9Q-10,1 0,0Q8,-2 15,-9M-18,-7Q-10,-8 -3,-18M-21,18Q-26,13 -34,11M-17,-16Q-24,-19 -28,-26" stroke-width=".95"/>
+      ${[[-8,2,-5,1],[4,-2,-22,.78],[13,-8,8,.8],[-10,-10,-35,.74],[-4,-16,8,.86],[-27,-24,177,.66],[-29,13,145,.68],[-18,10,28,.58]].map(([x,y,a,s])=>`<g transform="translate(${x} ${y}) rotate(${a}) scale(${s})">${spray}</g>`).join('')}
+      <path d="M-22,9l5,-.5m-2,-16 4,-.2" stroke-width="1.6"/>`;
+  }},
+  leafPrint:{name:'木叶留脉',py:.45,draw(ground,colors){
+    let veins='';
+    for(let i=0;i<7;i++){
+      const y=17-i*4.5,w=R(12*Math.sin((i+1)*Math.PI/9));
+      veins+=`M0,${y}q${-w*.65},-2 ${-w},-10m${w},9q${w*.6},-3 ${w},-11`;
+    }
+    return `<g transform="rotate(32)"><path d="M0,24C-2,18 -10,19 -13,8L-14,9L-15,1L-16,2Q-16,-11 -9,-18Q-5,-23 -1,-29Q0,-23 5,-21L5,-22Q15,-16 15,-3L16,-4Q16,6 10,15L11,15Q7,21 1,24Z" fill="${colors.leaf}" stroke-width=".8"/>
+      <path d="M-1,-27Q3,-9 0,12Q-2,24 2,32" stroke="currentColor" stroke-width="1.2"/><path d="${veins}" stroke="${ground}" stroke-width=".65"/>
+      <path d="M-7,-10l-4,-2m3,9 -5,-3m4,10 -5,-3m17,-19 4,-3m-3,12 6,-4m-7,11 6,-4" stroke="${ground}" stroke-width=".45"/></g>`;
+  }},
+  beads:{name:'如意璎珞',py:.7,draw(ground,colors){
+    const festoon='<path d="M-14,-8Q0,18 14,-8M-14,-5Q0,22 14,-5" stroke-width=".85"/><path d="M-13,-6Q0,20 13,-6" stroke-dasharray=".1 3.5" stroke-width="1.8"/>';
+    return `<path d="M-75,-12Q0,-8 75,-12M-75,-15Q0,-11 75,-15"/>
+      ${[-56,-28,0,28,56].map(x=>`<g transform="translate(${x} 0)">${festoon}
+      <path d="M0,7v4m0,7v4" stroke-width=".8"/><path d="M0,10l3,4 -3,4 -3,-4Z" fill="${colors.flower}" stroke-width=".8"/>
+      <path d="M-14,-15q-7,-3 -6,2q0,3 4,2q-1,4 2,6q3,-2 2,-6q5,1 4,-3q-1,-3 -6,-1Z" fill="${colors.leaf}" stroke-width=".9"/><circle cy="22" r="1.4" fill="currentColor"/></g>`).join('')}`;
+  }},
+  roundels:{name:'散点皮球花',full:true,draw(ground,colors,aspect){
+    const blooms=[[0,-43,5,6],[-23,-31,10,9],[19,-25,7,5],[0,-12,8,8],[-34,0,6,5],[28,3,11,10],[-10,13,11,6],[11,27,5.5,5],[-30,32,7,8],[30,44,8,6],[-2,48,8,9]];
+    return blooms.map(([x,y,size,n],i)=>{
+      const petals=Array.from({length:n},(_,k)=>`<g transform="rotate(${360*k/n})"><path d="M0,0C-1,-3 -5,-6 -2,-8Q0,-11 2,-8C5,-5 1,-3 0,0Z" fill="${i%2?colors.flower:colors.leaf}"/><path d="M0,-3v-4" stroke-width=".5"/></g>`).join('');
+      return `<g transform="translate(${x} ${y}) scale(${size/10*Math.min(1,aspect)} ${size/10*Math.min(1,1/aspect)})" stroke-width=".8"><circle r="9.8" stroke-width=".65" fill="${ground}"/>${petals}<circle r="2.5" fill="${i%2?colors.leaf:colors.flower}"/><circle r="1" fill="currentColor" stroke="none"/></g>`;
+    }).join('');
+  }},
+  hexSilk:{name:'龟背织锦',full:true,draw(ground,colors,aspect){
+    let outline='',diamonds='',rosettes='';
+    const rows=Math.ceil(52*aspect/12)+1;
+    for(let row=-rows;row<=rows;row++)for(let col=-3;col<=3;col++){
+      const x=col*17.32+(Math.abs(row)%2)*8.66,y=row*12;
+      outline+=`M${x},${y-8}l8.66,4v8l-8.66,4 -8.66,-4v-8Z`;
+      if((row+col)%3===0)rosettes+=`M${x},${y}q-6,-1 -4,-4q3,-1 4,4q0,-6 3,-5q3,2 -3,5q6,-2 6,1q-1,3 -6,-1q4,4 1,6q-3,0 -1,-6q-3,5 -5,2q-1,-2 5,-2Z`;
+      else diamonds+=`M${x},${y-5}l5,5 -5,5 -5,-5Zm0,3 2,2 -2,2 -2,-2Z`;
+    }
+    return `<g transform="scale(1 ${1/aspect})"><path d="${outline}" stroke-width=".8"/><path d="${diamonds}" fill="${colors.leaf}" fill-rule="evenodd" stroke="none" opacity=".78"/><path d="${rosettes}" fill="${colors.flower}" stroke-width=".55"/></g>`;
+  }},
+  hare:{name:'流釉兔毫',full:true,draw(ground,colors){
+    const rand=rng(7041),layers=['','',''];
+    for(let i=0;i<205;i++){
+      const x=R(rand()*92-46),y=R(-53+rand()*42),length=R(8+rand()*75);
+      const drift=R(-x*.12+rand()*3-1.5),width=R(.18+rand()*.65);
+      layers[i%3]+=`M${x},${y}q${width},${R(length*.34)} ${drift},${length}q${R(-drift-width)},${R(-length*.4)} ${-drift},${-length}Z`;
+    }
+    return `<g stroke="none"><path d="${layers[0]}" fill="currentColor" opacity=".65"/><path d="${layers[1]}" fill="${colors.leaf}" opacity=".8"/><path d="${layers[2]}" fill="${colors.flower}"/></g>`;
+  }},
+  lotus:{name:'缠枝莲',draw(ground,colors){
+    const blossom=`<g stroke-width="1"><path d="M-14,-5Q-7,-8 -3,-4Q-4,-10 0,-15Q5,-10 4,-4Q10,-10 15,-7Q12,0 6,4Q1,8 -5,4Q-11,2 -14,-5Z" fill="${ground}"/>
+      <path fill="${colors.flower}" stroke="none" d="M-13,-5Q-6,-5 0,4Q7,-5 14,-6Q6,8 0,6Q-8,4 -13,-5ZM0,-14Q4,-9 1,-3Q-1,-7 0,-14Z"/>
+      <path d="M-13,-4Q-5,-4 0,4Q4,-4 14,-6M-6,-6Q-3,-5 0,2Q3,-5 6,-7M-9,2Q0,11 10,0"/>
+      <path d="M-4,4Q0,7 4,4Q2,9 0,9Q-3,8 -4,4Z" fill="currentColor"/></g>`;
+    return [-48,0,48].map(x=>`<g transform="translate(${x} 0)">
+      <path d="M-24,0C-16,-17 1,-18 0,-1C-1,18 16,18 24,0M6,12Q16,10 18,1M-18,-7Q-22,-13 -16,-17"/>
+      <path fill="${colors.leaf}" stroke="none" d="M8,13Q9,5 16,4Q15,11 8,13ZM15,11Q24,6 23,1Q17,4 15,11ZM-18,-9Q-25,-13 -21,-17Q-16,-15 -18,-9Z"/>
+      <path stroke-width=".7" d="M3,12C11,23 24,14 20,9Q17,7 17,10Q19,13 19,10M-19,-9Q-17,-18 -10,-19Q-5,-19 -6,-15M-23,0Q-21,-5 -17,-7"/>
+      ${blossom}</g>`).join('');
+  }},
+  peach:{name:'折枝寿桃',draw(ground,colors){
+    const leaf=`<path d="M0,0Q5,-8 16,-5Q10,2 0,0Z" fill="${colors.leaf}"/><path d="M1,0Q9,-4 14,-4" stroke-width=".6"/>`;
+    const fruit=`<path d="M0,-7C-7,-11 -13,-3 -8,5C-6,9 -2,10 1,13C4,9 11,6 10,-1C9,-8 5,-10 0,-7Z" fill="${colors.flower}"/><path d="M-8,-1Q-6,8 1,11Q-2,7 -3,2Q-5,-3 -8,-1Z" fill="${ground}" stroke="none" opacity=".7"/><path d="M0,-7C5,-4 6,3 3,7" stroke-width=".8"/><path d="M-8,2Q-6,8 0,10" opacity=".4"/>`;
+    return `<path d="M-40,22C-30,17 -24,14 -18,4Q-12,-7 1,-10L15,-15L32,-20Q14,-16 2,-8Q-12,-4 -16,6Q-24,19 -40,22Z" fill="currentColor"/>
+      <path d="M-17,4Q-23,-3 -24,-12M-5,-6Q-6,-13 -13,-16M1,-9Q4,-6 5,-2M15,-15Q19,-13 20,-11"/>
+      <g transform="translate(5 6)">${fruit}</g><g transform="translate(20 -5) rotate(-18) scale(.72)">${fruit}</g>
+      ${[[-23,-7,-120],[-24,-11,-50],[-6,-10,-147],[11,-13,-84],[23,-17,4],[29,-18,27],[-20,10,161]].map(([x,y,a])=>`<g transform="translate(${x} ${y}) rotate(${a})">${leaf}</g>`).join('')}`;
+  }},
+  fish:{name:'游鱼水藻',draw(ground,colors){
+    const carp=`<path d="M-5,-3Q-2,-10 6,-7L9,-3M1,4L-4,10Q3,9 6,5" fill="currentColor" fill-opacity=".48"/>
+      <path d="M-11,0Q-7,-5 0,-5Q8,-6 15,-1L17,1Q8,7 1,6Q-6,5 -11,1L-20,7Q-17,2 -20,-5Z" fill="${colors.flower}"/>
+      <path d="M9,-3Q6,1 10,4M-12,0L-18,4M-12,0L-18,-3M3,2Q-1,7 -3,6L0,2" stroke-width=".85"/>
+      <path d="M-8,-1q1,2 2,0m0,-2q1,2 2,0m4,-1q1,2 2,0m2,0q1,2 2,0M-6,-1q1,3 3,0m1,-2q1,3 3,0m1,2q1,3 3,0m-9,2q1,3 3,0" stroke-width=".7"/><circle cx="12.5" cy="-.7" r="1.05" fill="currentColor" stroke="none"/>`;
+    const weed=`<path d="M0,0Q5,-8 0,-16T3,-29M2,-9Q-6,-13 -5,-18M2,-14Q8,-16 8,-22M0,-19Q-5,-23 -4,-27"/>`;
+    return `<g transform="translate(5 -8) rotate(-12)">${carp}</g><g transform="translate(-9 11) rotate(-16) scale(-.75 .75)">${carp}</g>
+      <g stroke="${colors.leaf}" transform="translate(-33 14) rotate(12)">${weed}</g><g opacity=".55" transform="translate(28 19) scale(.78)">${weed}</g>
+      <path d="M-27,20q6,-2 13,-1m11,-19q5,-2 9,-1m2,20q6,-2 14,-2" stroke-width=".65"/>`;
+  }},
+  icePlum:{name:'冰裂梅花',draw(ground,colors){
+    const flower=Array.from({length:5},(_,i)=>`<path transform="rotate(${i*72})" d="M0,0C-6,-1 -6,-7 -2,-8Q3,-10 4,-5Q4,-2 0,0Z" fill="${ground}"/>`).join('')+
+      `<circle r="1.6" fill="${colors.flower}"/><path d="M0,-1v-2m1,3 2,-1m-4,1 -2,-1m2,2 -1,2m3,-2 1,2" stroke-width=".65"/>`;
+    return `<path d="M-65,-19Q0,-15 65,-19V18Q0,23 -65,18Z" fill="currentColor" fill-opacity=".75"/>
+      <path stroke="${ground}" stroke-width=".85" d="M-61,-14l12,6 7,-10m-7,10 4,9 -11,14m11,-14 13,5 8,-7 -5,-15m5,15 13,3 8,-9 -1,-11m-7,20 3,10 -5,7m9,-26 13,3 8,-12m-8,12 4,12 -9,11m9,-11 10,3 11,-9 -2,-16m2,16 13,3 8,-10m-8,10 -1,11 9,3"/>
+      ${[[-23,4,1.08,17],[1,-7,.77,-7],[23,7,.92,25],[-45,-9,.72,6],[46,-7,.8,16]].map(([x,y,s,a])=>`<g stroke-width=".8" transform="translate(${x} ${y}) scale(${s}) rotate(${a})">${flower}</g>`).join('')}`;
+  }},
+  brocade:{name:'锦地开光',draw(ground,colors){
+    let lattice='';
+    for(let x=-90;x<=65;x+=8)lattice+=`M${x},-16l34,34m-34,0 34,-34`;
+    const frame='M0,-19Q6,-19 10,-15Q18,-16 18,-9Q25,-5 22,0Q25,6 18,9Q18,16 10,15Q5,20 0,19Q-6,19 -10,15Q-18,16 -18,9Q-25,5 -22,0Q-25,-6 -18,-9Q-18,-16 -10,-15Q-5,-20 0,-19Z';
+    return `<path d="${lattice}" opacity=".5" stroke-width=".8"/><path d="M-64,-17H64M-64,19H64" stroke-width="1.2"/>
+      <path d="${frame}" fill="${ground}" stroke-width="1.8"/><path d="${frame}" transform="scale(.89)" stroke-width=".7"/>
+      <path d="M-11,10Q-3,6 3,-8M-5,6Q-5,1 -10,-2M-2,3Q3,3 7,0"/>
+      <path d="M-5,4Q-14,4 -13,-4Q-7,-3 -5,4ZM1,0Q4,-7 11,-5Q9,-1 1,0Z" fill="currentColor" stroke="none"/>
+      ${Array.from({length:8},(_,i)=>`<ellipse transform="translate(3 -7) rotate(${i*45})" cy="-2.6" rx="1.3" ry="2.8" fill="${colors.flower}" stroke-width=".8"/>`).join('')}<circle cx="3" cy="-7" r="1.4" fill="currentColor"/>`;
+  }},
+  cliffs:{name:'海水江崖',draw(ground,colors){
+    const wave=`<path d="M-18,5C-10,3 -10,-8 -2,-8Q4,-9 5,-4Q5,-1 2,-2Q0,-3 2,-4Q-2,-4 -1,0Q0,4 8,4Q13,4 18,1M-16,7Q-9,5 -7,0M3,5Q9,8 17,4"/>`;
+    return `<path d="M-43,12L-33,2L-29,4L-17,-17L-13,-13L-10,-20L-4,-9L1,-7L7,8L15,14Z" fill="${colors.leaf}" fill-opacity=".74"/>
+      <path d="M-29,5l12,-22 -4,19 -5,7m13,-22 -2,10 -5,13m10,-30 -1,18 6,10m1,-17 0,9 7,11" stroke-width=".9"/>
+      <path d="M-21,3l2,-7m-1,9 3,-6m3,-5 2,-7m-1,13 2,-6m5,10 -2,-7m2,10 -3,-4" stroke-width=".6"/><g fill="${ground}">${[-40,-12,16,44].map((x,i)=>`<g transform="translate(${x} ${i%2?11:15}) scale(.85)">${wave}</g>`).join('')}</g>
+      <g transform="translate(27 -2) scale(.85)">${wave}</g><path d="M-55,18Q-38,13 -23,18T9,18T41,17T65,18M-55,21Q-38,16 -23,21T9,21T41,20T65,21" stroke-width=".85"/>`;
+  }}
+};
+const footBorders=[['none','留白'],['key','回纹'],['petal','仰莲瓣'],['leaf','蕉叶']];
+function footBorder(p){
+  if(!p.border||p.border==='none')return '';
+  const tile={key:'M-6,0V-6H4V-2H-2V-4H1M4,-6H6',petal:'M-6,0Q-7,-5 0,-10Q7,-5 6,0Q0,2 -6,0ZM-3,-1Q-4,-5 0,-7Q4,-4 3,-1',leaf:'M-5,0Q-4,-6 0,-12Q4,-7 5,0ZM0,-1V-10M0,-3L-2,-5M0,-5L2,-7'}[p.border];
+  if(!tile)return '';
+  const scale=Math.min(1,p.H/115,p.r[0]/23);
+  let tiles='';
+  for(let i=-7;i<=7;i++)tiles+=`<path transform="translate(${i*12} ${R(-.075*i*i)})" d="${tile}"/>`;
+  return `<g transform="translate(200 472) scale(${scale})" stroke-width="1.1">${tiles}<path d="M-90,-3Q0,5 90,-3"/></g>`;
+}
+function paintedMotif(key,ground,ink,aspect=1){
+  const colors=ink===ENAMEL_INK?{flower:'#dc8469',leaf:'#70946f'}:{flower:mix(ground,ink,.33),leaf:mix(ground,ink,.75)};
+  return `<g color="${ink}" stroke="currentColor" fill="none" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">${kilnMotifs[key].draw(ground,colors,aspect)}</g>`;
+}
+const motifGroups={
+  花鸟草木:['crane','bamboo','leafPrint','peach','lotus'],
+  山水鱼藻:['landscape','fish','cliffs'],
+  锦纹垂饰:['beads','roundels','hexSilk','brocade','icePlum'],
+  釉纹:['hare']
+};
+let motifGroup='花鸟草木';
+function kilnPatternCards(p){
+  const tabs=Object.keys(motifGroups).map(group=>`<button class="chip${group===motifGroup?' on':''}" data-motif-group="${group}" aria-pressed="${group===motifGroup}">${group}</button>`).join('');
+  const cards=motifGroups[motifGroup].map(key=>{
+    const art=kilnMotifs[key];
+    return `<button type="button" class="motif-card" data-mo="${key}" aria-pressed="${p.mo===key}"><svg aria-hidden="true" viewBox="-43 -25 86 50" style="background:${p.gl}">${paintedMotif(key,p.gl,p.pig)}</svg><span>${art.name}</span></button>`;
+  }).join('');
+  return `<div class="chips" role="group" aria-label="纹样分类">${tabs}</div><div class="motif-grid">${cards}</div>`;
+}
 const SHAPES={瓶:[[26,40,46,38,24,16,20],150],罐:[[34,48,54,52,44,34,32],110],筒:[[24,25,25,25,25,25,26],150],碗:[[20,34,46,54,60,64,66],70],梅瓶:[[22,30,44,52,40,18,14],170]};
 function potPath(r,H){const n=r.length,cx=200,by=478,pts=r.map((q,i)=>[q,by-2-(H-2)*i/(n-1)]),Lf=pts.map(p=>[cx-p[0],p[1]]).reverse(),Rt=pts.map(p=>[cx+p[0],p[1]]);
   const sm=a=>{let d='';for(let i=1;i<a.length;i++){const p0=a[i-1],p1=a[i],m=R((p0[1]+p1[1])/2);d+=`C${R(p0[0])},${m} ${R(p1[0])},${m} ${R(p1[0])},${R(p1[1])}`}return d},mw=R(r[n-1]),my=R(pts[n-1][1]);
@@ -2686,7 +2848,15 @@ function potVase(p,clayOnly){const g=potPath(p.r,p.H),id=p.id,ry=R(g.mw*.2),y=R(
    if(p.mo==='wave'){let d=`M${w0},${y}`;for(let x=w0;x<w1;x+=14)d+='q3.5,-7 7,0t7,0';ex+=`<path d="${d}"/><path d="${d}" transform="translate(0,8)" stroke-opacity=".5"/>`}
    if(p.mo==='dots')for(let k=-2;k<=2;k++){const x=200+k*26,yy=y+(k%2?6:0);ex+=[0,72,144,216,288].map(a=>`<circle cx="${R(x+Math.cos(a/DEG)*4.2)}" cy="${R(yy+Math.sin(a/DEG)*4.2)}" r="2.3" fill="${pg}" stroke="none"/>`).join('')}
    if(p.mo==='vine'){let d=`M${w0},${y}`;for(let x=w0;x<w1;x+=28)d+='q7,-9 14,0t14,0';ex+=`<path d="${d}"/>`;for(let x=w0+7,k=0;x<w1;x+=14,k++)ex+=`<path d="M${x},${y+(k%2?4:-4)}q5,-7 10,-3q-5,6 -10,3z" fill="${pg}" stroke="none"/>`}
-   ex+='</g>'+(p.rim?`<path d="M${200-g.mw},${g.my}A${g.mw},${ry} 0 0 0 ${200+g.mw},${g.my}" fill="none" stroke="#d2ab45" stroke-width="2.6"/><g clip-path="url(#pc-${id})"><path d="M120,474H280" stroke="#d2ab45" stroke-width="3"/></g>`:'')}
+   if(Object.hasOwn(kilnMotifs,p.mo)){
+     const row=clamp((476-y)/(p.H-2)*(p.r.length-1),0,p.r.length-1),lo=Math.floor(row);
+     const radius=lerp(p.r[lo],p.r[Math.min(lo+1,p.r.length-1)],row-lo);
+     const full=kilnMotifs[p.mo].full;
+     const sx=(full?Math.max(...p.r):radius)/40,sy=full?p.H/100:Math.min(sx,p.H/75);
+     const center=full?478-p.H/2:y;
+     ex+=`<g transform="translate(200 ${center}) scale(${sx} ${sy})">${paintedMotif(p.mo,p.gl,pg,sy/sx)}</g>`;
+   }
+   ex+=footBorder(p)+'</g>'+(p.rim?`<path d="M${200-g.mw},${g.my}A${g.mw},${ry} 0 0 0 ${200+g.mw},${g.my}" fill="none" stroke="#d2ab45" stroke-width="2.6"/><g clip-path="url(#pc-${id})"><path d="M120,474H280" stroke="#d2ab45" stroke-width="3"/></g>`:'')}
   const mid=Math.max(...p.r);ex+=`<g clip-path="url(#pc-${id})"><path d="M${R(200-mid*.55)},${g.my+10}V470" stroke="#fff" stroke-width="${clayOnly?3:5}" stroke-linecap="round" opacity="${clayOnly?.18:p.gloss?.5:.16}"/></g>`;
   return{n:p.name,price:0,my:g.my,mw:g.mw,ry,inner:mix(clayOnly?'#b98d6f':p.gl,'#000000',.45),body:g.d,fill:`url(#pg-${id})`,extra:ex,vb:`112 ${R(g.my-26)} 176 ${R(478-g.my+38)}`,pot:1,r:p.r,H:p.H}}
 const potDefs=(p,col)=>`<linearGradient id="pg-${p.id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(col,'#000000',.24)}"/><stop offset=".36" stop-color="${mix(col,'#ffffff',.22)}"/><stop offset="1" stop-color="${mix(col,'#000000',.3)}"/></linearGradient><clipPath id="pc-${p.id}"><path d="${potPath(p.r,p.H).d}"/></clipPath>`;
@@ -2695,7 +2865,7 @@ let pot=null,kstep=0,kdrag=false;
 const potTypeHTML=p=>{const vt=vtypeOf({r:p.r,H:p.H,mw:p.r[p.r.length-1],my:478-p.H});return`器型：<b>${vt.n}</b> · 可插 ${vt.cap} 枝<small>${vt.tip}</small>`};
 function potPreview(){const clay=kstep===0,v=potVase(pot,clay),n=pot.r.length;let hd='';
   if(clay)hd=pot.r.map((q,i)=>`<circle class="kh" cx="${R(200+q)}" cy="${R(476-(pot.H-2)*i/(n-1))}" r="6.5"/>`).join('')+`<path d="M200,${v.my-34}v12M195,${v.my-29}l5,-6l5,6M195,${v.my-27}" stroke="#8a654b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle class="kh top" cx="200" cy="${v.my-13}" r="7.5"/>`;
-  if(kstep===2&&pot.mo!=='none'){const y=R(v.my+(478-v.my)*(1-pot.py));hd=`<path d="M104,${y}h12M284,${y}h12" stroke="#8a654b" stroke-width="2.5" stroke-linecap="round"/><path d="M110,${y-9}l-4,4.500h8zM110,${y+9}l-4,-4.500h8z" fill="#8a654b"/>`}
+  if(kstep===2&&pot.mo!=='none'&&!kilnMotifs[pot.mo]?.full){const y=R(v.my+(478-v.my)*(1-pot.py));hd=`<path d="M104,${y}h12M284,${y}h12" stroke="#8a654b" stroke-width="2.5" stroke-linecap="round"/><path d="M110,${y-9}l-4,4.500h8zM110,${y+9}l-4,-4.500h8z" fill="#8a654b"/>`}
   return`<svg viewBox="96 238 208 264" id="ksvg"><defs>${potDefs(pot,clay?'#b98d6f':pot.gl)}</defs><ellipse cx="200" cy="486" rx="86" ry="11" fill="#6f5a48"/><ellipse cx="200" cy="482" rx="86" ry="11" fill="#9a8168"/><ellipse cx="200" cy="482" rx="60" ry="7" fill="none" stroke="#7d6652" stroke-width="1.5"/><ellipse cx="200" cy="${v.my}" rx="${v.mw}" ry="${v.ry}" fill="${v.inner}"/><path d="${v.body}" fill="${v.fill}"/>${v.extra}<path d="M${200-v.mw},${v.my}A${v.mw},${v.ry} 0 0 0 ${200+v.mw},${v.my}" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.5"/>${clay?`<g clip-path="url(#pc-${pot.id})" class="kspin" stroke="#fff" stroke-opacity=".22" fill="none">${[0,1,2,3,4,5,6,7].map(k=>`<path d="M110,${300+k*24}q90,14 180,0"/>`).join('')}</g>`:''}${hd}</svg>`.replace(/4\.500/g,'4.5')}
 function renderKiln(){const el=$('#kiln');
   if(!S.kiln){el.innerHTML=subHead('kiln')+'<h2 class="h-title">陶坊</h2><p class="empty-note">陶坊的门还关着。<br>去「乡邻」认识陶匠老窑，帮他一个忙，他会教你拉坯。</p>';return}
@@ -2703,7 +2873,7 @@ function renderKiln(){const el=$('#kiln');
   let panel;
   if(kstep===0)panel=`<p class="ktip">拖陶坯右边的圆点，把它推胖或收细；拖最上面的圆点，改高矮。</p><div class="kvtype" id="kvtype">${potTypeHTML(pot)}</div><h4>或者从一个坯形开始</h4><div class="pk">${Object.keys(SHAPES).map(k=>`<button class="pkc" data-shape="${k}"><svg viewBox="120 ${478-SHAPES[k][1]-8} 160 ${SHAPES[k][1]+12}"><path d="${potPath(SHAPES[k][0],SHAPES[k][1]).d}" fill="#b98d6f"/></svg><span>${k}</span></button>`).join('')}</div>`;
   else if(kstep===1)panel=`<h4>釉色</h4><div class="pk">${GLAZE.map((g,i)=>`<button class="pkc${pot.gl===g[1]?' on':''}" data-gl="${i}"><i class="sw" style="background:${g[1]}"></i><span>${g[0]}</span></button>`).join('')}</div><div class="seg"><label>光泽</label><div><button data-gloss="1"${pot.gloss?' class="on"':''}>亮釉</button><button data-gloss="0"${pot.gloss?'':' class="on"'}>哑光</button></div></div>`;
-  else if(kstep===2)panel=`<p class="ktip">选一个纹样，然后在陶坯上上下拖动，把它挪到喜欢的位置。</p><h4>纹样</h4><div class="chips">${MOTIF.map(m=>`<button class="chip${pot.mo===m[0]?' on':''}" data-mo="${m[0]}">${m[1]}</button>`).join('')}</div><h4>颜料</h4><div class="chips">${PIG.map((g,i)=>`<button class="chip${pot.pig===g[1]?' on':''}" data-pig="${i}"><i style="background:${g[1]}"></i>${g[0]}</button>`).join('')}</div><div class="seg"><label>口沿</label><div><button data-rim="0"${pot.rim?'':' class="on"'}>本色</button><button data-rim="1"${pot.rim?' class="on"':''}>描金边</button></div></div>`;
+  else if(kstep===2)panel=`<p class="ktip">${kilnMotifs[pot.mo]?.full?'这款纹样铺满器身，可调换颜料或搭配足部边饰。':'选好纹样后，在陶坯上上下拖动可调整位置。'}</p><h4>主题纹样</h4>${kilnPatternCards(pot)}<h4>基础纹样</h4><div class="chips">${MOTIF.map(m=>`<button class="chip${pot.mo===m[0]?' on':''}" aria-pressed="${pot.mo===m[0]}" data-mo="${m[0]}">${m[1]}</button>`).join('')}</div><h4>颜料</h4><div class="chips">${PIG.map((g,i)=>`<button class="chip${pot.pig===g[1]?' on':''}" data-pig="${i}"><i style="background:${g[1]}"></i>${g[0]}</button>`).join('')}</div><h4>足部边饰</h4><div class="chips">${footBorders.map(([key,name])=>`<button class="chip${(pot.border||'none')===key?' on':''}" aria-pressed="${(pot.border||'none')===key}" data-border="${key}">${name}</button>`).join('')}</div><div class="seg"><label>口沿</label><div><button data-rim="0"${pot.rim?'':' class="on"'}>本色</button><button data-rim="1"${pot.rim?' class="on"':''}>描金边</button></div></div>`;
   else panel=`<p class="ktip">起个名字，就可以入窑了。窑火要烧一小会儿。</p><label for="potName" class="muted" style="font-size:12px">陶器的名字</label><input class="inp" id="potName" maxlength="6" value="${esc(pot.name)}">`;
   el.innerHTML=subHead('kiln')+`<div class="st-head"><h2 class="h-title">陶坊</h2><div class="ksteps">${['塑形','上釉','彩绘','入窑'].map((s,i)=>`<button class="${i===kstep?'on':i<kstep?'done':''}" data-kstep="${i}"${i===kstep?' aria-current="step"':''}>${s}</button>`).join('')}</div></div><div class="kiln"><div class="kwheel" id="kwheel">${potPreview()}</div><div class="kside"><div class="kpanel">${panel}</div><div class="knav"><button class="btn lg" data-kgo="-1">${kstep?'上一步':'取消'}</button><button class="btn primary lg" data-kgo="1">${kstep===3?'入窑烧制':'下一步'}</button></div></div></div>`}
 function firePot(){pot.name=($('#potName')?.value||'无名').trim().slice(0,6)||'无名';const p=pot;p.id='p_'+S.nid++;S.clay--;
@@ -2711,14 +2881,16 @@ function firePot(){pot.name=($('#potName')?.value||'无名').trim().slice(0,6)||
   setTimeout(()=>{S.pots.push(p);VASES[p.id]=potVase(p);$('#defs').insertAdjacentHTML('beforeend',potDefs(p,p.gl));S.vases.push(p.id);pot=null;kstep=0;bump('pots');sfx('rare');save();
     modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">出窑</p><div class="reveal"><i class="rays"></i>${vaseThumb(VASES[p.id]).replace('<svg','<svg class="ico big-ico"')}</div><h2 class="h-title" style="justify-content:center">${esc(p.name)}</h2><p class="muted">已经摆上花艺台，可以在「花器」里选它。</p><button class="btn primary" data-act="close">收下</button></div>`);confetti(['#fff',p.gl,p.pig]);if(view==='kiln')renderKiln()},3600)}
 function kilnClick(e){const b=e.target.closest('button');if(!b)return;const d=b.dataset;
-  if(b.id==='potNew'){if(S.clay<1||S.pots.length>=8)return;pot={id:'prev',r:[...SHAPES.瓶[0]],H:SHAPES.瓶[1],gl:GLAZE[1][1],gloss:1,mo:'none',pig:PIG[0][1],py:.5,rim:0,name:pick(['初心','春水','半月','拙','听雨','小满'])};kstep=0}
+  if(b.id==='potNew'){if(S.clay<1||S.pots.length>=8)return;motifGroup='花鸟草木';pot={id:'prev',r:[...SHAPES.瓶[0]],H:SHAPES.瓶[1],gl:GLAZE[1][1],gloss:1,mo:'none',pig:PIG[0][1],py:.5,rim:0,name:pick(['初心','春水','半月','拙','听雨','小满'])};kstep=0}
   else if(d.potdel){const pt=S.pots.find(p=>p.id===d.potdel);if(!pt)return;return modal(`<div class="center"><h2 class="h-title" style="justify-content:center">送给乡邻</h2><p class="say">要把亲手烧制的「${esc(pt.name)}」送给乡邻吗？<br>乡邻会回礼 ${price(50)}，花架上已装裱的作品仍会保留它的模样。</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">留着自用</button><button class="btn primary" data-act="delpot" data-id="${pt.id}">送出</button></div></div>`)}
   else if(!pot)return;
   else if(d.shape){pot.r=[...SHAPES[d.shape][0]];pot.H=SHAPES[d.shape][1]}
   else if(d.k==='H')pot.H=clamp(pot.H+ +d.d*10,60,190);
   else if(d.k==='py')pot.py=clamp(pot.py+ +d.d*.25,0,1);
   else if(d.gl!==undefined)pot.gl=GLAZE[+d.gl][1];else if(d.gloss!==undefined)pot.gloss=+d.gloss;
-  else if(d.mo)pot.mo=d.mo;else if(d.pig!==undefined)pot.pig=PIG[+d.pig][1];else if(d.rim!==undefined)pot.rim=+d.rim;
+  else if(d.motifGroup)motifGroup=d.motifGroup;
+  else if(d.mo){if(pot.mo!==d.mo&&kilnMotifs[d.mo]?.py!==undefined)pot.py=kilnMotifs[d.mo].py;pot.mo=d.mo}
+  else if(d.border)pot.border=d.border;else if(d.pig!==undefined)pot.pig=PIG[+d.pig][1];else if(d.rim!==undefined)pot.rim=+d.rim;
   else if(d.kstep!==undefined){const nm=$('#potName');if(nm)pot.name=nm.value;if(+d.kstep===kstep)return;kstep=+d.kstep}
   else if(d.kgo){const nm=$('#potName');if(nm)pot.name=nm.value;if(+d.kgo<0){if(kstep===0)pot=null;else kstep--}else if(kstep===3)return firePot();else kstep++}
   else return;
@@ -2727,7 +2899,7 @@ function kilnPt(e){const sv=$('#ksvg');return sv?new DOMPoint(e.clientX,e.client
 function kilnPick(e){if(!pot)return null;const p=kilnPt(e);if(!p)return null;const my=478-pot.H,n=pot.r.length;
   if(kstep===0){if(Math.hypot(p.x-200,p.y-(my-13))<22)return{m:'H',y0:p.y,H0:pot.H};
     let best=null,bd=20;pot.r.forEach((q,i)=>{const d=Math.hypot(p.x-200-q,p.y-(476-(pot.H-2)*i/(n-1)));if(d<bd){bd=d;best={m:'r',row:i}}});return best}
-  if(kstep===2&&pot.mo!=='none'&&Math.abs(p.y-(my+(478-my)*(1-pot.py)))<20)return{m:'py'};return null}
+  if(kstep===2&&pot.mo!=='none'&&!kilnMotifs[pot.mo]?.full&&Math.abs(p.y-(my+(478-my)*(1-pot.py)))<20)return{m:'py'};return null}
 function kilnShape(e){if(!pot||!kdrag)return;const p=kilnPt(e);if(!p)return;
   if(kdrag.m==='H')pot.H=clamp(Math.round(kdrag.H0+(kdrag.y0-p.y)),60,190);
   else if(kdrag.m==='r')pot.r[kdrag.row]=R(clamp(Math.abs(p.x-200),10,68));

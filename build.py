@@ -130,6 +130,8 @@ def build():
 
     cut = html.rindex(MAIN)
     head, script = html[:cut], html[cut:]
+    # The offline edition uses the embedded title font and local body fonts.
+    head = re.sub(r'^<link [^>]*href="https://fonts\.(?:googleapis|gstatic)\.com[^"]*"[^>]*>\n?', '', head, flags=re.M)
 
     data = {}
     for f in sorted((ROOT / 'assets').rglob('*.webp')):

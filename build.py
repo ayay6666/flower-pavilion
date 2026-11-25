@@ -51,6 +51,19 @@ def collect_display_chars(html: str, include_poetic: bool = True) -> str:
     m_bdg = re.search(r"const BADGE=\[(.*?)\];\n", src_text)
     if m_bdg:
         parts += re.findall(r"\['b\d+','([^']+)'", m_bdg.group(1))
+    # 山野探险：地图名、地段名、乡邻名、拾遗名、小游戏标题都用书法字
+    for blk in [r"const WMAPS=\{.*?\}\};", r"const WQ=\{.*?\}\]\}\};"]:
+        m = re.search(blk, src_text, re.S)
+        if m:
+            parts += re.findall(r"\bn:'([^']+)'", m.group(0))
+            parts += re.findall(r"\[[\d.]+,'([^']+)'\]", m.group(0))
+    m = re.search(r"const WCU=\{.*?\};", src_text, re.S)
+    if m:
+        parts += re.findall(r"\w+:\['([^']+)'", m.group(0))
+    parts += re.findall(r"wxGameOpen\([^,]+,'([^']+)'", src_text)
+    parts += ['个漂咕咚山野拾遗花丛荷塘溪边草丛寻信花信归来旅人邮差书斋']
+    # 弹窗朱印：标题上方的小字会收进印里
+    parts += re.findall(r"letter-spacing:\.3em[^>]*>([^<$]+)<", src_text)
     for pat in [
         r"const GRADES=\[\[.*?\]\];",
         r"const NAMES=\{.*?\};",

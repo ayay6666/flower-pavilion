@@ -1324,6 +1324,31 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 @keyframes stampIn{0%{opacity:0;transform:scale(1.9)}55%{opacity:1;transform:scale(.92)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.hxb.hxb-bd .yin{animation:none}}
 @media (prefers-reduced-motion:reduce){.nope{animation:none}}
+/* Keep the first action in view on short phones, including after rotation. */
+@media (max-height:559px) and (min-aspect-ratio:4/3){
+  .dialog:has(.welcome-art){display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);column-gap:14px;align-items:center;max-width:680px;padding-top:14px}
+  .dialog .welcome-art{grid-row:1 / 3}
+  .welcome-art .splash{height:min(22vh,100px);object-fit:contain;border:0;margin-bottom:2px}
+  .welcome-art h2.logo.big{font-size:26px!important}
+  .dialog:has(.welcome-art)>.say{padding-right:24px;font-size:13px;line-height:1.5}
+  .dialog:has(.welcome-art)>.dlg-actions{grid-column:2;margin-top:4px}
+  #v-studio{display:flex;flex-direction:column}
+  #v-studio .sheet,#v-studio .studio{display:flex;flex:1;min-height:0;width:100%}
+  #v-studio .studio{align-items:stretch}
+  #v-studio .sheet{padding:0}
+  #v-studio .stage-col{max-width:900px;display:grid;grid-template-columns:minmax(0,1fr) minmax(252px,1fr);grid-template-rows:minmax(0,1fr) auto;align-items:center}
+  #v-studio .stagew{grid-row:1 / 3;align-self:stretch;display:grid;place-items:center;min-height:0;container-type:size}
+  #v-studio .stage-box{width:min(100%,calc((100dvh - 140px)*.9285));width:min(100cqw,92.85cqh)}
+  #v-studio .st-deck{min-width:0;align-self:end}
+  #v-studio .st-bar{grid-column:2;justify-content:space-between}
+  #stCount{display:none}
+  #v-studio .st-side{top:4px;right:4px;gap:2px}
+  #v-studio .st-side button{width:34px;height:34px}
+  #v-studio .st-pop{inset:4px 42px auto 4px;width:auto;max-height:calc(100% - 8px)}
+}
+@media (max-height:600px){
+  .wstart .wild-info{position:sticky;bottom:0;z-index:1}
+}
 </style>
 </head><body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="hx-stamp" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".5" numOctaves="2" seed="11" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -12.5 8.6" result="holes"/><feComposite in="SourceGraphic" in2="holes" operator="in" result="inked"/><feDisplacementMap in="inked" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
@@ -3328,7 +3353,7 @@ function start(data){
     modal(`<div class="center"><h2 class="h-title" style="justify-content:center">小院在别处开着</h2><p class="say">另一个窗口正在照看这座小院。为免两边的存档互相覆盖，这个窗口先歇下了。</p><button class="btn primary" data-act="reload">在这里继续</button></div>`,false,{dismissible:false});stale=true});
   window.claude?.hot?.snapshot?.(()=>({S}));
   if(S.intro&&awayMsg)modal(awayMsg);else if(S.intro&&S.termSeen!==term().n)termModal();
-  if(!S.intro)modal(`<div class="center"><img class="splash" src="${A('assets/splash.webp')}" width="900" height="600" alt="" draggable="false"><h2 class="logo big" style="font-size:40px;margin:4px 0">${[...'花信小筑'].map((c,i)=>`<span style="--i:${i}">${c}</span>`).join('')}</h2><p class="muted" style="margin:0">风有信，花不误。一方小院，四时花开。</p></div>
+  if(!S.intro)modal(`<div class="center welcome-art"><img class="splash" src="${A('assets/splash.webp')}" width="900" height="600" alt="" draggable="false"><h2 class="logo big" style="font-size:40px;margin:4px 0">${[...'花信小筑'].map((c,i)=>`<span style="--i:${i}">${c}</span>`).join('')}</h2><p class="muted" style="margin:0">风有信，花不误。一方小院，四时花开。</p></div>
    <p class="say" style="text-align:center;margin:12px 0 4px">花铺掌柜会陪你走一遍：<b>播种 → 照料 → 采花 → 插花</b>。<br>授粉育种、山野散步、乡邻往来，之后慢慢都会遇到。不赶时间。</p>
    <div class="center"><button class="btn primary" data-act="start">推开院门</button></div>`);
 }

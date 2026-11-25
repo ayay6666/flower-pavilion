@@ -658,13 +658,14 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 .tspot .tag{position:absolute;left:var(--sx);top:var(--sy);translate:-50% -50%;transition:transform .2s}
 .tspot:hover .tag{transform:translateY(-2px)}.tspot:active .tag{transform:scale(.95)}
 .tspot .bub{top:-15px;right:-17px}
-.tfig{position:absolute;left:var(--fx);top:var(--fy);height:var(--fh);translate:-50% -100%;padding:0;border:0;background:none;display:block;cursor:pointer}
+.tfig{position:absolute;left:var(--fx);top:var(--fy);height:max(var(--fh),44px);translate:-50% -100%;padding:0;border:0;background:none;display:block;cursor:pointer}
 .tfig.still{pointer-events:none}
 .tfig::before{content:"";position:absolute;left:50%;bottom:-4px;width:100%;height:10px;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(70,50,30,.32),transparent)}
 .tfig .chibi{position:relative;display:block;height:100%;width:auto;max-width:none;animation:bobc 2.8s ease-in-out infinite}
 .tfig:nth-of-type(odd) .chibi{animation-delay:-1.3s}
 .tfig .tag{position:absolute;top:calc(100% + 3px);left:50%;translate:-50% 0}
-.tfig .bub{top:-12px;right:-16px}
+.tfig .bub{top:-4px;right:auto;left:calc(100% - 6px)}
+.tfig.bl .bub{left:auto;right:calc(100% - 6px);border-radius:13px 13px 3px 13px}
 .ava.face{background:#efe4cc url('assets/n_he.webp') 50% 3%/190% auto no-repeat;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
 @media (prefers-reduced-motion:reduce){.tfig .chibi{animation:none}}
 @keyframes talkin{from{transform:translate(-50%,24px);opacity:0}}
@@ -2571,15 +2572,15 @@ const TOWNS={
    {own:'po',sign:'桂婆婆家',r:[71,5,26,27],s:[84,9]},
    {go:'shop',sign:'花铺',r:[1,40,42,52],painted:1},
    {go:'kiln',sign:'陶坊',r:[56,46,43,40],s:[63,59]}],
-  folk:{shen:[19.5,37,12],he:[47,31.5,12],po:[74,31.5,12],yao:[70,85,16],keep:[26,87,16],ye:[42,47,13],dou:[75,44,12.5]}},
- p:{img:'assets/town_p.webp',w:1024,h:1536,
+  folk:{shen:[19.5,41,12,'l'],he:[47,31.5,12],po:[74,31.5,12],yao:[70,85,16],keep:[26,87,16],ye:[42,47,13],dou:[75,44,12.5]}},
+ p:{img:'assets/town_p.webp',w:1024,h:1536,pan:.6,
   spots:[
-   {own:'shen',sign:'沈记书店',r:[8,7,34,18],painted:1},
-   {own:'po',sign:'桂婆婆家',r:[61,5,36,18],s:[78,8]},
-   {own:'he',sign:'阿禾苗圃',r:[5,29,39,18],s:[21,31]},
-   {go:'shop',sign:'花铺',r:[1,52,47,29],painted:1},
-   {go:'kiln',sign:'陶坊',r:[50,54,49,24],s:[72,55]}],
-  folk:{shen:[29,24,6.8],po:[64,23,6.8],he:[32,44,7.2],ye:[47,27.5,7],dou:[78,42.5,7],keep:[32,77,9],yao:[64.5,75.5,9]}}};
+   {own:'shen',sign:'沈记书店',r:[9,3,39,20],painted:1},
+   {own:'po',sign:'桂婆婆家',r:[59,10,40,21],s:[80,12.5]},
+   {own:'he',sign:'阿禾苗圃',r:[7,32,39,20],s:[24,34]},
+   {go:'shop',sign:'花铺',r:[1,55,48,26],painted:1},
+   {go:'kiln',sign:'陶坊',r:[50,61,49,22],s:[67,64.5]}],
+  folk:{shen:[27,22,6.8,'l'],po:[77,29.5,6.8],ye:[46,52.5,7],he:[34,50.5,7.2],dou:[77,50,7],keep:[40,80,9],yao:[72,83,9]}}};
 const TOWN_NAMED=['yao','ye','dou'];
 let TOWN=TOWNS.l;
 const townPick=()=>innerWidth<innerHeight?TOWNS.p:TOWNS.l;
@@ -2605,7 +2606,7 @@ function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==T
     const st=`style="--fx:${q[0]}%;--fy:${q[1]}%;--fh:${q[2]}%;z-index:${Math.round(q[1])}"`;
     if(!c)return`<span class="tfig still" ${st}>${chibi(id)}</span>`;
     const bub=id==='he'?'<i class="bub">…</i>':bubHTML(c),tag=TOWN_NAMED.includes(id)?`<span class="tag">${c.n}</span>`:'';
-    return`<button class="tfig${talkId===id?' on':''}" data-own="${id}" data-talk="${id}" ${st} aria-label="${id==='he'?'花匠阿禾':folkLabel(c)}">${bub}${chibi(id)}${tag}</button>`};
+    return`<button class="tfig${q[3]==='l'?' bl':''}${talkId===id?' on':''}" data-own="${id}" data-talk="${id}" ${st} aria-label="${id==='he'?'花匠阿禾':folkLabel(c)}">${bub}${chibi(id)}${tag}</button>`};
   $('#town').innerHTML=`<div class="tscroll" id="tscroll"><div class="tworld" id="tworld"><img class="tplate" src="${A(TOWN.img)}" width="${TOWN.w}" height="${TOWN.h}" alt="" draggable="false">`+
     TOWN.spots.map(spot).join('')+Object.keys(TOWN.folk).map(fig).join('')+'</div></div><div class="talk" id="talk" hidden></div>';
   layoutTown();$('#tscroll').addEventListener('scroll',e=>{const t=e.currentTarget;townX=[t.scrollLeft,t.scrollTop]},{passive:true});
@@ -2618,7 +2619,7 @@ function layoutTown(){const w=$('#tworld'),sc=$('#tscroll');if(!w||!sc)return;co
     sIn=Math.min(aw/TOWN.w,ah/TOWN.h),sH=ah/TOWN.h,s=TOWN.w*sH>aw&&TOWN.w*sH<=aw*1.3?sH:sIn,W=TOWN.w*s,H=TOWN.h*s,mount=W<=aw&&H<ah-1;
   Object.assign(w.style,{width:W+'px',height:H+'px',left:Math.max(pad,(R.width-W)/2)+'px',top:(top+Math.max(0,(ah-H)/2))+'px'});
   w.classList.toggle('mount',mount);
-  sc.scrollLeft=townX?townX[0]:Math.max(0,(W-aw)/2);sc.scrollTop=townX?townX[1]:Math.max(0,(H-ah)/2)}
+  sc.scrollLeft=townX?townX[0]:Math.max(0,(W-aw)*(TOWN.pan??.5));sc.scrollTop=townX?townX[1]:Math.max(0,(H-ah)/2)}
 function openHe(quiet){talkId='he';const t=$('#talk');if(!t)return;
   t.hidden=false;t.innerHTML=`<div class="tface">${chibi('he')}</div><div class="tbody"><div class="tname"><b>${HE.n}</b><small>${HE.role}</small></div><p class="say" id="tsay"></p><div class="treq"><span class="req">雇一天：浇水、拔草、请走小蜗牛</span></div><div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button><button class="btn primary" data-hire="1">雇我一天 ${price(80)}</button></div></div>`;
   const say='花要有人看着才长得好。你忙的时候，我去小院替你照料。';if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town [data-own]').forEach(n=>n.classList.toggle('on',n.dataset.own==='he'))}

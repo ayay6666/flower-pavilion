@@ -2269,7 +2269,13 @@ function sellValue(sc){return Math.round(S.arr.reduce((a,s)=>a+F[s.id].val,0)*(.
 function scrollHTML(w,cls=''){const dk=(BGS[w.bg]||BGS[0]).dk;
   return`<div class="scroll ${cls}"><div class="rod"></div><div class="mwrap"><div class="mount"><div class="paper${dk?' dk':''}">${stageSVG(w,false)}<span class="vt"><span class="vtn">${esc(w.name||'')}</span><i class="seal">花信</i></span></div></div></div><div class="rod"></div></div>`}
 function confetti(cols){const m=$('#modal');for(let k=0;k<26;k++){const e=document.createElement('span');e.className='cf';e.style.cssText=`background:${cols[k%cols.length]};--dx:${rint(-190,190)}px;--dy:${rint(-230,90)}px;animation-delay:${k*.02}s`;m.appendChild(e);setTimeout(()=>e.remove(),1900)}}
+const galleryCapacity=30;
+function galleryFullOfPins(){return S.gallery.filter(w=>w.pin).length>=galleryCapacity}
+function manageFullGallery(){
+  modal('<h2 class="h-title">整理花架</h2><p class="say">花架已满，架上的作品都已珍藏。这瓶花会留在花艺台。请先去花架取消一件珍藏，再回来完成作品。</p><button class="btn" data-act="close">返回</button><button class="btn primary" data-act="goto" data-v="gallery">整理花架</button>')
+}
 function finishDialog(){if(S.arr.length<3)return toast('至少插三枝花，才算一件作品');
+  if(galleryFullOfPins())return manageFullGallery();
   const sc=arrScore(),okO=S.orders.filter(o=>checkOrder(o,S.arr,sc).every(c=>c.ok)),name=pick(NAMES[sc.tone]);
   modal(`<div class="fin-scroll"><div class="center">${scrollHTML({...curW(),name},'unroll')}</div>
    <div class="meter2" style="margin-top:12px">${radar(sc.parts)}<div class="mscore"><b id="fscore">${sc.total}</b><small>意境</small><div class="rate pop" style="font-size:17px">${stars(starN(sc.total))}</div><p>${sc.tip}</p></div></div>
@@ -2278,11 +2284,18 @@ function finishDialog(){if(S.arr.length<3)return toast('至少插三枝花，才
   $('#modal .dialog').classList.add('findlg');
   $('#workName').addEventListener('input',e=>{$('#modal .vtn').textContent=e.target.value});countUp($('#fscore'),sc.total,900,500);setTimeout(()=>sfx('place'),1250);finishJuice(sc);
   if(sc.total>=62)setTimeout(()=>confetti(S.arr.map(s=>F[s.id].c[1])),500)}
-function finish(ok){const sc=arrScore(),name=($('#workName')?.value||'无题').trim().slice(0,8)||'无题',o=S.orders.find(x=>x.k===ok),usedPot=S.pots.find(p=>p.id===S.vase);
+function finish(ok){if(S.arr.length<3)return;
+  if(galleryFullOfPins())return manageFullGallery();
+  const sc=arrScore(),name=($('#workName')?.value||'无题').trim().slice(0,8)||'无题',o=S.orders.find(x=>x.k===ok),usedPot=S.pots.find(p=>p.id===S.vase);
   const entry={k:S.nid++,name,score:sc.total,vase:S.vase,bg:S.bg,kx:S.kx,stems:S.arr.map(s=>({k:s.k,id:s.id,x:s.x,y:s.y,sc:s.sc,flip:s.flip,seed:s.seed,bend:s.bend,st:s.st,bow:s.bow,sw:s.sw,side:s.side})),d:Date.now(),to:o?o.who:''};
   if(usedPot)entry.pot={...usedPot,r:[...usedPot.r]};
+  while(S.gallery.length>=galleryCapacity){
+    let i=S.gallery.length-1;
+    while(S.gallery[i].pin)i--;
+    S.gallery.splice(i,1);
+  }
   S.gallery.unshift(entry);
-  while(S.gallery.length>30){let idx=-1;for(let i=S.gallery.length-1;i>=0;i--)if(!S.gallery[i].pin){idx=i;break}S.gallery.splice(idx>=0?idx:S.gallery.length-1,1)}
+  hist=[];
   let msg;
   if(o){S.coins+=o.coins;if(o.seed)gotSeed(o.seed);S.orders=S.orders.filter(x=>x!==o);msg=o.story?`${o.who}收下了「${name}」`:`${o.who}收下了「${name}」，谢礼 ${o.coins} 花币${o.seed?`和${F[o.seed].n}花种`:''}`;addExp(o.exp+sc.total/8);bump('orders');if(o.story)folkDone(o.story,1200)}
   else{const v=sellValue(sc);S.coins+=v;msg=`「${name}」售出，得 ${v} 花币`;addExp(sc.total/8+S.arr.length)}
@@ -2321,10 +2334,10 @@ function holdShow(){if(S.gallery.length<3)return toast('攒够三件作品再办
   modal(`<div class="center"><img class="splash showart" src="${A('assets/show.webp')}" width="900" height="600" alt="" draggable="false" onerror="this.remove()"><p class="muted" style="margin:0;letter-spacing:.3em">花展落幕</p><h2 class="h-title" style="justify-content:center">${GRADES[gi][1]}</h2><div class="works showworks">${top.map(w=>`<div class="work">${scrollHTML(w)}<div class="rate">${stars(starN(w.score))}</div></div>`).join('')}</div><p class="say">三件作品合计意境 <b>${sum}</b>。<br>乡邻们看得高兴，凑了 ${price(coins)} 润笔${extra}。</p><button class="btn primary" data-act="close">收下</button></div>`,true);
   setTimeout(hud,300)}
 function renderGallery(){
-  $('#gallery').innerHTML=subHead('gallery')+`<h2 class="h-title">花架</h2><p class="h-sub">每一件完成的作品都装裱成立轴挂在这里（最多 30 件，珍藏的作品不会被挤掉）。点开立轴可以导出画片。</p>${showBar()}${S.gallery.length?`<div class="works">${S.gallery.map(w=>`<button class="work" data-work="${w.k}">${w.pin?'<i class="pin-tag">珍藏</i>':''}${scrollHTML(w)}<div class="rate">${stars(starN(w.score))}</div></button>`).join('')}</div>`:'<p class="empty-note">花架还空着。<br>在「花艺」完成第一件作品，它就会挂在这里。</p>'}`}
+  $('#gallery').innerHTML=subHead('gallery')+`<h2 class="h-title">花架</h2><p class="h-sub">每一件完成的作品都装裱成立轴挂在这里（最多 30 件，珍藏的作品不会被挤掉）。点开立轴可以导出画片。</p>${showBar()}${S.gallery.length?`<div class="works">${S.gallery.map(w=>`<button class="work" data-work="${w.k}"><i class="pin-tag" ${w.pin?'':'hidden'}>珍藏</i>${scrollHTML(w)}<div class="rate">${stars(starN(w.score))}</div></button>`).join('')}</div>`:'<p class="empty-note">花架还空着。<br>在「花艺」完成第一件作品，它就会挂在这里。</p>'}`}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function workDetail(k){const w=S.gallery.find(x=>x.k===k);if(!w)return;const d=new Date(w.d);
-  modal(`<div class="center">${scrollHTML(w,'unroll')}<div class="rate" style="margin-top:10px">${stars(starN(w.score))}</div><p class="muted" style="font-size:12.5px">意境 ${w.score} 分 · ${w.stems.length} 枝 · ${d.getMonth()+1} 月 ${d.getDate()} 日${w.to?` · 赠${w.to}`:''}${w.pin?' · 已珍藏':''}</p><div class="row" style="justify-content:center"><button class="btn" data-act="askdelwork" data-k="${k}">移出花架</button><button class="btn" data-act="pinwork" data-k="${k}">${w.pin?'取消珍藏':'珍藏'}</button><button class="btn primary" data-act="savepng" data-k="${k}">保存画片</button></div></div>`)}
+  modal(`<div class="center">${scrollHTML(w,'unroll')}<div class="rate" style="margin-top:10px">${stars(starN(w.score))}</div><p class="muted" style="font-size:12.5px">意境 ${w.score} 分 · ${w.stems.length} 枝 · ${d.getMonth()+1} 月 ${d.getDate()} 日${w.to?` · 赠${w.to}`:''}<span data-pin-status ${w.pin?'':'hidden'}> · 已珍藏</span></p><div class="row" style="justify-content:center"><button class="btn" data-act="askdelwork" data-k="${k}">移出花架</button><button class="btn" data-act="pinwork" data-k="${k}">${w.pin?'取消珍藏':'珍藏'}</button><button class="btn primary" data-act="savepng" data-k="${k}">保存画片</button></div></div>`)}
 const duriCache=new Map();
 async function toDataURI(u){if(u.startsWith('data:'))return u;if(duriCache.has(u))return duriCache.get(u);
   const b=window.__B?.[u]||await fetch(u).then(r=>{if(!r.ok)throw new Error(r.status);return r.blob()}),d=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(b)});
@@ -2454,7 +2467,14 @@ function bind(){
     else if(a==='plant')plant(+b.dataset.i,b.dataset.id);
     else if(a==='finish')finish(b.dataset.o?+b.dataset.o:null);
     else if(a==='savepng')exportWorkPNG(b.dataset.k==='cur'?'cur':+b.dataset.k,b);
-    else if(a==='pinwork'){const w=S.gallery.find(x=>x.k===+b.dataset.k);if(!w)return;w.pin=!w.pin;b.textContent=w.pin?'取消珍藏':'珍藏';toast(w.pin?'已珍藏，不会被新作品挤掉':'已取消珍藏');renderGallery();save()}
+    else if(a==='pinwork'){
+      const w=S.gallery.find(x=>x.k===+b.dataset.k);if(!w)return;
+      w.pin=!w.pin;
+      b.textContent=w.pin?'取消珍藏':'珍藏';
+      $('#modal [data-pin-status]').hidden=!w.pin;
+      $(`#gallery [data-work="${w.k}"] .pin-tag`).hidden=!w.pin;
+      toast(w.pin?'已珍藏，不会被新作品挤掉':'已取消珍藏');save()
+    }
     else if(a==='askdelwork'){const w=S.gallery.find(x=>x.k===+b.dataset.k);if(!w)return;if(w.pin)return toast('这幅作品已珍藏，先取消珍藏才能移出');modal(`<div class="center"><h2 class="h-title" style="justify-content:center">移出花架</h2><p class="say">确定要把「${esc(w.name)}」从花架上取下吗？取下后无法找回。</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">留着</button><button class="btn primary" data-act="delwork" data-k="${w.k}">移出</button></div></div>`)}
     else if(a==='delwork'){S.gallery=S.gallery.filter(w=>w.k!==+b.dataset.k);closeModal();renderGallery();save()}
     else if(a==='delpot'){const id=b.dataset.id;if(VASES[id])GVASES[id]=VASES[id];S.pots=S.pots.filter(p=>p.id!==id);S.vases=S.vases.filter(v=>v!==id);delete VASES[id];if(S.vase===id)S.vase='white';S.coins+=50;closeModal();toast('送给了乡邻，收到回礼 50 花币');sfx('coin');hud();if(view==='kiln')renderKiln();save()}

@@ -1848,8 +1848,38 @@ function setLock(b,why){if(!b)return;if(why){b.setAttribute('aria-disabled','tru
 document.addEventListener('click',e=>{const b=e.target.closest?.('[aria-disabled="true"]');if(!b)return;const c=+b.dataset.cost||0;
   if(c&&S.coins>=c){b.removeAttribute('aria-disabled');delete b.dataset.cost;return}
   e.preventDefault();e.stopImmediatePropagation();deny(c?`花币不够：需要 ${c}，还差 ${c-S.coins}`:b.dataset.why||'现在还不能这样做',b,!!c)},true);
+let modalOpener=null,pngOpener=null;
+function setDialogBackground(open){
+  for(const el of $$('.top,main,#dock'))el.inert=open;
+}
+function focusDialog(layer){
+  const dialog=$('.dialog',layer);
+  dialog.tabIndex=-1;
+  if(!dialog.hasAttribute('aria-label')){
+    dialog.setAttribute('aria-label',$('h2,h3',dialog)?.textContent.trim()||'花信小筑');
+  }
+  dialog.focus({preventScroll:true});
+}
+document.addEventListener('keydown',e=>{
+  const png=$('#pngView'),layer=!png.hidden?png:$('#modal');
+  if(layer.hidden||e.isComposing)return;
+  if(e.key==='Escape'){
+    e.preventDefault();e.stopPropagation();$('.dlg-x',layer)?.click();return;
+  }
+  if(e.key!=='Tab')return;
+  const buttons=$$('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]',layer)
+    .filter(el=>el.tabIndex>=0&&el.getClientRects().length&&getComputedStyle(el).visibility==='visible');
+  const first=buttons[0],last=buttons[buttons.length-1],active=document.activeElement;
+  if(!first){e.preventDefault();focusDialog(layer);return}
+  if(!buttons.includes(active)||(e.shiftKey?active===first:active===last)){
+    e.preventDefault();(e.shiftKey?last:first).focus()
+  }
+},true);
 function modal(html,wide,options={}){if(stale)return;
-  const m=$('#modal');m.innerHTML=`<div class="dialog${wide?' wide':''}" role="dialog" aria-modal="true">${html}</div>`;
+  const m=$('#modal');
+  if(m.hidden)modalOpener=document.activeElement;
+  if(!$('#pngView').hidden)closePngView();
+  m.innerHTML=`<div class="dialog${wide?' wide':''}" role="dialog" aria-modal="true">${html}</div>`;
   const d=$('.dialog',m),seedChoice=!!$('[data-act="plant"]',d);
   const actions=$$('[data-act]',d).filter(b=>b.dataset.act!=='plant'&&!b.hasAttribute('data-o'));
   actions.forEach(b=>{
@@ -1872,13 +1902,16 @@ function modal(html,wide,options={}){if(stale)return;
     d.classList.add('has-dlg-x');const x=document.createElement('button');x.type='button';x.className='btn dlg-x';x.setAttribute('aria-label','关闭');x.textContent='✕';
     x.onclick=e=>{e.stopPropagation();if(dismissAction)dismissAction.click();else closeModal()};d.prepend(x);
   }
-  inkTitles(d);m.hidden=false;
+  inkTitles(d);m.hidden=false;setDialogBackground(true);focusDialog(m);
 }
 /* 弹窗标题一律用题字：标题上方 4 字以内的小字（散步回来、出窑……）收进朱印，没有就盖一方「花信」 */
 function inkTitles(d){$$('.h-title',d).forEach(h=>{h.classList.add('ink-t');h.style.justifyContent='';if(h.querySelector('.seal'))return;const k=h.previousElementSibling;let t='花信';
   if(k&&k.matches('p.muted')&&/letter-spacing/.test(k.getAttribute('style')||'')){const x=k.textContent.trim();if(x.length<=4&&!/\d/.test(x)){t=x;k.remove()}}
   h.insertAdjacentHTML('beforeend',`<i class="seal${t.length>2?' s4':''}">${esc(t)}</i>`)})}
-function closeModal(){if(stale)return;closePngView();$('#modal').hidden=true;$('#modal').innerHTML=''}
+function closeModal(){if(stale)return;closePngView();$('#modal').hidden=true;$('#modal').innerHTML='';
+  setDialogBackground(false);
+  if(modalOpener?.isConnected&&modalOpener.getClientRects().length)modalOpener.focus({preventScroll:true});
+  modalOpener=null}
 const price=n=>`<span class="price"><i class="coin"></i>${n}</span>`;
 const fmtT=t=>t<60?`${t} 秒`:`${Math.floor(t/60)} 分${t%60?` ${t%60} 秒`:''}`;
 const stars=n=>[0,1,2,3,4].map(i=>`<i style="--i:${i}">${i<n?'★':'☆'}</i>`).join('');
@@ -2345,10 +2378,14 @@ async function renderWorkCanvas(w){
   c.fillStyle='#686052';c.font='18px "Noto Serif SC","Songti SC",serif';c.fillText(`花信小筑 · 意境 ${w.score} 分`,360,746);
   return cv}
 let pngState=null,pngBusy=false;
-function closePngView(){const v=$('#pngView');if(v){v.hidden=true;v.innerHTML=''}
+function closePngView(){const v=$('#pngView');if(v&&!v.hidden){
+    v.hidden=true;v.innerHTML='';$('#modal').inert=false;
+    if(pngOpener?.isConnected)pngOpener.focus({preventScroll:true});
+    pngOpener=null;
+  }
   const u=pngState?.blobUrl;pngState=null;if(u)setTimeout(()=>URL.revokeObjectURL(u),60000)}
 function openPngView(dataUrl,blobUrl,fileName,file,name){
-  closePngView();
+  closePngView();pngOpener=$('#modal [data-act="savepng"]')||document.activeElement;
   const ua=navigator.userAgent||'',isInApp=/MicroMessenger|QQ\/|Weibo|DingTalk|AlipayClient|baiduboxapp/i.test(ua);
   const isIOS=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   const isMobile=isInApp||isIOS||/Android|Mobile|HarmonyOS/i.test(ua)||matchMedia('(pointer:coarse)').matches;
@@ -2361,8 +2398,8 @@ function openPngView(dataUrl,blobUrl,fileName,file,name){
   else{tip='点下方按钮下载高清画片，也可右键画片另存为';acts=`<button type="button" class="btn" data-png="close">关闭</button><a class="btn primary" data-png="dl" href="${blobUrl}" download="${esc(fileName)}">下载原图</a>`}
   pngState={blobUrl,fileName,file,isMobile};
   const v=$('#pngView');
-  v.innerHTML=`<div class="dialog png-dlg has-dlg-x" role="dialog" aria-modal="true"><button type="button" class="btn dlg-x" data-png="close" aria-label="关闭">✕</button><div class="center"><div class="png-wrap"><img class="png-img" src="${dataUrl}" alt="${esc(name||'花信小筑画片')}"></div><p class="png-tip">${tip}</p></div><div class="dlg-actions">${acts}</div></div>`;
-  v.hidden=false}
+  v.innerHTML=`<div class="dialog png-dlg has-dlg-x" role="dialog" aria-label="作品画片" aria-modal="true"><button type="button" class="btn dlg-x" data-png="close" aria-label="关闭">✕</button><div class="center"><div class="png-wrap"><img class="png-img" src="${dataUrl}" alt="${esc(name||'花信小筑画片')}"></div><p class="png-tip">${tip}</p></div><div class="dlg-actions">${acts}</div></div>`;
+  v.hidden=false;$('#modal').inert=true;focusDialog(v)}
 async function exportWorkPNG(k,btn){const w=k==='cur'?{...curW(),name:($('#workName')?.value||'无题').trim().slice(0,8)||'无题',score:arrScore().total}:S.gallery.find(x=>x.k===k);if(!w||pngBusy)return;
   pngBusy=true;const oldTxt=btn?.textContent;if(btn){btn.disabled=true;btn.textContent='生成中…'}
   try{await waitExportFonts();const cv=await renderWorkCanvas(w),dataUrl=cv.toDataURL('image/png'),blob=dataURLToBlob(dataUrl);

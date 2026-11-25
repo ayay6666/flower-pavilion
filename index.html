@@ -2091,8 +2091,12 @@ function updHandles(geo){const s=stemOf(sel),ring=$('#ring'),bh=$('#bh');if(!rin
   const e=curE(),b=sbase(s,e),g=geo||stemGeo(s.id,b[0],b[1],s.x,s.y,stemOpt(s,e)),tp=g?stemTip(b,g):[s.x,s.y],m=stemMid(s,e,g);
   ring.setAttribute('cx',R(tp[0]));ring.setAttribute('cy',R(tp[1]));ring.setAttribute('visibility','visible');bh.setAttribute('cx',R(m[0]));bh.setAttribute('cy',R(m[1]));bh.setAttribute('visibility','visible')}
 let hist=[];
-function pushHist(h){hist.push(h||JSON.stringify({a:S.arr,c:S.cut}));if(hist.length>30)hist.shift()}
-function undo(){const h=hist.pop();if(!h)return toast('没有可以撤销的了');const o=JSON.parse(h);S.arr=o.a;S.cut=o.c;sel=null;renderStage();renderTray();updMeter();save()}
+function studioSnapshot(){
+  const {arr,cut,vase,form,bg,kx}=S;
+  return JSON.stringify({arr,cut,vase,form,bg,kx})
+}
+function pushHist(snapshot=studioSnapshot()){hist.push(snapshot);if(hist.length>30)hist.shift()}
+function undo(){const h=hist.pop();if(!h)return toast('没有可以撤销的了');Object.assign(S,JSON.parse(h));sel=null;renderStage();renderTray();renderChips();updMeter();save()}
 function snap(s,e){const t=guideTips(e,S.form).find(t=>Math.hypot(s.x-t[0],s.y-t[1])<24);if(t){s.x=t[0];s.y=t[1]}return!!t}
 function tidy(){if(!S.arr.length)return toast('先放几枝花，我再帮你理');pushHist();const e=curE(),U=e.U,tips=guideTips(e,S.form==='free'?'upright':S.form),pri={线:0,叶:1,辅:2,主:3,填:4};
   const sk=[...S.arr].sort((a,b)=>pri[F[a.id].role]-pri[F[b.id].role]).slice(0,3),rest=S.arr.filter(q=>!sk.includes(q));let nm=0,na=0,nf=0;
@@ -2201,10 +2205,10 @@ function initStage(){const st=$('#stage');let dragRAF=0,dragEv=null;
     const [ga,gb,geo,under]=stemPair(s,en,true),els=st.querySelectorAll(`.stem[data-k="${s.k}"]`);const sub=st.querySelector(`[data-under="${s.k}"]`);if(sub)sub.innerHTML=under;if(els[0])els[0].outerHTML=ga;if(els[1])els[1].outerHTML=gb;updHandles(geo)};
   st.addEventListener('pointerdown',e=>{if(pop||!$('#meter').hidden){pop=null;$('#meter').hidden=true;renderChips()}
     const cap=()=>{st.classList.add('dragging');try{st.setPointerCapture(e.pointerId)}catch(_){ }e.preventDefault()};
-    if(e.target.id==='bh'&&stemOf(sel)){drag={bow:1,h:JSON.stringify({a:S.arr,c:S.cut})};return cap()}
+    if(e.target.id==='bh'&&stemOf(sel)){drag={bow:1,h:studioSnapshot()};return cap()}
     const p=svgPt(e),g=e.target.closest('.stem'),cur=stemOf(sel),k=g?+g.dataset.k:cur&&Math.hypot(p.x-cur.x,p.y-cur.y)<=38?cur.k:0;
     if(!k){sel=null;updSel();return}
-    const wasSel=k===sel&&deck==='stem';sel=k;const s=stemOf(sel);drag={ox:s.x-p.x,oy:s.y-p.y,cx:e.clientX,cy:e.clientY,pt:p,wasSel,tap:1,h:JSON.stringify({a:S.arr,c:S.cut})};cap();updSel()});
+    const wasSel=k===sel&&deck==='stem';sel=k;const s=stemOf(sel);drag={ox:s.x-p.x,oy:s.y-p.y,cx:e.clientX,cy:e.clientY,pt:p,wasSel,tap:1,h:studioSnapshot()};cap();updSel()});
   st.addEventListener('pointermove',e=>{if(!drag)return;if(drag.tap){if(Math.hypot(e.clientX-drag.cx,e.clientY-drag.cy)<8)return;drag.tap=0}dragEv=e;if(!dragRAF)dragRAF=requestAnimationFrame(paintDrag)});
   const end=e=>{if(drag){if(dragRAF){cancelAnimationFrame(dragRAF);paintDrag()}dragEv=null;
     if(!drag.tap)tutFlag.drag=1;
@@ -2541,7 +2545,7 @@ function bind(){
     if(b.dataset.orders){pop=null;renderChips();$('#studio').classList.add('orders-open')}
     else if(b.dataset.pop){pop=pop===b.dataset.pop?null:b.dataset.pop;renderChips()}});
   $('#stPop').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
-    if(d.vase){const o=curE(),n=veff(d.vase,S.kx);if(S.arr.length>n.cap)return toast(`「${n.v.n.split(' ')[0]}」最多插 ${n.cap} 枝，先取下几枝再换`);
+    if(d.vase){if(d.vase===S.vase)return;const o=curE(),n=veff(d.vase,S.kx);if(S.arr.length>n.cap)return toast(`「${n.v.n.split(' ')[0]}」最多插 ${n.cap} 枝，先取下几枝再换`);
       pushHist();S.vase=d.vase;S.arr.forEach(s=>{s.x+=n.cx-o.cx;s.y=clamp(s.y+n.my-o.my,14,548);normalize(s,n)})}
     else if(d.kx!==undefined){if(+d.kx===S.kx)return;pushHist();const dl=+d.kx-S.kx;S.kx=+d.kx;S.arr.forEach(s=>{s.x=clamp(s.x+dl,12,508);normalize(s,curE())})}
     else if(d.form){if(d.form===S.form)return;pushHist();S.form=d.form;if(S.form!=='free')toast('把三枝花分别拖到「主」「副」「客」的虚线末端')}

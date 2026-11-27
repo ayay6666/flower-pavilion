@@ -1257,10 +1257,16 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 /* 跑起来落脚扬起的一小团土 */
 .wx-dust{position:absolute;bottom:18%;width:4cqh;height:1.8cqh;border-radius:50%;translate:-50% 30%;background:radial-gradient(closest-side,rgba(190,164,118,.55),rgba(190,164,118,0));pointer-events:none;animation:wxdust .7s ease-out forwards}
 @keyframes wxdust{from{transform:scale(.35);opacity:.95}to{transform:translate(var(--dx),-70%) scale(1.5);opacity:0}}
+/* 从花丛、草丛边走过：枝叶被带得晃一下；跑着冲过去，蝴蝶惊起再落回 */
+.xs.brush>img,.xs.brush>.ico,.xs.brush>svg{animation:wxbrush .95s ease-out}
+.xs.brush>img,.xs.brush>.ico{transform-origin:50% 100%}
+@keyframes wxbrush{18%{transform:rotate(calc(var(--bd,1)*10deg)) scaleY(.96)}45%{transform:rotate(calc(var(--bd,1)*-5deg))}72%{transform:rotate(calc(var(--bd,1)*2deg))}}
+.xs.stir .bf{animation:bfwander 5s ease-in-out infinite,wxstir 1.4s ease-out}
+@keyframes wxstir{30%{transform:translate(calc(var(--bd,1)*60%),-180%)}}
 /* 走进新的一段路，地名轻轻浮上来 */
 .wx-place.flash b{animation:wxplace .7s ease-out}
 @keyframes wxplace{from{opacity:0;translate:0 6px}}
-@media (prefers-reduced-motion:reduce){.pano.wx .wj-walker.idle .ps,.wx-place.flash b{animation:none}.pano.wx .wj-shadow{transition:none}}
+@media (prefers-reduced-motion:reduce){.pano.wx .wj-walker.idle .ps,.xs.brush>*,.xs.stir .bf,.wx-place.flash b{animation:none}.pano.wx .wj-shadow{transition:none}}
 /* 选地图：小卡皮肤，选中的一张同 .pkc.on */
 .wild-rest{overflow-x:hidden}.wild-rest .legs{flex-wrap:wrap;min-width:0}
 .wx-maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:6px}
@@ -3344,7 +3350,7 @@ function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{w
     if(walk.to!=null&&!walk.keys&&!walk.hold&&!walk.busy&&open&&Math.abs(walk.to-walk.p)*q.D<=.5){walk.p=walk.to;walk.to=null;walk.v=0;walk.run=false;if(walk.goal>=0){const g=walk.goal;walk.goal=-1;wxUse(g)}}
     const moving=Math.abs(walk.v)>6;
     if(moving!==walk.mv){walk.mv=moving;if(!walk.busy&&!walk.soft)wxFrame(moving?-1:9)}
-    q.pano.classList.toggle('go',moving);wxStride(dt,base,moving,(walk.v-pv)/(dt||1));wxPaint(false,dt);
+    q.pano.classList.toggle('go',moving);wxStride(dt,base,moving,(walk.v-pv)/(dt||1));wxPaint(false,dt);if(moving)wxBrush(now);
     // 走到路的尽头，手搭凉棚望一望
     if(walk.p>=1&&!walk.top){walk.top=1;walk.after='look'}
     if(!moving&&!walk.busy&&open){walk.still+=dt;
@@ -3363,6 +3369,13 @@ function wxStride(dt,base,moving,accel){const q=wxQ,w=q.walker,rm=wxRM(),sp=Math
   const k=`${walk.lean.toFixed(2)}|${bob.toFixed(1)}`;if(k!==walk.lk){walk.lk=k;w.style.setProperty('--lean',walk.lean.toFixed(2)+'deg');w.style.setProperty('--bob',bob.toFixed(1)+'px')}}
 function wxDust(){const q=wxQ;if(!q||$$('.wx-dust',q.spots).length>6)return;const d=document.createElement('i');d.className='wx-dust';
   d.style.left=(q.W*.28+q.D*walk.p-walk.face*q.walker.offsetWidth*.14)+'px';d.style.setProperty('--dx',(-walk.face*rint(10,22))+'px');q.spots.appendChild(d);setTimeout(()=>d.remove(),700)}
+/* 从花丛、草丛里走过，花枝被裙摆带得晃一晃；跑着冲过花丛，停着的蝴蝶会惊起来再落回去 */
+function wxBrush(now){const q=wxQ,lim=q.walker.offsetWidth*.34,fast=Math.abs(walk.v)>clamp(q.W*.75,240,420)*1.25;
+  walk.spots.forEach((s,i)=>{if(s.done||!['flower','bush','bfly'].includes(s.k))return;if(s.k==='flower'&&['lotus','waterlily'].includes(F[s.id]?.base||s.id))return;
+    const d=Math.abs(s.t-walk.p)*q.D;if(d>(s.k==='bfly'&&fast?lim*2.2:lim)||now-(s.bt||0)<1500)return;
+    const el=q.spots.querySelector(`.xs[data-i="${i}"]`);if(!el)return;s.bt=now;el.style.setProperty('--bd',walk.face);
+    el.classList.remove('brush','stir');void el.offsetWidth;el.classList.add('brush');if(s.k==='bfly'&&fast)el.classList.add('stir');
+    clearTimeout(el._bt);el._bt=setTimeout(()=>el.classList.remove('brush','stir'),1500)})}
 function wxPx2P(clientX){const q=wxQ,r=q.pano.getBoundingClientRect();return clamp((clientX-r.left+wxCam()-q.W*.28)/q.D,0,1)}
 function wxPoint(e){if(!walk||!wxQ||e.button>0)return;
   if(e.target.closest('.xs,button,.walk-top,.walk-bot'))return;const pid=e.pointerId;walk.goal=-1;walk.run=false;walk.hold={x:e.clientX,t:performance.now()};walk.to=wxPx2P(e.clientX);

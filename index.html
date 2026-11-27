@@ -641,25 +641,28 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 .bub svg{display:block;width:13px;height:13px}
 @media (max-width:700px){.tb{left:var(--xm);top:var(--ym)}.npc{z-index:var(--zm)}.npc::before{width:calc(min(46px,6vh)*var(--dm,1))}.npc .chibi{width:calc(min(50px,6.5vh)*var(--s,1)*var(--dm,1))}}
 .talk{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(94%,560px);display:flex;gap:12px;align-items:flex-end;background:#fffdf6 var(--grain);border-radius:22px;padding:14px 16px 14px 10px;box-shadow:0 14px 34px rgba(20,40,40,.3),inset 0 0 0 2px rgba(255,255,255,.8);z-index:4;animation:talkin .3s cubic-bezier(.2,1.3,.4,1)}
-/* 小镇整图：跟小院一样铺满整个页面，顶栏和底栏浮在画上；多出来的部分滑动看。
+/* 小镇是一张比屏幕大的地图：铺满整个页面，顶栏和底栏浮在画上；拖动、双指缩放着看（镜头见 layoutTown）。
    人物按站位给的 z-index（几十）只在整图内部比前后，isolation 把整图关成一层，对话框（.talk）才能盖在所有人物上面 */
-.tscroll{position:absolute;inset:0 0 calc(-1*var(--dock-room));isolation:isolate;z-index:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:none;touch-action:pan-x pan-y}
+.tscroll{position:absolute;inset:0 0 calc(-1*var(--dock-room));isolation:isolate;z-index:0;overflow:hidden;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.tscroll.grab,.tscroll.grab *{cursor:grabbing}
 /* 只在图片还没载入的一瞬间露出宣纸 */
 #app[data-at=town] .scene{background:#efe5cf var(--grain) center/384px}
 .tscroll::-webkit-scrollbar{display:none}
-.tworld{position:absolute;container-type:size}
+.tworld{position:absolute;left:0;top:0;container-type:size;will-change:transform}
 .tplate{position:absolute;inset:0;width:100%;height:100%;max-width:none}
 /* 小镇是俯视的一整张画，不再叠在平视的远山、草地和角花上；夜色和雨天照样罩在画上 */
 #app[data-at=town] .scene>:not(#fx){display:none}
 .tworld::after,.tworld::before{content:"";position:absolute;inset:calc(-1*var(--bt,0%)) calc(-1*var(--br,0%)) calc(-1*var(--bb,0%)) calc(-1*var(--bl,0%));pointer-events:none;z-index:300}
 /* 带出血的整图：.tworld 只是中间的安全区（坐标、人物都按它算），底图向四周多出一圈画（--bl/--bt/--br/--bb，安全区宽高的百分比），
-   夜色雨幕跟着底图一起铺开。整屏不滑动 */
-.tscroll.fit{overflow:hidden}
+   夜色雨幕跟着底图一起铺开 */
 .tworld.bleed .tplate{left:calc(-1*var(--bl));top:calc(-1*var(--bt));width:calc(100% + var(--bl) + var(--br));height:calc(100% + var(--bt) + var(--bb))}
 .tworld::after{background:#141a44;opacity:calc(var(--night,0)*.46)}
 .tworld::before{background:#5d7186;opacity:0;transition:opacity 2s}.rain .tworld::before{opacity:.32}
 .tspot{position:absolute;left:var(--l);top:var(--t);width:var(--w);height:var(--h);padding:0;border:0;background:none;border-radius:18px;cursor:pointer;z-index:1}
-.tspot:focus-visible{outline:2px solid var(--rouge);outline-offset:2px}
+.tspot:focus-visible,.tfig:focus-visible{outline:none}
+/* 房子和人物被选中（Tab 键，或关掉对话框后焦点回到它身上）时，不在画上画红框：房子底下泛一团暖光，人物身上泛一圈柔光 */
+.tspot:focus-visible{background:radial-gradient(closest-side,rgba(255,244,200,.42),rgba(255,244,200,.16) 60%,transparent)}
+.tfig:focus-visible{filter:drop-shadow(0 0 5px rgba(255,246,206,.95)) drop-shadow(0 0 2px #fff)}
 /* 画上不写地名：花铺、沈记书店的招牌本来就画在图里，其余房子不叠任何牌子或纸签（压在画上都出戏）。
    人名、「门还关着」也不浮在画上：点人物、点房子，对话框里有名字；陶坊关着门会说明怎么开。读屏从 aria-label 读到 */
 .tspot .bub{top:-15px;right:-17px}
@@ -2540,6 +2543,7 @@ function go(v){if(SUBS[v])v=subSel[v];if(v==='folk')v='town';const par=parOf(v);
 function bind(){
   $('#backBtn').addEventListener('click',()=>go($('#backBtn').dataset.to||'garden'));
   $('#bookBtn').addEventListener('click',()=>{if(parOf(view)!=='book')go('book')});
+  bindTownCam();
   $('#town').addEventListener('click',e=>{if(e.target.closest('[data-hire]')){const receipt=payHire();if(receipt){sfx('coin');hud();save();talkId=null;renderTown();hireTag();toast(receipt)}return}const f=e.target.closest('[data-folk]'),x=e.target.closest('[data-talkx]'),n=e.target.closest('[data-talk]');
     if(f&&!f.disabled)folkDone(f.dataset.folk);else if(x){talkId=null;$('#talk').hidden=true;$$('#town [data-own]').forEach(q=>q.classList.remove('on'))}else if(n){sfx('place');openTalk(n.dataset.talk)}});
   $('#plots').addEventListener('click',e=>{if(Date.now()-sweepJust<400)return;const p=e.target.closest('.plot');if(p)plotClick(p)});initSweep();
@@ -2896,7 +2900,7 @@ function payHire(){
   S.coins-=80;S.hire=Math.max(now,S.hire||0)+DAY*1000;
   return renewal?'花匠阿禾已续约一天':'花匠阿禾去你的小院上工了，这一天花田交给他'
 }
-let townX=null;
+let tcam=null,tz={};
 let talkId=null,typeT=0;
 function typeText(el,txt){clearInterval(typeT);if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent='「'+txt+'」';return}let i=0;el.textContent='「';
   typeT=setInterval(()=>{i++;if(!el.isConnected)return clearInterval(typeT);el.textContent='「'+txt.slice(0,i)+(i>=txt.length?'」':'');if(i>=txt.length)clearInterval(typeT)},32)}
@@ -2906,28 +2910,64 @@ function townFigure(id){const q=TOWN.folk[id],c=id==='he'?HE:FOLK.find(x=>x.id==
     const bub=id==='he'?'<i class="bub">…</i>':bubHTML(c);
     return`<button class="tfig${q[3]==='l'?' bl':''}${talkId===id?' on':''}" data-own="${id}" data-talk="${id}" ${st} aria-label="${id==='he'?'花匠阿禾':folkLabel(c)}">${bub}${chibi(id)}</button>`}
 
-function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==TOWN){TOWN=pick;townX=null}
+function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==TOWN){TOWN=pick;tcam=null}
   const spot=t=>{const who=t.own==='he'?HE:t.own&&FOLK.find(x=>x.id===t.own),r=t.r,lock=t.go==='kiln'&&!S.kiln,
       sign=t.sign+(lock?' · 门还关着':'')+(t.own==='he'&&away?' · 在你的小院':''),
       lab=who?(t.own==='he'?`${sign}，花匠阿禾`:`${t.sign}，${folkLabel(who)}`):sign.replace(' · ','，');
     return`<button class="tspot${who&&talkId===who.id?' on':''}" ${who?`data-own="${who.id}" data-talk="${who.id}"`:`data-go="${t.go}"`} style="--l:${r[0]}%;--t:${r[1]}%;--w:${r[2]}%;--h:${r[3]}%" aria-label="${lab}"></button>`};
   $('#town').innerHTML=`<div class="tscroll" id="tscroll"><div class="tworld${TOWN.safe?' bleed':''}" id="tworld"><img class="tplate" src="${A(TOWN.img)}" width="${TOWN.w}" height="${TOWN.h}" alt="" draggable="false">`+
     TOWN.spots.map(spot).join('')+Object.keys(TOWN.folk).map(townFigure).join('')+'</div></div><div class="talk" id="talk" hidden></div>';
-  layoutTown();$('#tscroll').addEventListener('scroll',e=>{const t=e.currentTarget;townX=[t.scrollLeft,t.scrollTop]},{passive:true});
+  layoutTown();if(!S.tzTip&&tz.W){S.tzTip=1;save();toast(matchMedia('(pointer:coarse)').matches?'小镇比屏幕大：拖动看看，双指可以放大缩小':'小镇比屏幕大：拖动看看，滚轮可以放大缩小')}
   if(talkId)openTalk(talkId,true)}
-/* 小镇整图跟小院一样铺满整个页面（顶栏、底栏浮在画上）。
-   横竖两张图都带出血：安全区（原图）整块放进顶栏和底栏之间、居中，四周的出血把整屏铺满，一屏看全、不滑动；
-   出血不够盖满的极端比例，再放大到盖满为止（安全区边上会略出屏）。 */
+/* 小镇是一张比屏幕大的地图（城镇经营游戏那样）：单指或鼠标拖着看，双指、滚轮、触控板捏合缩放，镜头不出整图（连出血）的边。
+   tcam={s,x,y}：s＝原图一像素在屏幕上多大，x/y＝整图（连出血）左上角在 #tscroll 里的位置；人物、热区都按安全区（.tworld）的百分比放。
+   缩放范围：最小是整图刚好盖满屏幕；最大到人物约 180px 高。
+   进门的默认：安全区放进顶栏和底栏之间一屏看全，但人物至少要有约 80px 高（手机上就会放大，要拖着看）；镜头对准安全区中心。 */
+function townLimits(R){const[sx,sy,sw,sh]=TOWN.safe||[0,0,TOWN.w,TOWN.h],
+    top=($('header.top')?.getBoundingClientRect().bottom||R.top)-R.top+4,bot=($('#dock')?.getBoundingClientRect().top||R.bottom)-R.top-4,ah=Math.max(120,bot-top),
+    fh=Math.min(...Object.values(TOWN.folk).map(q=>q[2]))/100*sh,
+    lo=Math.max(R.width/TOWN.w,R.height/TOWN.h),hi=Math.max(lo*1.6,180/fh);
+  return{lo,hi,s0:clamp(Math.max(Math.min(R.width/sw,ah/sh),80/fh),lo,hi),top,ah,L:R.left,T:R.top,W:R.width,H:R.height}}
+function townApply(){const w=$('#tworld');if(!w||!tcam||!tz.W)return;const[sx,sy,sw,sh]=TOWN.safe||[0,0,TOWN.w,TOWN.h],
+    s=tcam.s=clamp(tcam.s,tz.lo,tz.hi);
+  tcam.x=clamp(tcam.x,tz.W-TOWN.w*s,0);tcam.y=clamp(tcam.y,tz.H-TOWN.h*s,0);
+  w.style.width=sw*s+'px';w.style.height=sh*s+'px';w.style.transform=`translate(${tcam.x+sx*s}px,${tcam.y+sy*s}px)`}
+function townZoom(px,py,k){if(!tcam)return;const s1=clamp(tcam.s*k,tz.lo,tz.hi),r=s1/tcam.s;px-=tz.L;py-=tz.T;
+  tcam.x=px-(px-tcam.x)*r;tcam.y=py-(py-tcam.y)*r;tcam.s=s1;townApply()}
 function layoutTown(){const w=$('#tworld'),sc=$('#tscroll');if(!w||!sc)return;const R=sc.getBoundingClientRect();if(!R.height)return;
-  const sf=TOWN.safe;sc.classList.toggle('fit',!!sf);
-  if(sf){const[sx,sy,sw,sh]=sf,top=($('header.top')?.getBoundingClientRect().bottom||0)-R.top+4,bot=($('#dock')?.getBoundingClientRect().top||R.bottom)-R.top-4,ah=Math.max(120,bot-top);
-    const s=Math.max(Math.min(R.width/sw,ah/sh),R.width/TOWN.w,R.height/TOWN.h),W=sw*s,H=sh*s,
-      cl=(v,lo,hi)=>Math.min(hi,Math.max(lo,v)),
-      px=cl((R.width-W)/2-sx*s,R.width-TOWN.w*s,0),py=cl(top+(ah-H)/2-sy*s,R.height-TOWN.h*s,0);
-    w.style.setProperty('--bl',sx/sw*100+'%');w.style.setProperty('--br',(TOWN.w-sx-sw)/sw*100+'%');
-    w.style.setProperty('--bt',sy/sh*100+'%');w.style.setProperty('--bb',(TOWN.h-sy-sh)/sh*100+'%');
-    Object.assign(w.style,{width:W+'px',height:H+'px',left:px+sx*s+'px',top:py+sy*s+'px'});sc.scrollLeft=sc.scrollTop=0;return}
-  const s=Math.max(R.width/TOWN.w,R.height/TOWN.h);Object.assign(w.style,{width:TOWN.w*s+'px',height:TOWN.h*s+'px',left:'0px',top:'0px'})}
+  const old=tz,[sx,sy,sw,sh]=TOWN.safe||[0,0,TOWN.w,TOWN.h];tz=townLimits(R);
+  w.style.setProperty('--bl',sx/sw*100+'%');w.style.setProperty('--br',(TOWN.w-sx-sw)/sw*100+'%');
+  w.style.setProperty('--bt',sy/sh*100+'%');w.style.setProperty('--bb',(TOWN.h-sy-sh)/sh*100+'%');
+  if(!tcam){const s=tz.s0;tcam={s,x:tz.W/2-(sx+sw/2)*s,y:tz.top+tz.ah/2-(sy+sh/2)*s}}
+  else if(old.W&&(old.W!==tz.W||old.H!==tz.H)){const cx=(old.W/2-tcam.x)/tcam.s,cy=(old.H/2-tcam.y)/tcam.s;tcam.x=tz.W/2-cx*tcam.s;tcam.y=tz.H/2-cy*tcam.s}
+  sc.scrollLeft=sc.scrollTop=0;townApply()}
+/* 拖动和缩放。拖过（手指挪动超过几像素）的那一下不算点击，免得拖地图时误点开人物或房子；松手时带一点惯性 */
+function bindTownCam(){const T=$('#town'),pts=new Map();let g=null,fling=0,dragged=false;
+  const pair=()=>{const[a,b]=[...pts.values()];return{x:(a.x+b.x)/2,y:(a.y+b.y)/2,d:Math.hypot(a.x-b.x,a.y-b.y)}};
+  T.addEventListener('pointerdown',e=>{const sc=e.target.closest('#tscroll');if(!sc||(e.button||0)>0||!tcam)return;cancelAnimationFrame(fling);
+    if(!pts.size){dragged=false;g={sx:e.clientX,sy:e.clientY,vx:0,vy:0,t:e.timeStamp,moved:false}}
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2){g.moved=dragged=true;g.p=pair();sc.classList.add('grab');for(const id of pts.keys())try{sc.setPointerCapture(id)}catch(_){}}});
+  T.addEventListener('pointermove',e=>{const q=pts.get(e.pointerId);if(!q||!g)return;const sc=$('#tscroll');
+    if(!g.moved){if(Math.hypot(e.clientX-g.sx,e.clientY-g.sy)<8)return;g.moved=dragged=true;sc.classList.add('grab');try{sc.setPointerCapture(e.pointerId)}catch(_){}}
+    const dx=e.clientX-q.x,dy=e.clientY-q.y;q.x=e.clientX;q.y=e.clientY;
+    if(pts.size>=2){const p=pair();if(g.p&&g.p.d>0){tcam.x+=p.x-g.p.x;tcam.y+=p.y-g.p.y;townZoom(p.x,p.y,p.d/g.p.d)}g.p=p;g.vx=g.vy=0;return}
+    const dt=Math.max(1,e.timeStamp-g.t);g.t=e.timeStamp;g.vx=g.vx*.3+dx/dt*.7;g.vy=g.vy*.3+dy/dt*.7;
+    tcam.x+=dx;tcam.y+=dy;townApply()});
+  const up=e=>{if(!pts.delete(e.pointerId)||!g)return;g.p=pts.size>=2?pair():null;if(pts.size)return;
+    $('#tscroll')?.classList.remove('grab');let{vx,vy}=g;
+    if(!g.moved||e.timeStamp-g.t>90||e.type==='pointercancel'||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+    let last=performance.now();const f=t=>{const dt=Math.min(32,t-last);last=t;const k=Math.pow(.93,dt/16);vx*=k;vy*=k;
+      const ox=tcam.x,oy=tcam.y;tcam.x+=vx*dt;tcam.y+=vy*dt;townApply();if(tcam.x===ox)vx=0;if(tcam.y===oy)vy=0;
+      if(Math.hypot(vx,vy)>.03&&view==='town')fling=requestAnimationFrame(f)};fling=requestAnimationFrame(f)};
+  T.addEventListener('pointerup',up);T.addEventListener('pointercancel',up);
+  T.addEventListener('click',e=>{if(dragged&&e.target.closest('#tscroll')){dragged=false;e.stopPropagation();e.preventDefault()}},true);
+  T.addEventListener('wheel',e=>{if(!e.target.closest('#tscroll')||!tcam)return;e.preventDefault();cancelAnimationFrame(fling);
+    const d=e.deltaMode===1?e.deltaY*16:e.deltaY;townZoom(e.clientX,e.clientY,Math.exp(-d*(e.ctrlKey?.01:.0015)))},{passive:false});
+  // 用键盘 Tab 到画外的人物或房子时，镜头挪过去（不让浏览器自己滚动 #tscroll）
+  T.addEventListener('focusin',e=>{const b=e.target.closest('#tworld button'),sc=$('#tscroll');if(!b||!sc||!tcam)return;sc.scrollLeft=sc.scrollTop=0;if(pts.size)return;
+    const r=b.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    if(cx<tz.L+40||cx>tz.L+tz.W-40||cy<tz.T+tz.top+40||cy>tz.T+tz.top+tz.ah-40){tcam.x+=tz.L+tz.W/2-cx;tcam.y+=tz.T+tz.top+tz.ah/2-cy;townApply()}})}
 function openHe(quiet){talkId='he';const t=$('#talk');if(!t)return;
   const away=hired();
   t.hidden=false;t.innerHTML=`<div class="tface">${chibi('he')}</div><div class="tbody"><div class="tname"><b>${HE.n}</b><small>${HE.role}</small></div><p class="say" id="tsay"></p><div class="treq"><span class="req">${away?'在你的小院照料花田':'雇一天：浇水、拔草、请走小蜗牛'}</span></div><div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button><button class="btn primary" data-hire="1">${away?'续一天':'雇我一天'} ${price(80)}</button></div></div>`;

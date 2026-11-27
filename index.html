@@ -3391,13 +3391,14 @@ function wxPoint(e){if(!walk||!wxQ||e.button>0)return;
     // 按得久是“按住走”，松手就收脚停下；一下轻点是“走到那儿”，点得远就跑过去
     if(walk&&walk.hold){const long=performance.now()-walk.hold.t>320;walk.hold=null;walk.hrun=false;if(long)walk.to=null;else if(walk.to!=null)walk.run=Math.abs(walk.to-walk.p)*wxQ.D>wxQ.W*.45}};
   addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)}
-/* 键盘：←→ / A D 走，按着 Shift 跑，Enter / 空格 / E 拿身边的东西 */
-function wxKey(e,down){if(!walk||view!=='wild'||!$('#modal').hidden||e.target.closest?.('input,textarea'))return;const k=e.key;
+/* 键盘：←→ / A D 走，按着 Shift 跑，Enter / 空格 / E 拿身边的东西。弹窗开着时也照收松键，免得松开的键被吞掉、人自己一直走 */
+function wxKey(e,down){if(!walk||view!=='wild'||e.target.closest?.('input,textarea'))return;const k=e.key;
   if(k==='Shift'){walk.shift=down;return}
+  if(down&&!$('#modal').hidden)return;
   if(k==='ArrowLeft'||k==='a'||k==='A'){walk.keys=down?-1:walk.keys<0?0:walk.keys;walk.to=null;walk.goal=-1;e.preventDefault()}
   else if(k==='ArrowRight'||k==='d'||k==='D'){walk.keys=down?1:walk.keys>0?0:walk.keys;walk.to=null;walk.goal=-1;e.preventDefault()}
   else if(down&&(k==='Enter'||k===' '||k==='e'||k==='E')&&walk.near>=0&&!e.repeat&&!e.target.closest?.('button')){e.preventDefault();wxGoUse(walk.near)}}
-addEventListener('keydown',e=>wxKey(e,true));addEventListener('keyup',e=>wxKey(e,false));
+addEventListener('keydown',e=>wxKey(e,true));addEventListener('keyup',e=>wxKey(e,false));addEventListener('blur',()=>{if(walk){walk.keys=0;walk.shift=false}});
 $('#wild').addEventListener('pointerdown',e=>{if(e.target.closest('.pano.wx'))wxPoint(e)});
 $('#wild').addEventListener('click',e=>{const m=e.target.closest('[data-wxmap]');if(m){if(m.getAttribute('aria-disabled')==='true')return;wxs().map=m.dataset.wxmap;sfx('place');save();wxRender();return}
   if(e.target.closest('#wxAct')&&walk&&walk.near>=0)return wxGoUse(walk.near);

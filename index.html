@@ -3248,10 +3248,19 @@ function wxMount(){wxStopScene();const p=$('#wild .pano');if(!p||view!=='wild')r
 function wxMeasure(){const q=wxQ;if(!q)return;const W=q.pano.clientWidth,H=q.pano.clientHeight;if(!W||!H)return;const D=Math.max(W*5,H*8);Object.assign(q,{W,H,D});
   q.sky.style.width=W*1.12+'px';q.hills.style.width=Math.max(W+D*.10,H*.38*1600/294)+'px';[q.props,q.ground,q.cross,q.deco,q.spots].forEach(el=>el.style.width=W+D+'px');
   $$('.wj-prop',q.pano).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');$$('.xs',q.spots).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');if(walk)walk.near=-2;wxPaint(true)}
-function wxPaint(force){const q=wxQ;if(!q||!q.D)return;const p=walk?walk.p:0,{W,D}=q,X=W*.28+D*p,cam=clamp(X-W*.42,0,D);
-  if(!force&&q.lastP===p&&q.lastF===(walk&&walk.face))return;q.lastP=p;q.lastF=walk&&walk.face;
+/* 镜头：人往哪边走，画面就往那边多让出一截（朝右时人站在左 36%，朝左时站在右 62%），好看清前面有什么；
+   转身后镜头慢慢挪过去，不一转身就猛甩。人物转身是一张纸翻个面（scaleX 从 1 过渡到 -1），不是瞬间换向 */
+const wxRM=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
+const wxCam=()=>{const q=wxQ;return clamp(q.W*.28+q.D*(walk?walk.p:0)-q.W*(q.lead??.36),0,q.D)};
+function wxPaint(force,dt){const q=wxQ;if(!q||!q.D)return;const p=walk?walk.p:0,{W,D}=q,X=W*.28+D*p,face=walk?walk.face:1,rm=wxRM(),lead=face<0?.62:.36;
+  q.lead=force||rm||q.lead==null||!dt?lead:q.lead+(lead-q.lead)*(1-Math.exp(-dt*2.4));
+  if(walk)walk.fv=force||rm||walk.fv==null||!dt?face:Math.abs(face-walk.fv)<.02?face:walk.fv+(face-walk.fv)*(1-Math.exp(-dt*22));
+  const fv=walk?walk.fv:1,cam=wxCam(),key=`${p}|${fv}|${R(q.lead*1000)}`;
+  if(!force&&q.lastK===key)return;q.lastK=key;
   const mv=(el,x)=>{el.style.transform=`translate3d(${-x}px,0,0)`};mv(q.sky,cam*W*.12/D);mv(q.hills,cam*.10);[q.props,q.ground,q.cross,q.deco,q.spots].forEach(el=>mv(el,cam));
-  q.walker.style.transform=`translate3d(${R(X-cam)}px,0,0) translateX(-50%) scaleX(${walk?walk.face:1})`;q.mist.style.opacity=(.06+.24*p).toFixed(3);
+  // 翻面过 0 的那一下别薄成一条线：最窄留 0.14
+  const sx=Math.sign(fv||1)*Math.max(.14,Math.abs(fv));
+  q.walker.style.transform=`translate3d(${R(X-cam)}px,0,0) translateX(-50%) scaleX(${sx.toFixed(3)})`;q.mist.style.opacity=(.06+.24*p).toFixed(3);
   if(walk){const d=$('#wdot');if(d)d.style.left=(p*100).toFixed(1)+'%';const tg=$('#wstretch'),nm=wxStretch(walk.map,p);if(tg&&tg.textContent!==nm)tg.textContent=nm;wxNear()}}
 
 /* ---------- 一趟出门 ---------- */
@@ -3310,7 +3319,7 @@ function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{w
       else if(walk.still>7&&!walk.soft){walk.still=-3*Math.random();wxPlay(pick(['smell','look']),null,null,true)}}else walk.still=0;
     wxRAF=requestAnimationFrame(step)};
   wxRAF=requestAnimationFrame(step)}
-function wxPx2P(clientX){const q=wxQ,r=q.pano.getBoundingClientRect(),X=walk.p*q.D+q.W*.28,cam=clamp(X-q.W*.42,0,q.D);return clamp((clientX-r.left+cam-q.W*.28)/q.D,0,1)}
+function wxPx2P(clientX){const q=wxQ,r=q.pano.getBoundingClientRect();return clamp((clientX-r.left+wxCam()-q.W*.28)/q.D,0,1)}
 function wxPoint(e){if(!walk||!wxQ||e.button>0)return;
   if(e.target.closest('.xs,button,.walk-top,.walk-bot'))return;const pid=e.pointerId;walk.goal=-1;walk.hold={x:e.clientX,t:performance.now()};walk.to=wxPx2P(e.clientX);
   const mv=ev=>{if(ev.pointerId===pid&&walk&&walk.hold)walk.hold.x=ev.clientX},up=ev=>{if(ev.pointerId!==pid)return;removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);

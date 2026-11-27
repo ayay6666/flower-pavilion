@@ -861,7 +861,8 @@ body{color:var(--ink)}
 .lvring span{width:calc(100% - 8px);height:calc(100% - 8px);background:url('assets/ui_round.webp') center/100% 100% no-repeat;color:var(--ink)}
 
 /* Wide painted plaques keep their decorated ends outside the text. */
-.hint{width:min(100%,720px);min-height:46px;padding:10px clamp(64px,16vw,126px);background:url('assets/ui_btn_paper.webp') center/100% 100% no-repeat;border:0;border-image:none;border-radius:0;box-shadow:none;filter:var(--ui-shadow);backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink);line-height:1.65;letter-spacing:0;overflow-wrap:anywhere}
+/* 提示语用小卡宣纸（ui_card），按字数收宽，不再铺两头画了竹子桃花的木牌：那张图被拉到整屏宽，两头的画糊成一片，还压住背景里的小屋 */
+.hint{width:fit-content;max-width:min(100%,560px);min-height:0;padding:1px 10px;background:none;border:8px solid transparent;border-image:url('assets/ui_card.webp') 40 fill / 8px stretch;border-radius:7px;box-shadow:none;filter:var(--ui-shadow);backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink);line-height:1.65;letter-spacing:0;overflow-wrap:anywhere}
 /* 页头只挂一块店招（ui_plaque），外层不再铺牌匾，免得“牌匾套卷轴”、宽屏被拉变形 */
 .st-head,.shop-head{min-height:0;padding:0;background:none;border:0;border-image:none;border-radius:0;box-shadow:none;filter:none;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 12px;color:var(--ink)}
 .st-head .h-sub{min-width:0;margin:0;text-align:center;line-height:1.65;overflow-wrap:anywhere}
@@ -919,7 +920,7 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 }
 @media(max-width:360px){
   .view .h-title{padding-inline:60px;font-size:24px}
-  .hint{padding-inline:58px;font-size:12px}
+  .hint{padding-inline:8px;font-size:12px}
   #dock{gap:3px}.top .phase{padding-inline:0}
   .tface .chibi,.talk .tface .chibi{width:44px}
 }
@@ -960,7 +961,9 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 @media (max-width:760px){#v-kiln{padding-bottom:calc(var(--dock-room) + 8px)}.knav{position:sticky;bottom:14px;z-index:4;justify-content:flex-end;pointer-events:none}.knav .btn{pointer-events:auto;box-shadow:0 3px 10px rgba(64,45,25,.28)}}
 .kwheel{--kw-off:178px;max-width:min(420px,100%,max(200px,calc((100vh - var(--dock-room) - var(--kw-off))*.788)));max-width:min(420px,100%,max(200px,calc((100dvh - var(--dock-room) - var(--kw-off))*.788)))}
 @media (max-width:760px){.kwheel{--kw-off:240px}}
-.mode-exit{display:inline-flex;align-items:center;justify-content:center;min-height:28px;margin-left:6px;padding:0 4px;color:var(--rouge);font-size:12px;white-space:nowrap;vertical-align:baseline}
+/* 露水、授粉模式里，提示卡右边挂一枚小关闭钮（跟订单卡的 ✕ 同一款 --c-sm 纸钮），和字排在同一行，不另起一行写红字「退出」 */
+.hint.has-x{display:flex;align-items:center;gap:8px;text-align:left}.hint.has-x>span{flex:1;min-width:0}
+.mode-exit{display:grid;place-items:center;font-size:14px;color:var(--ink-soft)}
 .dialog.has-dlg-x{padding-top:42px}
 .dlg-x,.talk-x{position:absolute;top:0;right:0;display:grid;place-items:center;z-index:2;font-size:18px}
 .dlg-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:0 0 auto;width:100%;margin-top:12px}
@@ -1345,7 +1348,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
      矮屏（高 ≤ 500，横屏手机）上的小镇对话框边框收到 16px：它压在小镇画面上，又要放下名字、台词和按钮，28px 的花边太占地方
    · 标题两种：页面标题用卷轴 ui_ribbon（山野、手账各页）；弹窗标题一律用题字 .ink-t（modal() 自动套上，见 inkTitles）
    · 小卡 ui_card：卡片、订单、浮层提示（.tip-pop）、底部操作条
-   · 牌匾 ui_btn_paper：提示语
+   · 牌匾 ui_btn_paper：山野里的路程牌。花畦提示语改用小卡 ui_card，按字数收宽
    · 店招 ui_plaque：页头标题（花铺、花艺台）。整块木匾按原图比例显示，不拉伸，外层不再叠牌匾或卷轴
    · 印章 .yin：徽章。两字竖排长方印，朱底白字（阴文）与白底朱字（阳文）交替，钤印的斑驳边用 #hx-stamp 滤镜；
      没得到的只留浅虚框。手账里的徽章墙是一页印谱，不再一格一张卡；获得徽章的横幅用小卡皮肤，印章盖下去
@@ -1360,7 +1363,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .btn.sm,.chip,.ksteps button{height:var(--c-sm)}
 .btn.lg,.st-quick button{height:var(--c-lg)}
 .snd,.ib,.so-x,.dlg-x,.talk-x,.lvring{width:var(--c-md);height:var(--c-md);min-width:0;padding:0;flex-shrink:0}
-.order-x{width:var(--c-sm);height:var(--c-sm);padding:0}
+.order-x,.mode-exit{width:var(--c-sm);height:var(--c-sm);padding:0;flex-shrink:0}
 .g-tools .tool,.st-side button{width:var(--c-round);height:var(--c-round);flex:0 0 var(--c-round)}
 /* ---- 自适应：按容器实际大小收放，不按某一款手机写死 ---- */
 /* 顶栏放不下时（窄屏且有返回钮），先让出店名 */
@@ -2181,9 +2184,9 @@ function hints(){const now=Date.now(),ps=S.plots.filter(Boolean),seeds=IDS.some(
   let step=0;if(!S.done&&!fertMode&&!polMode&&S.tut>=99&&!harvestSummary){step=cut>=3||S.arr.length?4:ps.some(p=>p.p>=F[p.id].t)?3:ps.length?2:cut?3:1;
     if(idle)t=step===4?'花枝够了：点下方的「花艺」，插第一瓶花':step===2?'等花慢慢长。土干了会冒出水滴，点「照料」浇水':step===3?'再种几株，攒够三枝花就能去插花':t}
   const hk=`${step}|${fertMode?1:0}|${polMode?1:0}|${t}`;
-  if(hk!==lastHintKey){lastHintKey=hk;const hint=$('#hint');hint.textContent=t;
+  if(hk!==lastHintKey){lastHintKey=hk;const hint=$('#hint'),mx=fertMode||polMode;hint.classList.toggle('has-x',mx);hint.textContent=mx?'':t;
     if(step){const b=document.createElement('b');b.className='tut';b.textContent=`新手 ${step}/4`;hint.prepend(b)}
-    if(fertMode||polMode){const x=document.createElement('button');x.className='mode-exit';x.dataset.modeExit='1';x.textContent='✕ 退出';x.setAttribute('aria-label','退出当前模式');hint.appendChild(x)}}
+    if(mx){const sp=document.createElement('span');sp.textContent=t;const x=document.createElement('button');x.type='button';x.className='btn mode-exit';x.dataset.modeExit='1';x.textContent='✕';x.setAttribute('aria-label',fertMode?'收起露水':'收起授粉');hint.append(sp,x)}}
   $('#fertBtn').classList.toggle('on',fertMode);$('#polBtn').classList.toggle('on',polMode);
   $('#fertBtn').setAttribute('aria-pressed',String(fertMode));$('#polBtn').setAttribute('aria-pressed',String(polMode));
   const needsCare=S.plots.slice(0,plotCount()).some(p=>p&&p.p<F[p.id].t&&(p.pest||p.wu-now<=waterMs(p)*.8));

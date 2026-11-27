@@ -910,7 +910,7 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
   .st-quick{left:8px;right:8px;gap:4px;flex-wrap:wrap}
   .st-quick button{padding:0 2px;font-size:11px}
   .kfoot .btn.lg{padding:0 8px}
-  #v-wild .walk-bot{grid-template-columns:minmax(0,1fr) auto}
+  #v-wild .walk-bot{grid-template-columns:minmax(0,1fr) auto auto}
 }
 @media(max-width:360px){
   .view .h-title{padding-inline:60px;font-size:24px}
@@ -1200,6 +1200,8 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .wx-deco{top:0;height:100%;z-index:4}
 .wx-deco .wx-dec{bottom:-2%;height:12cqh;transform:translateX(-50%) scaleX(var(--flip))}.wx-deco .wx-dec.k-lily{bottom:2%;height:5.5cqh}.wx-deco .wx-dec.k-mush{bottom:3%;height:7cqh}
 .pano.wx .wj-walker{z-index:5}
+/* 画里的东西用 Tab 选中时也只泛柔光，不画矩形框（框压在画上像截图标注） */
+.xs:focus-visible,.wx-box button:focus-visible{outline:none;filter:drop-shadow(0 0 5px rgba(255,246,206,.95)) drop-shadow(0 0 2px #fff)}
 .xs{position:absolute;bottom:var(--b);height:11cqh;padding:0;margin:0;border:0;background:none;line-height:0;pointer-events:auto;cursor:pointer;transform:translateX(-50%);transform-origin:50% 100%;-webkit-tap-highlight-color:transparent;transition:transform .25s,opacity .4s,filter .2s;filter:drop-shadow(0 2px 2px rgba(46,45,31,.18))}
 .xs img,.xs>svg{display:block;height:100%;width:auto;max-width:none;pointer-events:none}
 .xs .ico{width:auto;height:100%}
@@ -1228,8 +1230,11 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 @keyframes flap{to{transform:scaleX(.45)}}
 @keyframes bfwander{25%{translate:30% -40%}50%{translate:-20% -70%}75%{translate:-40% -20%}}
 @keyframes bob3{50%{translate:0 -4px}}
-/* 探险时的操作：顶部是地名和进度，底部是背包与回家；靠近东西时中间浮出一个主操作钮 */
-.wx-act{position:absolute;z-index:2;transform:translateX(-50%);white-space:nowrap;pointer-events:auto;animation:dlg .2s ease}
+/* 探险时的操作：顶部是地名和进度，底部是背包、操作钮与回家。
+   走近东西时，东西自己泛一圈柔光；要做的事（拨开草丛、收露水……）写在底栏中间的纸钮上，不浮在画上、不挡人和路 */
+#v-wild .walk-bot{grid-template-columns:minmax(0,1fr) auto auto}
+#v-wild .walk-bot .wx-act{grid-column:2;white-space:nowrap;animation:dlg .2s ease}
+#v-wild .walk-bot #walkEnd{grid-column:3}
 #v-wild .walk-tip{transition:opacity 1s}#v-wild .walk-tip.fade{opacity:0}
 /* 人物动作帧：与走路帧同高、脚底对齐，帧格更宽，好放下伸手和跃起的姿势 */
 .wj-walker .ps{position:absolute;left:50%;bottom:0;height:100%;aspect-ratio:420/360;translate:-50% 0;background:url("assets/wk_pose.webp") 0 0/1200% 100% no-repeat;pointer-events:none;display:none}
@@ -1238,7 +1243,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .xs::before{content:"";position:absolute;inset:-14px -12px -8px}
 .xs.k-bfly.flee .bf{animation:bfflee .7s ease-in forwards}
 @keyframes bfflee{to{translate:-60% -260%;opacity:.2}}
-.pano.acting .wx-act{visibility:hidden}
+#v-wild:has(.pano.acting) .wx-act{visibility:hidden}
 #wbag.bump{animation:bagbump .36s ease}
 @keyframes bagbump{40%{transform:scale(1.06)}}
 @media (prefers-reduced-motion:reduce){.xs.k-bfly.flee .bf,#wbag.bump{animation:none}}
@@ -3297,7 +3302,7 @@ function wxPaint(force,dt){const q=wxQ;if(!q||!q.D)return;const p=walk?walk.p:0,
 function wxStart(){if(legs()<1||walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';S.legs--;X.trips++;
   walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1,hold:null,busy:false,soft:false,mv:null,still:0,after:null,v:0,fv:1,ph:.34,lean:0,run:false,hrun:false,shift:false,wf:-1};
   const M=WMAPS[walk.map];
-  $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">按住地面就走，按得远些就跑；点东西就去拿</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn" id="walkEnd">回家</button></div>`;
+  $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">按住地面就走，按得远些就跑；点东西就去拿</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn wx-act" id="wxAct" hidden></button><button class="btn" id="walkEnd">回家</button></div>`;
   $('#wbag').innerHTML=bagHTML();wxDrawSpots();wxMount();sfx('place');save();refreshDock();
   setTimeout(()=>{const t=$('#wxTip');if(t)t.classList.add('fade')},6000)}
 function wxGen(m){const M=WMAPS[m],X=wxs(),r=rng((X.trips*977+dayNo()*131+m.charCodeAt(0)*7)>>>0),q=X.q[m]||0,st=wxStep(m),list=[],put=(k,o={})=>list.push({k,...o});
@@ -3326,12 +3331,12 @@ const WSPOT={flower:s=>s.id==='lotus'||F[s.id]?.base==='lotus'?`<img src="${A('a
   bfly:()=>`<img src="${A('assets/x_wildfl.webp')}" alt="" draggable="false"><i class="bf b1">${BFLY}</i><i class="bf b2">${BFLY}</i><i class="bf b3">${BFLY}</i>`,
   npc:()=>{const Q=WQ[walk.map],st=wxStep(walk.map);return`<img src="${A(Q.img)}" alt="" draggable="false">${st?`<i class="wx-mark${wxReady(walk.map)?' ready':''}">${wxReady(walk.map)?'！':'…'}</i>`:''}`}};
 const wxLabel=s=>({flower:`${F[s.id]?.base==='lotus'||s.id==='lotus'?'采':'摘'}${F[s.id]?.n||''}`,dew:'收露水',clay:'挖陶土',seed:'拾花种',page:'拾起画稿',stone:'打水漂',bush:'拨开草丛',curio:'看看是什么',bfly:'扑蝶',npc:`和${WQ[walk.map].n}说话`})[s.k];
-function wxDrawSpots(){const box=$('#wxSpots');if(!box||!walk)return;box.innerHTML=walk.spots.map((s,i)=>s.done?'':`<button class="xs k-${s.k}${s.rare?' rare':''}${s.k==='flower'?' fl-'+(F[s.id].base||s.id):''}" data-i="${i}" data-t="${s.t}" style="--b:${s.b.toFixed(1)}%" aria-label="${wxLabel(s)}">${WSPOT[s.k](s)}</button>`).join('')+'<button class="btn primary sm wx-act" id="wxAct" hidden></button>';if(wxQ)wxMeasure()}
+function wxDrawSpots(){const box=$('#wxSpots');if(!box||!walk)return;box.innerHTML=walk.spots.map((s,i)=>s.done?'':`<button class="xs k-${s.k}${s.rare?' rare':''}${s.k==='flower'?' fl-'+(F[s.id].base||s.id):''}" data-i="${i}" data-t="${s.t}" style="--b:${s.b.toFixed(1)}%" aria-label="${wxLabel(s)}">${WSPOT[s.k](s)}</button>`).join('');walk.near=-2;if(wxQ)wxMeasure()}
 const wxReach=()=>Math.max(56,wxQ.walker.offsetWidth*.62)+34;
 function wxNear(){if(!walk||!wxQ)return;const lim=wxReach()/wxQ.D;let best=-1,bd=lim;
   walk.spots.forEach((s,i)=>{if(s.done)return;const d=Math.abs(s.t-walk.p);if(d<bd){bd=d;best=i}});
   if(best===walk.near)return;walk.near=best;$$('#wxSpots .xs.near').forEach(e=>e.classList.remove('near'));const b=$('#wxAct');
-  if(best<0){if(b)b.hidden=true;return}const el=$(`#wxSpots .xs[data-i="${best}"]`);el?.classList.add('near');if(b&&el){b.hidden=false;b.textContent=wxLabel(walk.spots[best]);b.style.left=el.style.left;b.style.top=Math.max(wxQ.H*.16,el.offsetTop-b.offsetHeight-6)+'px'}}
+  if(best<0){if(b)b.hidden=true;return}const el=$(`#wxSpots .xs[data-i="${best}"]`);el?.classList.add('near');if(b){b.hidden=false;b.textContent=wxLabel(walk.spots[best])}}
 /* 走路的手感：有起步、有收脚。速度慢慢提上去，快到落点时按刹得住的速度收住，正好停在落点上；
    往回走要先刹住再转身（跑着急刹会往后一仰）。走路帧按走过的路程翻，不按时间翻：走得慢脚步就慢，脚底不打滑 */
 function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{wxRAF=0;if(!walk||view!=='wild'||!wxQ||!wxQ.pano.isConnected)return;

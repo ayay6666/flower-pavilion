@@ -1011,7 +1011,6 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 @media (min-width:600px) and (min-aspect-ratio:11/10){
   .plots{grid-template-columns:repeat(6,1fr);width:min(100%,900px,max(420px,calc((100vh - 380px)*2.5)));width:min(100%,900px,max(420px,calc((100dvh - 380px)*2.5)))}
 }
-.hint .tut{display:inline-block;margin-right:8px;padding:0 8px;border-radius:99px;background:var(--rouge);color:#fff6e4;font-size:11.5px;font-weight:600;line-height:20px;letter-spacing:.04em;white-space:nowrap;vertical-align:1px}
 .save-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
 .showbar{margin:0 0 14px}.showbar .btn{flex-shrink:0}
 .showworks{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}.showworks .work{padding:2px}
@@ -2232,7 +2231,6 @@ function hints(){const now=Date.now(),ps=S.plots.filter(Boolean),seeds=IDS.some(
     if(idle)t=step===4?'花枝够了：点下方的「花艺」，插第一瓶花':step===2?'等花慢慢长。土干了会冒出水滴，点「照料」浇水':step===3?'再种几株，攒够三枝花就能去插花':t}
   const hk=`${step}|${fertMode?1:0}|${polMode?1:0}|${t}`;
   if(hk!==lastHintKey){lastHintKey=hk;const hint=$('#hint'),mx=fertMode||polMode;hint.classList.toggle('has-x',mx);hint.textContent=mx?'':t;
-    if(step){const b=document.createElement('b');b.className='tut';b.textContent=`新手 ${step}/4`;hint.prepend(b)}
     if(mx){const sp=document.createElement('span');sp.textContent=t;const x=document.createElement('button');x.type='button';x.className='btn mode-exit';x.dataset.modeExit='1';x.textContent='✕';x.setAttribute('aria-label',fertMode?'收起露水':'收起授粉');hint.append(sp,x)}}
   $('#fertBtn').classList.toggle('on',fertMode);$('#polBtn').classList.toggle('on',polMode);
   $('#fertBtn').setAttribute('aria-pressed',String(fertMode));$('#polBtn').setAttribute('aria-pressed',String(polMode));
@@ -3774,7 +3772,7 @@ let coachEl=null,coachT=null,coachSw=null,coachRAF=0,modalSeen=0,lastCoachTxt=''
 function coachDom(){if(coachEl)return coachEl;const c=coachEl=document.createElement('div');c.id='coach';c.hidden=true;
   c.innerHTML=`<div class="co-spot" hidden></div><div class="co-hand" hidden><svg viewBox="0 0 48 56"><path d="M18 4c3 0 5 2 5 5v14l2-1c3-1 5 0 6 2l1-1c3-1 5 1 6 3c3 0 5 2 5 5v9c0 8-6 14-14 14h-4c-5 0-9-3-11-7l-7-13c-1-3 0-5 2-6s5 0 6 2l2 3V9c0-3 2-5 5-5z" fill="#fff6e4" stroke="#3a2c28" stroke-width="2.4" stroke-linejoin="round"/><path d="M23 23v9M31 24v8M38 27v6" stroke="#3a2c28" stroke-width="1.6" stroke-linecap="round" opacity=".5"/></svg></div><div class="co-bub"><img class="co-av" src="${A('assets/guide_av.webp')}" width="252" height="276" alt="花铺掌柜" draggable="false"><div class="co-body"><p class="co-txt" aria-live="polite"></p><div class="co-row"><span class="co-step"></span><button class="co-next" type="button" hidden>下一步</button><button class="co-skip" type="button">跳过引导</button></div></div></div>`;
   $('#app').appendChild(c);
-  $('.co-skip',c).onclick=()=>{S.tut=99;save();coachHide();hints();toast('引导已跳过，顶上的提示会一直陪着你')};
+  $('.co-skip',c).onclick=()=>{S.tut=99;save();coachHide();hints();toast('引导已跳过')};
   $('.co-next',c).onclick=()=>{S.tut++;save();coachPing();coachTick()};
   return c}
 function coachHide(){if(coachEl)coachEl.hidden=true;$('#app').classList.remove('coaching');coachT=null}

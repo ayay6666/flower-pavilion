@@ -620,7 +620,7 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 @keyframes bobc{50%{transform:translateY(-3px)}}
 .tb .tag{font-size:12px;letter-spacing:.1em;padding:1px 9px;border-radius:99px;background:rgba(255,255,255,.9);box-shadow:0 2px 6px var(--shadow);margin-top:2px;white-space:nowrap}
 .npc.on .tag{background:var(--ink);color:var(--jade)}
-.bub{position:absolute;top:-8px;right:-6px;min-width:25px;height:25px;padding:0 5px;border-radius:13px 13px 13px 3px;background:var(--white);color:var(--ink);box-shadow:0 2px 6px var(--shadow);display:grid;place-items:center;font-style:normal;font-size:13px;font-family:var(--f-display);animation:bob 1.6s ease-in-out infinite;z-index:1}
+.bub{position:absolute;top:-8px;right:-6px;min-width:30px;height:21px;padding:0 7px;border-radius:10px;background:#fffaf0;color:var(--ink);box-shadow:0 1px 3px rgba(73,47,29,.3);display:grid;place-items:center;font-style:normal;font-size:13px;line-height:1;font-family:var(--f-display);animation:bob 1.6s ease-in-out infinite;z-index:1}
 .bub.ok{
   top:-5px;right:-8px;width:24px;min-width:0;height:17px;padding:0;
   border:1px solid #966e47;border-radius:3px 2px 3px 2px;
@@ -635,39 +635,49 @@ main{position:absolute;inset:0;flex:none;z-index:2}
   content:"";position:absolute;top:6px;left:calc(50% - 3px);width:6px;height:6px;
   border-radius:48% 43% 46% 40%;background:#a34839;box-shadow:inset 0 1px 1px #cb8060
 }
-.bub.done{background:var(--rouge);color:#fff;animation:none}
+.bub.done{color:#ad382e;animation:none}
+/* 对话泡带一根小尾巴指向说话的人，不做成圆片（圆片像通知红点）；信封泡（.ok）是另一种形状，不加尾巴 */
+.bub:not(.ok)::before{content:"";position:absolute;left:6px;bottom:-5px;width:8px;height:6px;background:inherit;clip-path:polygon(0 0,100% 0,10% 100%)}
+.bub svg{display:block;width:13px;height:13px}
 @media (max-width:700px){.tb{left:var(--xm);top:var(--ym)}.npc{z-index:var(--zm)}.npc::before{width:calc(min(46px,6vh)*var(--dm,1))}.npc .chibi{width:calc(min(50px,6.5vh)*var(--s,1)*var(--dm,1))}}
 .talk{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(94%,680px);display:flex;gap:12px;align-items:flex-end;background:#fffdf6 var(--grain);border-radius:22px;padding:14px 16px 14px 10px;box-shadow:0 14px 34px rgba(20,40,40,.3),inset 0 0 0 2px rgba(255,255,255,.8);z-index:4;animation:talkin .3s cubic-bezier(.2,1.3,.4,1)}
-/* 小镇整图：世界层按地平线以下的空间缩放；手机上比屏幕宽，左右滑动看 */
-/* 人物按站位给的 z-index（几十）只在整图内部比前后，isolation 把整图关成一层，对话框（.talk）才能盖在所有人物上面 */
+/* 小镇整图：跟小院一样铺满整个页面，顶栏和底栏浮在画上；多出来的部分滑动看。
+   人物按站位给的 z-index（几十）只在整图内部比前后，isolation 把整图关成一层，对话框（.talk）才能盖在所有人物上面 */
 .tscroll{position:absolute;inset:0 0 calc(-1*var(--dock-room));isolation:isolate;z-index:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:none;touch-action:pan-x pan-y}
-/* 装裱：画四周是宣纸，画本身一圈细木色边和投影 */
+/* 只在图片还没载入的一瞬间露出宣纸 */
 #app[data-at=town] .scene{background:#efe5cf var(--grain) center/384px}
-.tworld.mount{border-radius:4px;box-shadow:0 0 0 1px rgba(120,86,52,.35),0 0 0 7px #f7f0e0,0 0 0 8px rgba(120,86,52,.25),0 14px 34px rgba(70,48,24,.28)}
-.tworld.mount .tplate{border-radius:4px}
 .tscroll::-webkit-scrollbar{display:none}
 .tworld{position:absolute;container-type:size}
 .tplate{position:absolute;inset:0;width:100%;height:100%;max-width:none}
 /* 小镇是俯视的一整张画，不再叠在平视的远山、草地和角花上；夜色和雨天照样罩在画上 */
 #app[data-at=town] .scene>:not(#fx){display:none}
-.tworld::after,.tworld::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:300}
+.tworld::after,.tworld::before{content:"";position:absolute;inset:calc(-1*var(--bt,0%)) calc(-1*var(--br,0%)) calc(-1*var(--bb,0%)) calc(-1*var(--bl,0%));pointer-events:none;z-index:300}
+/* 带出血的整图：.tworld 只是中间的安全区（坐标、人物都按它算），底图向四周多出一圈画（--bl/--bt/--br/--bb，安全区宽高的百分比），
+   夜色雨幕跟着底图一起铺开。整屏不滑动 */
+.tscroll.fit{overflow:hidden}
+.tworld.bleed .tplate{left:calc(-1*var(--bl));top:calc(-1*var(--bt));width:calc(100% + var(--bl) + var(--br));height:calc(100% + var(--bt) + var(--bb))}
 .tworld::after{background:#141a44;opacity:calc(var(--night,0)*.46)}
 .tworld::before{background:#5d7186;opacity:0;transition:opacity 2s}.rain .tworld::before{opacity:.32}
 .tspot{position:absolute;left:var(--l);top:var(--t);width:var(--w);height:var(--h);padding:0;border:0;background:none;border-radius:18px;cursor:pointer;z-index:1}
 .tspot:focus-visible{outline:2px solid var(--rouge);outline-offset:2px}
-.tworld .tag{font-size:12px;letter-spacing:.1em;padding:1px 9px;white-space:nowrap}
-.tspot .tag{position:absolute;left:var(--sx);top:var(--sy);translate:-50% -50%;transition:transform .2s}
-.tspot:hover .tag{transform:translateY(-2px)}.tspot:active .tag{transform:scale(.95)}
+/* 画上不写地名：花铺、沈记书店的招牌本来就画在图里，其余房子不叠任何牌子或纸签（压在画上都出戏）。
+   人名、「门还关着」也不浮在画上：点人物、点房子，对话框里有名字；陶坊关着门会说明怎么开。读屏从 aria-label 读到 */
 .tspot .bub{top:-15px;right:-17px}
 .tfig{position:absolute;left:var(--fx);top:var(--fy);height:max(var(--fh),44px);translate:-50% -100%;padding:0;border:0;background:none;display:block;cursor:pointer}
 .tfig.still{pointer-events:none}
 .tfig::before{content:"";position:absolute;left:50%;bottom:-4px;width:100%;height:10px;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(70,50,30,.32),transparent)}
 .tfig .chibi{position:relative;display:block;height:100%;width:auto;max-width:none;animation:bobc 2.8s ease-in-out infinite}
 .tfig:nth-of-type(odd) .chibi{animation-delay:-1.3s}
-.tfig .tag{position:absolute;top:calc(100% + 3px);left:50%;translate:-50% 0}
-.tfig .bub{top:-4px;right:auto;left:calc(100% - 6px)}
-.tfig.bl .bub{left:auto;right:calc(100% - 6px);border-radius:13px 13px 3px 13px}
-.ava.face{background:#efe4cc url('assets/n_he.webp') 50% 3%/190% auto no-repeat;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
+/* 小镇里的对话泡：宣纸色、细褐边，跟画同一种纸墨质地，不用亮白底加投影（像手机通知）；
+   跟着整图缩放，手机横屏时整图比较小，固定像素的泡会盖住旁边的人和房子 */
+.tfig .bub{top:5%;right:auto;left:calc(100% - 7px)}
+.tfig .bub:not(.ok){font-size:clamp(10px,2.4cqmin,13px);min-width:2.3em;height:1.6em;padding:0 .5em;font-weight:700;background:#f8efdb;border:1px solid rgba(107,69,40,.55);box-shadow:0 1px 1.5px rgba(60,38,20,.25);color:#4a2c18}
+/* 有边的泡，尾巴用转 45° 的小方块带两条边，盖住泡底那段边线 */
+.tfig .bub:not(.ok)::before{left:3px;right:auto;bottom:-4px;width:6px;height:6px;clip-path:none;border:solid rgba(107,69,40,.55);border-width:0 1px 1px 0;rotate:45deg}
+.tfig .bub svg{width:1em;height:1em}
+.tfig.bl .bub{left:auto;right:calc(100% - 6px)}
+.tfig.bl .bub:not(.ok)::before{left:auto;right:3px}
+.ava.face{background:#efe4cc none 50% 3%/190% auto no-repeat;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
 @media (prefers-reduced-motion:reduce){.tfig .chibi{animation:none}}
 @keyframes talkin{from{transform:translate(-50%,24px);opacity:0}}
 .tface{flex-shrink:0;margin-top:-48px}.tface .chibi{width:92px}
@@ -710,7 +720,7 @@ body{margin:0;background:var(--jade)}
 .inp,.stp>div,.seg>div{background:#faf5e9;border-radius:7px}
 .seg button{border-radius:5px}.pkc.on{background:#fff9ec;box-shadow:inset 0 0 0 2px var(--rouge)}
 .h-title,h3.sec{font-family:var(--f-display)}
-.spot .tagw,.tb .tag,.tworld .tag,.hire,.pop{background:var(--jade) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);border-radius:5px;box-shadow:0 2px 6px var(--shadow);text-shadow:none}
+.spot .tagw,.tb .tag,.hire,.pop{background:var(--jade) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);border-radius:5px;box-shadow:0 2px 6px var(--shadow);text-shadow:none}
 .pop{padding:2px 7px}.hire{color:#36533e}
 .spot.sign{background:var(--jade-2) var(--grain) center/256px;color:var(--ink);border:1px solid var(--line);filter:drop-shadow(0 3px 2px rgba(64,45,25,.22));text-shadow:none}
 .bld>img{width:min(30vw,46vh);height:auto;object-fit:contain;display:block;filter:drop-shadow(0 6px 8px rgba(64,45,25,.2))}
@@ -873,7 +883,7 @@ body{color:var(--ink)}
 .toast{background:#2b2a26 var(--grain) center/256px;background-blend-mode:multiply;color:#fff6e4;border:0;border-radius:5px;box-shadow:none;filter:drop-shadow(0 5px 7px rgba(43,32,23,.25));backdrop-filter:none;-webkit-backdrop-filter:none}
 .pop:not(.rate){border-style:solid;border-color:transparent;border-width:6px;border-image:url('assets/ui_card.webp') 40 fill / 6px stretch;background:none;border-radius:7px;padding:0 3px;box-shadow:none;filter:var(--ui-shadow);color:var(--ink);text-shadow:none;max-width:calc(100% - 24px);white-space:normal;text-align:center;line-height:1.4}
 .spot .tagw,.tb .tag,.hire{background:#f7f0df var(--grain) center/256px;border-color:rgba(136,105,64,.3);color:var(--ink)}
-.npc.on .tag,.tworld .on .tag{background:#ad382e;color:#fff6e4}
+.npc.on .tag{background:#ad382e;color:#fff6e4}
 
 /* Preserve the existing grids and scrolling regions at narrow widths. */
 .grid{grid-template-columns:repeat(auto-fill,minmax(min(132px,100%),1fr))}
@@ -1213,16 +1223,6 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 /* 探险时的操作：顶部是地名和进度，底部是背包与回家；靠近东西时中间浮出一个主操作钮 */
 .wx-act{position:absolute;z-index:2;transform:translateX(-50%);white-space:nowrap;pointer-events:auto;animation:dlg .2s ease}
 #v-wild .walk-tip{transition:opacity 1s}#v-wild .walk-tip.fade{opacity:0}
-/* 选地图：小卡皮肤，选中的一张同 .pkc.on */
-.wild-rest{overflow-x:hidden}.wild-rest .legs{flex-wrap:wrap;min-width:0}
-.wx-maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:6px}
-.wx-map{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 8px;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
-.wx-map b{font-family:var(--f-display);font-size:19px;font-weight:400;letter-spacing:.1em;line-height:1.3}
-.wx-map small{grid-column:1/-1;font-size:12px;line-height:1.5;color:var(--ink-soft)}
-.wx-map .wx-cus{grid-row:1;grid-column:2;display:flex;gap:2px}
-.wx-map .wx-q{grid-column:1/-1;font-size:11.5px;line-height:1.6;color:#4f6f5c}
-.wx-map[aria-disabled=true] b{color:var(--ink-soft)}
-.cu{display:block;width:24px;height:24px;object-fit:contain}
 /* 人物动作帧：与走路帧同高、脚底对齐，帧格更宽，好放下伸手和跃起的姿势 */
 .wj-walker .ps{position:absolute;left:50%;bottom:0;height:100%;aspect-ratio:420/360;translate:-50% 0;background:url("assets/wk_pose.webp") 0 0/1200% 100% no-repeat;pointer-events:none;display:none}
 .wj-walker.pose .wk{visibility:hidden}.wj-walker.pose .ps{display:block}
@@ -1234,6 +1234,16 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #wbag.bump{animation:bagbump .36s ease}
 @keyframes bagbump{40%{transform:scale(1.06)}}
 @media (prefers-reduced-motion:reduce){.xs.k-bfly.flee .bf,#wbag.bump{animation:none}}
+/* 选地图：小卡皮肤，选中的一张同 .pkc.on */
+.wild-rest{overflow-x:hidden}.wild-rest .legs{flex-wrap:wrap;min-width:0}
+.wx-maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:6px}
+.wx-map{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 8px;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.wx-map b{font-family:var(--f-display);font-size:19px;font-weight:400;letter-spacing:.1em;line-height:1.3}
+.wx-map small{grid-column:1/-1;font-size:12px;line-height:1.5;color:var(--ink-soft)}
+.wx-map .wx-cus{grid-row:1;grid-column:2;display:flex;gap:2px}
+.wx-map .wx-q{grid-column:1/-1;font-size:11.5px;line-height:1.6;color:#4f6f5c}
+.wx-map[aria-disabled=true] b{color:var(--ink-soft)}
+.cu{display:block;width:24px;height:24px;object-fit:contain}
 .cu.unk{filter:brightness(0);opacity:.16}
 .cu.big{position:relative;width:min(120px,32vw);height:min(120px,32vw);margin:0 auto}
 .wx-ava{display:block;height:min(150px,22vh);width:auto;margin:0 auto 2px}
@@ -2355,7 +2365,7 @@ function renderShop(){const lv=level(),seeds=IDS.filter(id=>F[id].lv),sell=IDS.f
   <h3 class="sec">花种</h3><div class="grid">${seeds.map(id=>{const f=F[id],ss=inSeason(id),lk=f.lv>lv&&!ss;return`<div class="card rr${lk?0:f.r}${lk?' seeded':''}">${ss?'<i class="card-tag">当令</i>':''}${icon(id)}<span class="nm">${f.n}</span><span class="rar r${f.r}">${RAR[f.r]}</span><span class="meta">${fmtT(f.t)}开花 · 已有 ${S.seeds[id]||0}</span>${lk?`<span class="meta">Lv.${f.lv} 上架</span>`:`<span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buy="${id}" aria-label="买一粒${f.n}花种，${f.buy} 花币"${costAttr(f.buy)}>${price(f.buy)}</button><button class="btn sm" data-buy="${id}" data-n="5" aria-label="买五粒${f.n}花种，${f.buy*5} 花币"${costAttr(f.buy*5)}>×5</button></span>`}</div>`}).join('')}</div>
   <h3 class="sec">花器</h3><div class="grid">${Object.keys(VASES).filter(v=>!VASES[v].pot).map(v=>{const d=VASES[v],own=S.vases.includes(v);return`<div class="card"><svg class="ico" viewBox="${d.vb||'110 250 180 240'}">${d.back||''}<ellipse cx="200" cy="${d.my}" rx="${d.mw}" ry="${d.ry}" fill="${d.inner}"/><path d="${d.body}" fill="${d.fill}"${d.stroke?` stroke="#9fc3d0" stroke-width="1.5"`:''}/>${d.extra||''}</svg><span class="nm">${d.n}</span><span class="meta" title="${vtypeOf(d).tip}">${vtypeOf(d).n} · ${Math.min(d.cap||vtypeOf(d).cap,18)} 枝</span>${own?'<span class="meta">已拥有</span>':`<button class="btn sm" data-buyv="${v}" aria-label="买${d.n}，${d.price} 花币"${costAttr(d.price)}>${price(d.price)}</button>`}</div>`}).join('')}</div>
   <h3 class="sec">杂货</h3><div class="grid"><div class="card"><i class="bi" style="width:54px;height:83px">${DEWSVG}</i><span class="nm">露水</span><span class="meta">滴在生长中的花上，长高一截 · 已有 ${S.dew}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyf="1" aria-label="买1瓶露水，15 花币"${costAttr(15)}>${price(15)}</button><button class="btn sm" data-buyf="5" aria-label="买5瓶露水，75 花币"${costAttr(75)}>×5</button></span></div><div class="card"><i class="bi" style="width:64px;height:83px">${BFLY}</i><span class="nm">花蜜</span><span class="meta">摆在院里，引来一只蝴蝶 · 蝴蝶 ${S.bfly}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyb="1" aria-label="买1份花蜜，25 花币"${costAttr(25)}>${price(25)}</button><button class="btn sm" data-buyb="5" aria-label="买5份花蜜，125 花币"${costAttr(125)}>×5</button></span></div>${S.kiln?`<div class="card"><i class="bi" style="width:60px;height:83px">${CLAYSVG}</i><span class="nm">陶土</span><span class="meta">拉坯用 · 已有 ${S.clay}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-buyc="1" aria-label="买1块陶土，40 花币"${costAttr(40)}>${price(40)}</button><button class="btn sm" data-buyc="5" aria-label="买5块陶土，200 花币"${costAttr(200)}>×5</button></span></div>`:''}</div>
-  <h3 class="sec">雇工</h3><div class="st-finish"><span style="display:flex;align-items:center;gap:10px;min-width:0"><span class="ava big face" aria-hidden="true"></span><span><b style="letter-spacing:.1em">花匠阿禾</b><br><span class="muted" style="font-size:12.5px">${S.hire>Date.now()?`在岗，还能帮你看护 ${gameDur(S.hire-Date.now())}`:'替你浇水、拔草、请走小蜗牛。雇一天，帮你看护一整天。'}</span></span></span><button class="btn primary" data-hire="1"${costAttr(80)}>${S.hire>Date.now()?'续一天':'雇一天'} ${price(80)}</button></div>
+  <h3 class="sec">雇工</h3><div class="st-finish"><span style="display:flex;align-items:center;gap:10px;min-width:0"><span class="ava big face" style="background-image:url('${A('assets/n_he.webp')}')" aria-hidden="true"></span><span><b style="letter-spacing:.1em">花匠阿禾</b><br><span class="muted" style="font-size:12.5px">${S.hire>Date.now()?`在岗，还能帮你看护 ${gameDur(S.hire-Date.now())}`:'替你浇水、拔草、请走小蜗牛。雇一天，帮你看护一整天。'}</span></span></span><button class="btn primary" data-hire="1"${costAttr(80)}>${S.hire>Date.now()?'续一天':'雇一天'} ${price(80)}</button></div>
   <h3 class="sec">收购</h3>${sell.length||S.dew||S.clay?`<div class="grid">${sell.map(id=>{const nd=neededCut(id);return`<div class="card">${nd?'<i class="card-tag" style="background:#547f68">需用</i>':''}${icon(id)}<span class="nm">${F[id].n} ×${S.cut[id]}</span><span class="meta">每枝 ${price(sellP(id))}</span><span class="row" style="justify-content:center;gap:4px"><button class="btn sm" data-sell="${id}" aria-label="卖一枝${F[id].n}">卖一枝</button><button class="btn sm" data-sell="${id}" data-all="1" aria-label="卖出全部${F[id].n}">全卖</button></span></div>`}).join('')}${S.dew?`<div class="card"><i class="bi" style="width:54px;height:83px">${DEWSVG}</i><span class="nm">露水 ×${S.dew}</span><span class="meta">每滴 ${price(6)}</span><button class="btn sm" data-sell="dew" aria-label="卖一滴露水">卖一滴</button></div>`:''}${S.clay?`<div class="card"><i class="bi" style="width:60px;height:83px">${CLAYSVG}</i><span class="nm">陶土 ×${S.clay}</span><span class="meta">每块 ${price(15)}</span><button class="btn sm" data-sell="clay" aria-label="卖一块陶土">卖一块</button></div>`:''}</div>`:'<p class="empty-note">手头没有可以卖的东西。采下的花枝、山野带回的露水和陶土，花铺都收。</p>'}`}
 const sellP=id=>Math.max(2,Math.round(F[id].val*.6));
 function srcText(id){const f=F[id],rc=BREED.find(r=>r[2]===id);let t=f.lv?`花铺 Lv.${f.lv} 上架。`:'';
@@ -2486,7 +2496,7 @@ function go(v){if(SUBS[v])v=subSel[v];if(v==='folk')v='town';const par=parOf(v);
 function bind(){
   $('#backBtn').addEventListener('click',()=>go($('#backBtn').dataset.to||'garden'));
   $('#bookBtn').addEventListener('click',()=>{if(parOf(view)!=='book')go('book')});
-  $('#town').addEventListener('click',e=>{if(e.target.closest('[data-hire]')){if(payHire()){sfx('coin');hud();save();talkId=null;renderTown();hireTag();toast('花匠阿禾去你的小院上工了，这一天花田交给他')}return}const f=e.target.closest('[data-folk]'),x=e.target.closest('[data-talkx]'),n=e.target.closest('[data-talk]');
+  $('#town').addEventListener('click',e=>{if(e.target.closest('[data-hire]')){const receipt=payHire();if(receipt){sfx('coin');hud();save();talkId=null;renderTown();hireTag();toast(receipt)}return}const f=e.target.closest('[data-folk]'),x=e.target.closest('[data-talkx]'),n=e.target.closest('[data-talk]');
     if(f&&!f.disabled)folkDone(f.dataset.folk);else if(x){talkId=null;$('#talk').hidden=true;$$('#town [data-own]').forEach(q=>q.classList.remove('on'))}else if(n){sfx('place');openTalk(n.dataset.talk)}});
   $('#plots').addEventListener('click',e=>{if(Date.now()-sweepJust<400)return;const p=e.target.closest('.plot');if(p)plotClick(p)});initSweep();
   $('#waterAll').addEventListener('click',()=>{let n=0,c=0;$$('#plots .plot').forEach((el,i)=>{const q=S.plots[i];if(!q||i>=plotCount())return;
@@ -2637,7 +2647,7 @@ function bind(){
     else if(d.buyf){const n=+d.buyf,cost=15*n;if(poor(cost))return;S.coins-=cost;S.dew+=n;receipt=`买下${n>1?` ${n} 瓶`:'一瓶'}露水，现在有 ${S.dew} 瓶`}
     else if(d.buyc){const n=+d.buyc,cost=40*n;if(poor(cost))return;S.coins-=cost;S.clay+=n;receipt=`买下${n>1?` ${n} 块`:'一块'}陶土，现在有 ${S.clay} 块`}
     else if(d.buyb){const n=+d.buyb,cost=25*n;if(poor(cost))return;S.coins-=cost;S.bfly+=n;receipt=`${n>1?`花蜜摆好了，飞来 ${n} 只蝴蝶`:'花蜜摆好了，飞来一只蝴蝶'}，现在有 ${S.bfly} 只`}
-    else if(d.hire){if(!payHire())return;receipt='花匠阿禾来上工了，这一天花田交给他'}
+    else if(d.hire){receipt=payHire();if(!receipt)return}
     else if(d.sell){const id=d.sell;if(id==='dew'||id==='clay'){if(S[id]<1)return;S[id]--;S.coins+=id==='dew'?6:15}
       else{if(d.all&&neededCut(id)&&(S.cut[id]||0)>0)return modal(`<div class="center"><h2 class="h-title" style="justify-content:center">全部卖出？</h2><p class="say">乡邻或花笺正需要「${F[id].n}」，确定要把手头的 ${S.cut[id]} 枝全都卖掉吗？</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">留着</button><button class="btn primary" data-act="confirmSell" data-id="${id}">全卖</button></div></div>`);
         const n=d.all?S.cut[id]:1;if(!(S.cut[id]>0))return;S.cut[id]-=n;S.coins+=n*sellP(id)}receipt='已卖出，余额 '+S.coins+' 花币'}else return;
@@ -2668,7 +2678,7 @@ function petalsFx(){const cv=$('#fx'),c=cv.getContext('2d');if(!c||matchMedia('(
   const rs=()=>{W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight};rs();addEventListener('resize',rs);
   const mk=init=>({x:Math.random()*W-40,y:init?Math.random()*H:-20,s:4+Math.random()*5,vx:.15+Math.random()*.45,vy:.22+Math.random()*.4,a:Math.random()*6.28,va:(Math.random()-.5)*.03,ph:Math.random()*6.28,col:pick(['#f7c6d6','#fbe0e8','#ffffff','#f3b4c8'])});
   const ps=Array.from({length:14},()=>mk(true));
-  const checkOff=()=>{if(view!==fxView){fxView=view;const el=$('#v-'+view);fxOff=view==='wild'||(!!el&&getComputedStyle(el).backgroundImage!=='none');if(fxOff)c.clearRect(0,0,W,H)}};
+  const checkOff=()=>{if(view!==fxView){fxView=view;const el=$('#v-'+view);fxOff=view==='wild'||view==='town'||(!!el&&getComputedStyle(el).backgroundImage!=='none');if(fxOff)c.clearRect(0,0,W,H)}};
   function step(){raf=0;checkOff();if(document.hidden||fxOff)return;
     c.clearRect(0,0,W,H);if(raining){c.strokeStyle='rgba(222,236,246,.6)';c.lineWidth=1.2;c.beginPath();for(let i=0;i<80;i++){const x=Math.random()*W,y=Math.random()*H;c.moveTo(x,y);c.lineTo(x-5,y+17)}c.stroke()}
     for(let n=ps.length-1;n>=0;n--){const p=ps[n];if(p.life!==undefined){p.x+=p.bx;p.y+=p.by;p.bx*=.95;p.by=p.by*.95+.12;p.a+=p.va*4;if(--p.life<=0){ps.splice(n,1);continue}}else{p.ph+=.012;p.x+=p.vx+Math.sin(p.ph)*.4;p.y+=p.vy;p.a+=p.va;if(p.y>H+20||p.x>W+20)Object.assign(p,mk(false))}
@@ -2682,7 +2692,18 @@ function tick(){sky();const now=Date.now(),app=$('#app');
   if(rainUntil){if(now<rainUntil)S.plots.forEach(p=>{if(p){grow(p,now);p.wu=Math.max(p.wu,now+waterMs(p))}});
     else{rainUntil=0;raining=false;rainbowUntil=now+45000;app.classList.remove('rain');app.classList.add('rainbow');toast('雨过天晴，彩虹出来了：此刻授粉必定结籽')}}
   if(rainbowUntil&&now>rainbowUntil){rainbowUntil=0;app.classList.remove('rainbow')}
-  if(S.hire>now)tend(now);hireTag();
+  if(S.hire>now)tend(now);
+  else if(view==='town'&&S.hire&&!$('#tworld .tfig[data-own="he"]')){
+    const nursery=$('.tspot[data-own="he"]');
+    nursery.setAttribute('aria-label','阿禾苗圃，花匠阿禾');
+    $('#tworld').insertAdjacentHTML('beforeend',townFigure('he'));
+    if(talkId==='he'){
+      const action=document.activeElement.closest('#talk button');
+      openHe(true);
+      if(action)$(action.hasAttribute('data-hire')?'#talk [data-hire]':'#talk [data-talkx]').focus({preventScroll:true})
+    }
+  }
+  hireTag();
   ensureWishes();S.plots.forEach((q,i)=>{if(q&&i<plotCount()&&q.p<F[q.id].t&&q.p>F[q.id].t*.08&&!q.pest&&(q.pn||0)<(F[q.id].r>=2?2:1)&&Math.random()<1/500){q.pest=Math.random()<.55?'weed':'bug';q.pn=(q.pn||0)+1}});
   if(view==='wild'&&!walk)refreshWildRest();
   if(view==='garden'){refreshPlots();hints();if(now>windNext&&$('#modal').hidden){spawnWind();windNext=now+rint(32000,58000)}}
@@ -2792,69 +2813,81 @@ function folkDone(id,delay){const c=FOLK.find(x=>x.id===id),st=c&&fstep(c);if(!s
 /* ----- the town: buildings and neighbours you walk up to ----- */
 const LOOK={he:{w:181,h:420},po:{w:168,h:420,s:.9},shen:{w:158,h:420},ye:{w:236,h:420},yao:{w:193,h:420},dou:{w:163,h:420,s:.78},keep:{w:152,h:420}};
 const chibi=id=>{const k=LOOK[id];return k?`<img class="chibi" src="${A(`assets/n_${id}.webp`)}" width="${k.w}" height="${k.h}" style="--s:${k.s||1}" alt="" draggable="false">`:''};
-/* 小镇是一整张画：横屏/电脑用 town.webp（1536×1024），手机竖屏用 town_p.webp（1024×1536），同一座小镇的两种排布。
+/* 小镇是一整张画：横屏/电脑用 town_x.webp（2560×1536：中间 1536×1024 是原来的 town.webp，安全区 safe=[左,上,宽,高]，
+   四周是外扩出来的出血），
+   手机竖屏用 town_px.webp（1792×2304：中间 1024×1536 是原来的 town_p.webp），同一座小镇的两种排布。
    房子和书店、花铺的招牌字都画在图里，代码只在上面放可点的热区、纸签和人物。
-   坐标都是整图的百分比。spot r=[左,上,宽,高]，s=纸签中心（painted 表示图里已有招牌字）；folk=[x,脚底 y,身高]。
-   豆豆是小邮差，站在小溪木桥边，不挡在大路正中。 */
+   坐标都是安全区（原图）的百分比。spot r=[左,上,宽,高]（painted 表示图里已有招牌字）；folk=[x,脚底 y,身高]。
+   豆豆是小邮差，站在小溪木桥边，不挡在大路正中。阿野站在大路上，不站进井边的花草里。 */
 const TOWNS={
- l:{img:'assets/town.webp',w:1536,h:1024,
+ l:{img:'assets/town_x.webp',w:2560,h:1536,safe:[512,256,1536,1024],
   spots:[
    {own:'shen',sign:'沈记书店',r:[4,8,26,29],painted:1},
-   {own:'he',sign:'阿禾苗圃',r:[35,7,25,26],s:[47,11]},
-   {own:'po',sign:'桂婆婆家',r:[71,5,26,27],s:[84,9]},
+   {own:'he',sign:'阿禾苗圃',r:[35,7,25,26]},
+   {own:'po',sign:'桂婆婆家',r:[71,5,26,27]},
    {go:'shop',sign:'花铺',r:[1,40,42,52],painted:1},
-   {go:'kiln',sign:'陶坊',r:[56,46,43,40],s:[63,59]}],
-  folk:{shen:[19.5,41,12,'l'],he:[47,31.5,12],po:[74,31.5,12],yao:[70,85,16],keep:[26,87,16],ye:[42,47,13],dou:[75,44,12.5]}},
- p:{img:'assets/town_p.webp',w:1024,h:1536,pan:.6,
+   {go:'kiln',sign:'陶坊',r:[56,46,43,40]}],
+  folk:{shen:[19.5,41,12,'l'],he:[47,31.5,12],po:[74,31.5,12],yao:[88,88,16],keep:[26,87,16],ye:[43,52.5,13,'l'],dou:[75,44,12.5]}},
+ p:{img:'assets/town_px.webp',w:1792,h:2304,safe:[384,384,1024,1536],
   spots:[
    {own:'shen',sign:'沈记书店',r:[9,3,39,20],painted:1},
-   {own:'po',sign:'桂婆婆家',r:[59,10,40,21],s:[80,12.5]},
-   {own:'he',sign:'阿禾苗圃',r:[7,32,39,20],s:[24,34]},
+   {own:'po',sign:'桂婆婆家',r:[59,10,40,21]},
+   {own:'he',sign:'阿禾苗圃',r:[7,32,39,20]},
    {go:'shop',sign:'花铺',r:[1,55,48,26],painted:1},
-   {go:'kiln',sign:'陶坊',r:[50,61,49,22],s:[67,64.5]}],
-  folk:{shen:[27,22,6.8,'l'],po:[77,29.5,6.8],ye:[46,52.5,7],he:[34,50.5,7.2],dou:[77,50,7],keep:[40,80,9],yao:[72,83,9]}}};
-const TOWN_NAMED=['yao','ye','dou'];
+   {go:'kiln',sign:'陶坊',r:[50,61,49,22]}],
+  folk:{shen:[27,22,6.8,'l'],po:[77,29.5,6.8],ye:[46,52.5,7],he:[34,50.5,7.2],dou:[77,50,7],keep:[40,80,9],yao:[88,84,9]}}};
 let TOWN=TOWNS.l;
 const townPick=()=>innerWidth<innerHeight?TOWNS.p:TOWNS.l;
 /* 花匠阿禾：不是乡邻委托线上的人，在苗圃门口接活，雇了就去你的小院 */
 const HE={id:'he',n:'阿禾',role:'花匠'};
 const fstate=c=>{const st=fstep(c),nl=st?needList(st.need):[];return{st,ok:!!(nl.length&&nl.every(x=>x.ok))}};
-const bubHTML=c=>{const{st,ok}=fstate(c);return`<i class="bub${!st?' done':ok?' ok':''}">${!st?'知':ok?'':st.need.work?'花':'…'}</i>`};
+/* 头上的泡：…＝有事相托；梅花＝托你插一瓶花（去花艺台）；信封＝东西齐了可以交；♥＝已是知己 */
+const BUB_WORK='<svg viewBox="-6 -6 12 12" aria-hidden="true"><g fill="#c9566f">'+[0,72,144,216,288].map(a=>`<circle r="2.4" cx="${(3.1*Math.sin(a*Math.PI/180)).toFixed(2)}" cy="${(-3.1*Math.cos(a*Math.PI/180)).toFixed(2)}"/>`).join('')+'</g><circle r="1.4" fill="#e3b341"/></svg>';
+const bubHTML=c=>{const{st,ok}=fstate(c);return`<i class="bub${!st?' done':ok?' ok':''}">${!st?'♥':ok?'':st.need.work?BUB_WORK:'…'}</i>`};
 const folkLabel=c=>c.n+(fstate(c).ok?'，委托可交付':'');
 const hired=()=>(S.hire||0)>Date.now();
-function payHire(){if(S.coins<80){toast(`花币不够：需要 80，还差 ${80-S.coins}`);return false}S.coins-=80;S.hire=Math.max(Date.now(),S.hire||0)+DAY*1000;return true}
+function payHire(){
+  if(S.coins<80){toast(`花币不够：需要 80，还差 ${80-S.coins}`);return ''}
+  const now=Date.now(),renewal=S.hire>now;
+  S.coins-=80;S.hire=Math.max(now,S.hire||0)+DAY*1000;
+  return renewal?'花匠阿禾已续约一天':'花匠阿禾去你的小院上工了，这一天花田交给他'
+}
 let townX=null;
 let talkId=null,typeT=0;
 function typeText(el,txt){clearInterval(typeT);if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent='「'+txt+'」';return}let i=0;el.textContent='「';
   typeT=setInterval(()=>{i++;if(!el.isConnected)return clearInterval(typeT);el.textContent='「'+txt.slice(0,i)+(i>=txt.length?'」':'');if(i>=txt.length)clearInterval(typeT)},32)}
-function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==TOWN){TOWN=pick;townX=null}if(away&&talkId==='he')talkId=null;
-  const pc=(v,base,size)=>((v-base)/size*100).toFixed(2)+'%';
-  const spot=t=>{const who=t.own==='he'?HE:t.own&&FOLK.find(x=>x.id===t.own),r=t.r,lock=t.go==='kiln'&&!S.kiln,
-      sign=t.sign+(lock?' · 门还关着':'')+(t.own==='he'&&away?' · 在你的小院':''),
-      lab=who?(t.own==='he'?`${t.sign}，花匠阿禾`:`${t.sign}，${folkLabel(who)}`):sign.replace(' · ','，');
-    return`<button class="tspot${who&&talkId===who.id?' on':''}" ${who?`data-own="${who.id}" data-talk="${who.id}"`:`data-go="${t.go}"`} style="--l:${r[0]}%;--t:${r[1]}%;--w:${r[2]}%;--h:${r[3]}%" aria-label="${lab}">`+
-      (t.painted?'':`<span class="tag" style="--sx:${pc(t.s[0],r[0],r[2])};--sy:${pc(t.s[1],r[1],r[3])}">${sign}</span>`)+'</button>'};
-  const fig=id=>{const q=TOWN.folk[id],c=id==='he'?HE:FOLK.find(x=>x.id===id);if(id==='he'&&away)return'';
+function townFigure(id){const q=TOWN.folk[id],c=id==='he'?HE:FOLK.find(x=>x.id===id);if(id==='he'&&hired())return'';
     const st=`style="--fx:${q[0]}%;--fy:${q[1]}%;--fh:${q[2]}%;z-index:${Math.round(q[1])}"`;
     if(!c)return`<span class="tfig still" ${st}>${chibi(id)}</span>`;
-    const bub=id==='he'?'<i class="bub">…</i>':bubHTML(c),tag=TOWN_NAMED.includes(id)?`<span class="tag">${c.n}</span>`:'';
-    return`<button class="tfig${q[3]==='l'?' bl':''}${talkId===id?' on':''}" data-own="${id}" data-talk="${id}" ${st} aria-label="${id==='he'?'花匠阿禾':folkLabel(c)}">${bub}${chibi(id)}${tag}</button>`};
-  $('#town').innerHTML=`<div class="tscroll" id="tscroll"><div class="tworld" id="tworld"><img class="tplate" src="${A(TOWN.img)}" width="${TOWN.w}" height="${TOWN.h}" alt="" draggable="false">`+
-    TOWN.spots.map(spot).join('')+Object.keys(TOWN.folk).map(fig).join('')+'</div></div><div class="talk" id="talk" hidden></div>';
+    const bub=id==='he'?'<i class="bub">…</i>':bubHTML(c);
+    return`<button class="tfig${q[3]==='l'?' bl':''}${talkId===id?' on':''}" data-own="${id}" data-talk="${id}" ${st} aria-label="${id==='he'?'花匠阿禾':folkLabel(c)}">${bub}${chibi(id)}</button>`}
+
+function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==TOWN){TOWN=pick;townX=null}
+  const spot=t=>{const who=t.own==='he'?HE:t.own&&FOLK.find(x=>x.id===t.own),r=t.r,lock=t.go==='kiln'&&!S.kiln,
+      sign=t.sign+(lock?' · 门还关着':'')+(t.own==='he'&&away?' · 在你的小院':''),
+      lab=who?(t.own==='he'?`${sign}，花匠阿禾`:`${t.sign}，${folkLabel(who)}`):sign.replace(' · ','，');
+    return`<button class="tspot${who&&talkId===who.id?' on':''}" ${who?`data-own="${who.id}" data-talk="${who.id}"`:`data-go="${t.go}"`} style="--l:${r[0]}%;--t:${r[1]}%;--w:${r[2]}%;--h:${r[3]}%" aria-label="${lab}"></button>`};
+  $('#town').innerHTML=`<div class="tscroll" id="tscroll"><div class="tworld${TOWN.safe?' bleed':''}" id="tworld"><img class="tplate" src="${A(TOWN.img)}" width="${TOWN.w}" height="${TOWN.h}" alt="" draggable="false">`+
+    TOWN.spots.map(spot).join('')+Object.keys(TOWN.folk).map(townFigure).join('')+'</div></div><div class="talk" id="talk" hidden></div>';
   layoutTown();$('#tscroll').addEventListener('scroll',e=>{const t=e.currentTarget;townX=[t.scrollLeft,t.scrollTop]},{passive:true});
   if(talkId)openTalk(talkId,true)}
-/* 小镇整图只放在顶栏和底栏之间，不被按钮压住。高度正好卡满这块区域、只是略宽时铺满（多出的部分左右滑），
-   差得多时整张完整显示，像一幅装裱的画摆在宣纸上。初次进入居中，之后记住看到的位置 */
+/* 小镇整图跟小院一样铺满整个页面（顶栏、底栏浮在画上）。
+   横竖两张图都带出血：安全区（原图）整块放进顶栏和底栏之间、居中，四周的出血把整屏铺满，一屏看全、不滑动；
+   出血不够盖满的极端比例，再放大到盖满为止（安全区边上会略出屏）。 */
 function layoutTown(){const w=$('#tworld'),sc=$('#tscroll');if(!w||!sc)return;const R=sc.getBoundingClientRect();if(!R.height)return;
-  const top=($('header.top')?.getBoundingClientRect().bottom||0)-R.top+6,bot=($('#dock')?.getBoundingClientRect().top||R.bottom)-R.top-8,
-    pad=R.width>700?24:0,aw=R.width-pad*2,ah=Math.max(120,bot-top),
-    sIn=Math.min(aw/TOWN.w,ah/TOWN.h),sH=ah/TOWN.h,s=TOWN.w*sH>aw&&TOWN.w*sH<=aw*1.3?sH:sIn,W=TOWN.w*s,H=TOWN.h*s,mount=W<=aw&&H<ah-1;
-  Object.assign(w.style,{width:W+'px',height:H+'px',left:Math.max(pad,(R.width-W)/2)+'px',top:(top+Math.max(0,(ah-H)/2))+'px'});
-  w.classList.toggle('mount',mount);
-  sc.scrollLeft=townX?townX[0]:Math.max(0,(W-aw)*(TOWN.pan??.5));sc.scrollTop=townX?townX[1]:Math.max(0,(H-ah)/2)}
+  const sf=TOWN.safe;sc.classList.toggle('fit',!!sf);
+  if(sf){const[sx,sy,sw,sh]=sf,top=($('header.top')?.getBoundingClientRect().bottom||0)-R.top+4,bot=($('#dock')?.getBoundingClientRect().top||R.bottom)-R.top-4,ah=Math.max(120,bot-top);
+    const s=Math.max(Math.min(R.width/sw,ah/sh),R.width/TOWN.w,R.height/TOWN.h),W=sw*s,H=sh*s,
+      cl=(v,lo,hi)=>Math.min(hi,Math.max(lo,v)),
+      px=cl((R.width-W)/2-sx*s,R.width-TOWN.w*s,0),py=cl(top+(ah-H)/2-sy*s,R.height-TOWN.h*s,0);
+    w.style.setProperty('--bl',sx/sw*100+'%');w.style.setProperty('--br',(TOWN.w-sx-sw)/sw*100+'%');
+    w.style.setProperty('--bt',sy/sh*100+'%');w.style.setProperty('--bb',(TOWN.h-sy-sh)/sh*100+'%');
+    Object.assign(w.style,{width:W+'px',height:H+'px',left:px+sx*s+'px',top:py+sy*s+'px'});sc.scrollLeft=sc.scrollTop=0;return}
+  const s=Math.max(R.width/TOWN.w,R.height/TOWN.h);Object.assign(w.style,{width:TOWN.w*s+'px',height:TOWN.h*s+'px',left:'0px',top:'0px'})}
 function openHe(quiet){talkId='he';const t=$('#talk');if(!t)return;
-  t.hidden=false;t.innerHTML=`<div class="tface">${chibi('he')}</div><div class="tbody"><div class="tname"><b>${HE.n}</b><small>${HE.role}</small></div><p class="say" id="tsay"></p><div class="treq"><span class="req">雇一天：浇水、拔草、请走小蜗牛</span></div><div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button><button class="btn primary" data-hire="1">雇我一天 ${price(80)}</button></div></div>`;
-  const say='花要有人看着才长得好。你忙的时候，我去小院替你照料。';if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town [data-own]').forEach(n=>n.classList.toggle('on',n.dataset.own==='he'))}
+  const away=hired();
+  t.hidden=false;t.innerHTML=`<div class="tface">${chibi('he')}</div><div class="tbody"><div class="tname"><b>${HE.n}</b><small>${HE.role}</small></div><p class="say" id="tsay"></p><div class="treq"><span class="req">${away?'在你的小院照料花田':'雇一天：浇水、拔草、请走小蜗牛'}</span></div><div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button><button class="btn primary" data-hire="1">${away?'续一天':'雇我一天'} ${price(80)}</button></div></div>`;
+  const say=away?'我正在你的小院照料花田。续约会从这次雇期结束时算起。':'花要有人看着才长得好。你忙的时候，我去小院替你照料。';if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town [data-own]').forEach(n=>n.classList.toggle('on',n.dataset.own==='he'))}
 function openTalk(id,quiet){if(id==='he')return openHe(quiet);talkId=id;const c=FOLK.find(x=>x.id===id),st=fstep(c),lv=S.folk[id]||0,nl=st?needList(st.need):[],ok=nl.length&&nl.every(x=>x.ok),work=st&&st.need.work,t=$('#talk');if(!t)return;
   t.hidden=false;t.innerHTML=`<div class="tface">${chibi(id)}</div><div class="tbody"><div class="tname"><b>${c.n}</b><small>${c.role}</small><span class="hearts">${[0,1,2,3].map(i=>`<i class="${i<lv?'on':''}"></i>`).join('')}</span></div><p class="say" id="tsay"></p>${st?`<div class="treq">${nl.filter(x=>!st.need.give||ok||!x.ok).map(x=>`<span class="req${x.ok?' ok':''}">${x.ok?'✓ ':''}${x.t}</span>`).join('')}</div>`:'<div class="treq"><span class="req ok">♥ 知己 · 偶寄时令花笺</span></div>'}<div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button>${st?(work?'<button class="btn primary" data-go="studio">去花艺</button>':ok?`<button class="btn primary" data-folk="${id}">交给${c.n}</button>`:''):''}</div></div>`;
   const say=st?st.say:c.end;if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town [data-own]').forEach(n=>n.classList.toggle('on',n.dataset.own===id))}

@@ -1249,6 +1249,19 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #v-wild .walk-bot .wx-act{grid-column:2;white-space:nowrap;animation:dlg .2s ease}
 #v-wild .walk-bot #walkEnd{grid-column:3}
 #v-wild .walk-tip{transition:opacity 1s}#v-wild .walk-tip.fade{opacity:0}
+#v-wild .walk-tip.end{display:block;padding:5px 14px;border-radius:99px;background:rgba(249,243,229,.94) var(--grain) center/256px;border-color:rgba(136,105,64,.38);font-size:12.5px}
+@media (max-height:500px){#v-wild .walk-tip.end{top:106px;font-size:12px}}
+#v-wild .wpath #wdot{z-index:1}
+#v-wild .wpath::after{content:"";position:absolute;right:0;top:50%;width:10px;height:10px;border-radius:50%;background:#f4ecda;border:2px solid #615d50;transform:translate(50%,-50%);transition:border-color .35s,background-color .35s}
+#v-wild .wpath.at-end::after{border-color:var(--rouge);background:#ffe9b0}
+#v-wild .wpath.at-end #wdot{box-shadow:0 0 0 4px rgba(239,191,82,.45),0 2px 5px var(--shadow)}
+.pano.wx .wj-pav{transition:filter .4s ease}
+.pano.wx.near-pav .wj-pav,.pano.wx.at-end .wj-pav,.pano.wx:has(.wx-pav:hover) .wj-pav,.pano.wx:has(.wx-pav:focus-visible) .wj-pav{filter:drop-shadow(0 0 10px rgba(255,244,202,.9)) drop-shadow(0 2px 6px rgba(46,45,31,.18))}
+.xs.wx-pav{bottom:34%;height:34cqh;width:30cqh;z-index:0;filter:none}
+.xs.wx-pav::before,.xs.wx-pav::after{content:none}
+.xs.wx-pav:hover,.xs.wx-pav:focus-visible{transform:translateX(-50%);filter:none}
+#walkEnd.wx-end-pop{animation:wxendpop .55s ease}
+@keyframes wxendpop{35%{transform:scale(1.08)}}
 /* 人物动作帧：与走路帧同高、脚底对齐，帧格更宽，好放下伸手和跃起的姿势 */
 .wj-walker .ps{position:absolute;left:50%;bottom:0;height:100%;aspect-ratio:420/360;translate:-50% 0;background:url("assets/wk_pose.webp") 0 0/1200% 100% no-repeat;pointer-events:none;display:none}
 .wj-walker.pose .wk{visibility:hidden}.wj-walker.pose .ps{display:block}
@@ -1259,7 +1272,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #v-wild:has(.pano.acting) .wx-act{visibility:hidden}
 #wbag.bump{animation:bagbump .36s ease}
 @keyframes bagbump{40%{transform:scale(1.06)}}
-@media (prefers-reduced-motion:reduce){.xs.k-bfly.flee .bf,#wbag.bump{animation:none}}
+@media (prefers-reduced-motion:reduce){.xs.k-bfly.flee .bf,#wbag.bump,#walkEnd.wx-end-pop{animation:none}.pano.wx .wj-pav{transition:none}}
 /* 走路帧由脚本按走过的路程来翻（走得慢脚步也慢），这里关掉按时间翻的旧动画。
    --lean 前倾/后仰、--bob 跑步起伏都绕脚底转，影子不跟着歪 */
 .pano.wx.go .wj-walker .wk{animation:none}
@@ -3347,15 +3360,36 @@ addEventListener('resize',()=>{if(view==='wild')measureJourney()});
    一趟出门花 1 点脚力，路上的东西拿完为止，不限时，按「回家」结束。存档只记 S.wx（地图进度、支线、拾遗）。 */
 const WPROP={gate:[560,366,.38,'assets/w_gate.webp'],willow:[520,480,.46,'assets/w_willow.webp'],peach:[520,377,.36,'assets/w_peach.webp'],bridge:[900,276,.24,'assets/w_bridge.webp'],bamboo:[473,520,.47,'assets/w_bamboo.webp'],rock:[420,197,.13,'assets/w_rock.webp'],bush:[420,205,.13,'assets/w_bush.webp'],pine:[467,520,.49,'assets/w_pine.webp'],pavilion:[640,421,.38,'assets/w_pavilion.webp'],lotus:[628,447,.3,'assets/x_lotus.webp'],lily:[648,235,.12,'assets/x_lily.webp'],reed:[628,474,.3,'assets/x_reed.webp'],wildfl:[748,424,.17,'assets/x_wildfl.webp'],mush:[335,240,.1,'assets/x_mush.webp']};
 const WMAPS={
-  xi:{n:'溪谷',sub:'出院门沿溪走，过桥穿竹，一路到山顶的亭子。',seed:43027,ground:'assets/w_path.webp',plan:journeyPlan,
+  xi:{n:'溪谷',pav:'山顶的亭子',sub:'出院门沿溪走，过桥穿竹，一路到山顶的亭子。',seed:43027,ground:'assets/w_path.webp',plan:journeyPlan,
     st:[[.055,'院门'],[.255,'柳岸'],[.41,'溪桥'],[.625,'竹林'],[.94,'山腰'],[2,'山顶']],water:.3,npc:.335,fl:['wildmum','wildmum','forget','forget','daisy','cosmos'],cu:['cone','feather','pebble','bell']},
-  zhu:{n:'竹海',sub:'竹叶沙沙，石阶上长满青苔，深处有一眼泉。',seed:52711,ground:'assets/x_bpath.webp',
+  zhu:{n:'竹海',pav:'竹亭',sub:'竹叶沙沙，石阶上长满青苔，深处有一眼泉。',seed:52711,ground:'assets/x_bpath.webp',
     plan:[['rock',0],['bamboo',.03],['bamboo',.07],['pine',.11],['bamboo',.15],['bamboo',.19],['bush',.23],['bamboo',.27],['bamboo',.31],['rock',.35],['bamboo',.39],['bamboo',.43],['bamboo',.47],['reed',.52],['bridge',.57],['bamboo',.63],['bamboo',.67],['rock',.71],['bamboo',.75],['bamboo',.79],['bush',.83],['pine',.87],['bamboo',.91],['pavilion',1]],
     st:[[.2,'竹径'],[.45,'听泉'],[.7,'竹海'],[.92,'石阶'],[2,'竹亭']],deco:[['mush',.045],['mush',.29],['mush',.445],['mush',.69],['mush',.84]],water:.57,npc:.5,fl:['lavender','lavender','wildmum','lilyvalley','eucalyptus','forget'],cu:['leafw','husk','moss','copter']},
-  he:{n:'荷塘',sub:'柳堤绕着一塘荷花，曲桥那头是读书的水亭。',seed:61493,ground:'assets/x_pond.webp',
+  he:{n:'荷塘',pav:'水亭',sub:'柳堤绕着一塘荷花，曲桥那头是读书的水亭。',seed:61493,ground:'assets/x_pond.webp',
     plan:[['willow',0],['peach',.05],['willow',.1],['reed',.15],['willow',.21],['peach',.27],['reed',.33],['willow',.39],['bridge',.5],['reed',.56],['peach',.61],['willow',.66],['reed',.72],['willow',.78],['peach',.86],['pavilion',1]],
     deco:[['lotus',.03],['lily',.09],['lotus',.2],['lily',.26],['lotus',.37],['lily',.44],['lotus',.62],['lily',.68],['lotus',.8],['lily',.88],['lotus',.97]],
     st:[[.2,'柳堤'],[.44,'荷风'],[.58,'曲桥'],[.86,'桃岸'],[2,'水亭']],water:.5,npc:.93,fl:['forget','forget','cosmos','jasmine','jasmine','waterlily','lotus'],cu:['pod','dfly','ling','snail']}};
+const WX_PAV=-2;
+const wxLeft=()=>walk?walk.spots.filter(s=>!s.done&&s.k!=='npc').length:0;
+function wxLootList(g){const L=[];if(g.bfly)L.push(`蝴蝶 ×${g.bfly}`);if(g.dew)L.push(`露水 ×${g.dew}`);if(g.clay)L.push(`陶土 ×${g.clay}`);
+  const cnt=a=>{const m={};(a||[]).forEach(i=>m[i]=(m[i]||0)+1);return m},sd=cnt(g.seeds),ct=cnt(g.cut);for(const i in ct)L.push(`${F[i].n} ×${ct[i]}`);for(const i in sd)L.push(`${F[i].n}花种 ×${sd[i]}`);(g.misc||[]).forEach(x=>L.push(x));return L}
+const wxFlavorLine=m=>({
+  xi:['溪水比昨天清了一点。','半山腰的石头上晒着一只猫。','山顶的风里有花的味道。','回来的路上，鞋尖沾了草籽。'],
+  zhu:['竹叶上的水珠落进了衣领。','石阶上的青苔摸上去软软的。','竹林深处的泉水叮咚响着。','回来的路上，鞋尖沾了草籽。'],
+  he:['荷叶下面，有条小鱼一直跟着你。','水亭的风里飘着淡淡的荷香。','曲桥边的水纹半天还没散。','回来的路上，鞋尖沾了草籽。']
+}[m]||['山顶的风里有花的味道。']);
+function wxEndTipText(){const M=WMAPS[walk.map],Q=WQ[walk.map],left=wxLeft(),ready=wxReady(walk.map);
+  if(left===0&&!ready)return`已到${M.pav}，这一路都逛遍了 · 点亭子或「回家」结束这一趟`;
+  if(ready)return`已到${M.pav} · 回头路上${Q.n}还在等你，或点亭子回家`;
+  return`已到${M.pav}，路就到这里 · 回头还有 ${left} 处没看，点亭子可回家`}
+function wxTip(txt,keep=false){const t=$('#wxTip');if(!t)return;if(walk)clearTimeout(walk.tipT);t.textContent=txt;t.classList.remove('fade');t.classList.toggle('end',!!keep);
+  if(!keep&&walk)walk.tipT=setTimeout(()=>{const el=$('#wxTip');if(el)el.classList.add('fade')},5000)}
+function wxMarkEndBtn(pulse=false){const b=$('#walkEnd');if(!b)return;const on=!!(walk&&(walk.top||walk.cleared)),was=b.classList.contains('primary');b.classList.toggle('primary',on);
+  if(on&&(!was||pulse)){b.classList.remove('wx-end-pop');void b.offsetWidth;b.classList.add('wx-end-pop')}}
+function wxShowCleared(){if(!walk)return;walk.cleared=1;wxMarkEndBtn(true);sfx('bloom');
+  wxTip(walk.top?'这一路的物事都收齐了 · 点亭子或「回家」结束这一趟':'这一路的物事都收齐了 · 去前面亭子看看，或点「回家」',true)}
+function wxCheckDone(){if(!walk||walk.cleared||wxLeft()>0||wxReady(walk.map))return;
+  if($('#modal').hidden)wxShowCleared();else{walk.clearedNotice=1;wxMarkEndBtn(false)}}
 const WMAP_IDS=['xi','zhu','he'];
 const WCU={cone:['松果','山腰松树底下捡的，还带着松香。','assets/cu_cone.webp'],feather:['翠鸟羽','溪桥边落下的一根蓝羽毛，迎着光会变色。','assets/cu_feather.webp'],pebble:['圆溪石','被溪水磨了几百年，摸上去是温的。','assets/cu_pebble.webp'],bell:['旧铜铃','不知谁家的牛掉的，一晃还会响。','assets/cu_bell.webp'],
   leafw:['竹叶笛','卷起来的竹叶，吹得出呜呜的声音。','assets/cu_leafw.webp'],husk:['笋壳','春笋脱下的外衣，比纸还轻。','assets/cu_husk.webp'],moss:['青苔石','泉边的石头，苔藓软得像绒毯。','assets/cu_moss.webp'],copter:['竹蜻蜓','谁家孩子削的，手一搓就飞起来。','assets/cu_copter.webp'],
@@ -3398,11 +3432,11 @@ function wxFit(){const r=$('#wild .wild-rest');if(!r||walk)return;r.classList.re
 
 /* ---------- 场景 ---------- */
 function wxSceneHTML(m){const M=WMAPS[m],r=rng(M.seed),back=[],cross=[];
-  const prop=([key,t])=>{const d=WPROP[key],s=d[2]*(.92+r()*.16),flip=['gate','bridge','pavilion'].includes(key)?1:r()<.5?-1:1;return`<img class="wj-prop" data-t="${t}" src="${A(d[3])}" width="${d[0]}" height="${d[1]}" alt="" draggable="false" style="--s:${s.toFixed(4)};--flip:${flip}">`};
+  const prop=([key,t])=>{const d=WPROP[key],s=d[2]*(.92+r()*.16),flip=['gate','bridge','pavilion'].includes(key)?1:r()<.5?-1:1;return`<img class="wj-prop${key==='pavilion'?' wj-pav':''}" data-t="${t}" src="${A(d[3])}" width="${d[0]}" height="${d[1]}" alt="" draggable="false" style="--s:${s.toFixed(4)};--flip:${flip}">`};
   M.plan.forEach(a=>(a[0]==='bridge'?cross:back).push(prop(a)));
   return`<div class="pano wx" data-map="${m}"><div class="journey"><div class="wj-layer wj-sky" aria-hidden="true"><img src="${A('assets/mountains.webp')}" width="1600" height="528" alt="" draggable="false"></div><div class="wj-layer wj-hills" aria-hidden="true"><img src="${A('assets/w_hills.webp')}" width="1600" height="294" alt="" draggable="false"></div><div class="wj-layer wj-props" aria-hidden="true">${back.join('')}</div><div class="wj-layer wj-ground" aria-hidden="true" style="background-image:url('${A(M.ground)}')"></div><div class="wj-layer wj-crossing" aria-hidden="true">${cross.join('')}</div><div class="wj-layer wx-deco" aria-hidden="true">${(M.deco||[]).map(([k,t])=>{const d=WPROP[k];return`<img class="wj-prop wx-dec k-${k}" data-t="${t}" src="${A(d[3])}" width="${d[0]}" height="${d[1]}" alt="" draggable="false" style="--flip:${r()<.5?-1:1}">`}).join('')}</div><div class="wj-layer wx-spots" id="wxSpots"></div><div class="wj-walker" aria-hidden="true"><i class="wj-shadow"></i><i class="wk"></i></div><div class="wj-mist" aria-hidden="true"></div></div></div>`}
 let wxQ=null,wxRAF=0,wxRO=null;
-function wxStopScene(){cancelAnimationFrame(wxRAF);wxRAF=0;clearTimeout(wxSeqT);if(wxRO)wxRO.disconnect();wxRO=null;wxQ=null}
+function wxStopScene(){cancelAnimationFrame(wxRAF);wxRAF=0;clearTimeout(wxSeqT);clearTimeout(walk?.tipT);if(wxRO)wxRO.disconnect();wxRO=null;wxQ=null}
 function wxMount(){wxStopScene();const p=$('#wild .pano');if(!p||view!=='wild')return;
   wxQ={pano:p,sky:$('.wj-sky',p),hills:$('.wj-hills',p),props:$('.wj-props',p),ground:$('.wj-ground',p),cross:$('.wj-crossing',p),deco:$('.wx-deco',p),spots:$('.wx-spots',p),walker:$('.wj-walker',p),mist:$('.wj-mist',p),W:0,H:0,D:0};
   wxMeasure();if(typeof ResizeObserver!=='undefined'){wxRO=new ResizeObserver(wxMeasure);wxRO.observe(p)}wxFrame(9);if(walk){walk.mv=null;walk.busy=walk.soft=false;walk.v=0;walk.wf=-1;wxLoop()}}
@@ -3422,15 +3456,18 @@ function wxPaint(force,dt){const q=wxQ;if(!q||!q.D)return;const p=walk?walk.p:0,
   // 翻面过 0 的那一下别薄成一条线：最窄留 0.14
   const sx=Math.sign(fv||1)*Math.max(.14,Math.abs(fv));
   q.walker.style.transform=`translate3d(${R(X-cam)}px,0,0) translateX(-50%) scaleX(${sx.toFixed(3)})`;q.mist.style.opacity=(.06+.24*p).toFixed(3);
-  if(walk){const d=$('#wdot');if(d)d.style.left=(p*100).toFixed(1)+'%';const tg=$('#wstretch'),nm=wxStretch(walk.map,p);if(tg&&tg.textContent!==nm){tg.textContent=nm;const pl=tg.parentNode;pl.classList.remove('flash');void pl.offsetWidth;pl.classList.add('flash')}wxNear()}}
+  if(walk){const d=$('#wdot');if(d)d.style.left=(p*100).toFixed(1)+'%';const tg=$('#wstretch'),nm=wxStretch(walk.map,p);if(tg&&tg.textContent!==nm){tg.textContent=nm;const pl=tg.parentNode;pl.classList.remove('flash');void pl.offsetWidth;pl.classList.add('flash')}
+    q.pano.classList.toggle('near-pav',p>=.95);const atEnd=p>=.995;q.pano.classList.toggle('at-end',atEnd);$('#v-wild .wpath')?.classList.toggle('at-end',atEnd);
+    wxNear();
+    if(walk.top&&!walk.cleared){if(p<.90&&walk.atEndTip){walk.atEndTip=0;$('#wxTip')?.classList.add('fade')}else if(p>=.96&&!walk.atEndTip){walk.atEndTip=1;wxTip(wxEndTipText(),true)}}}}
 
 /* ---------- 一趟出门 ---------- */
 function wxStart(){if(legs()<1||walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';S.legs--;X.trips++;
-  walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1,hold:null,busy:false,soft:false,mv:null,still:0,after:null,v:0,fv:1,ph:.34,lean:0,run:false,hrun:false,shift:false,wf:-1};
+  walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1,hold:null,busy:false,soft:false,mv:null,still:0,after:null,v:0,fv:1,ph:.34,lean:0,run:false,hrun:false,shift:false,wf:-1,tipT:0,top:0,atEndTip:0,cleared:0,clearedNotice:0,leaving:0};
   const M=WMAPS[walk.map];
   $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">按住地面就走，按得远些就跑；点东西就去拿</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn wx-act" id="wxAct" hidden></button><button class="btn" id="walkEnd">回家</button></div>`;
   $('#wbag').innerHTML=bagHTML();wxDrawSpots();wxMount();sfx('place');save();refreshDock();
-  setTimeout(()=>{const t=$('#wxTip');if(t)t.classList.add('fade')},6000)}
+  walk.tipT=setTimeout(()=>{const t=$('#wxTip');if(t)t.classList.add('fade')},6000)}
 function wxGen(m){const M=WMAPS[m],X=wxs(),r=rng((X.trips*977+dayNo()*131+m.charCodeAt(0)*7)>>>0),q=X.q[m]||0,st=wxStep(m),list=[],put=(k,o={})=>list.push({k,...o});
   const slots=[];for(let t=.07;t<.975;t+=.05)slots.push(clamp(t+(r()-.5)*.018,.06,.975));
   const free=slots.filter(t=>Math.abs(t-M.npc)>.04);
@@ -3457,7 +3494,7 @@ const WSPOT={flower:s=>s.id==='lotus'||F[s.id]?.base==='lotus'?`<img src="${A('a
   bfly:()=>`<img src="${A('assets/x_wildfl.webp')}" alt="" draggable="false"><i class="bf b1">${BFLY}</i><i class="bf b2">${BFLY}</i><i class="bf b3">${BFLY}</i>`,
   npc:()=>{const Q=WQ[walk.map],st=wxStep(walk.map);return`<img src="${A(Q.img)}" alt="" draggable="false">${st?`<i class="wx-mark${wxReady(walk.map)?' ready':''}">${wxReady(walk.map)?'！':'…'}</i>`:''}`}};
 const wxLabel=s=>({flower:`${F[s.id]?.base==='lotus'||s.id==='lotus'?'采':'摘'}${F[s.id]?.n||''}`,dew:'收露水',clay:'挖陶土',seed:'拾花种',page:'拾起画稿',stone:'打水漂',bush:'拨开草丛',curio:'看看是什么',bfly:'扑蝶',npc:`和${WQ[walk.map].n}说话`})[s.k];
-function wxDrawSpots(){const box=$('#wxSpots');if(!box||!walk)return;box.innerHTML=walk.spots.map((s,i)=>s.done?'':`<button class="xs k-${s.k}${s.rare?' rare':''}${s.k==='flower'?' fl-'+(F[s.id].base||s.id):''}" data-i="${i}" data-t="${s.t}" style="--b:${s.b.toFixed(1)}%" aria-label="${wxLabel(s)}">${WSPOT[s.k](s)}</button>`).join('');walk.near=-2;if(wxQ)wxMeasure()}
+function wxDrawSpots(){const box=$('#wxSpots');if(!box||!walk)return;const pav=`<button class="xs wx-pav" data-t="1" data-pav="1" aria-label="在${WMAPS[walk.map].pav}歇脚、回家"></button>`;box.innerHTML=pav+walk.spots.map((s,i)=>s.done?'':`<button class="xs k-${s.k}${s.rare?' rare':''}${s.k==='flower'?' fl-'+(F[s.id].base||s.id):''}" data-i="${i}" data-t="${s.t}" style="--b:${s.b.toFixed(1)}%" aria-label="${wxLabel(s)}">${WSPOT[s.k](s)}</button>`).join('');walk.near=-2;if(wxQ)wxMeasure()}
 const wxReach=()=>Math.max(56,wxQ.walker.offsetWidth*.62)+34;
 function wxNear(){if(!walk||!wxQ)return;const lim=wxReach()/wxQ.D;let best=-1,bd=lim;
   walk.spots.forEach((s,i)=>{if(s.done)return;const d=Math.abs(s.t-walk.p);if(d<bd){bd=d;best=i}});
@@ -3483,14 +3520,16 @@ function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{w
       if(to!=null&&!walk.keys&&!walk.hold&&(to-walk.p)*(to-np)<=0){np=to;walk.v=0}
       if(np<=0||np>=1){np=clamp(np,0,1);walk.v=0}walk.p=np}
     if(Math.abs(walk.v)>4)walk.face=walk.v<0?-1:1;else if(vd)walk.face=vd<0?-1:1;
-    if(walk.to!=null&&!walk.keys&&!walk.hold&&!walk.busy&&open&&Math.abs(walk.to-walk.p)*q.D<=.5){walk.p=walk.to;walk.to=null;walk.v=0;walk.run=false;if(walk.goal>=0){const g=walk.goal;walk.goal=-1;wxUse(g)}}
+    if(walk.to!=null&&!walk.keys&&!walk.hold&&!walk.busy&&open&&Math.abs(walk.to-walk.p)*q.D<=.5){walk.p=walk.to;walk.to=null;walk.v=0;walk.run=false;if(walk.goal===WX_PAV){walk.goal=-1;wxArriveModal()}else if(walk.goal>=0){const g=walk.goal;walk.goal=-1;wxUse(g)}}
     const moving=Math.abs(walk.v)>6;
     if(moving!==walk.mv){walk.mv=moving;if(!walk.busy&&!walk.soft)wxFrame(moving?-1:9)}
     q.pano.classList.toggle('go',moving);wxStride(dt,base,moving,(walk.v-pv)/(dt||1));wxPaint(false,dt);if(moving)wxBrush(now);
-    // 走到路的尽头，手搭凉棚望一望
-    if(walk.p>=1&&!walk.top){walk.top=1;walk.after='look'}
+    // 走到路的尽头：先望一望山亭，再弹出「亭边小歇」收尾（若主动点了亭子走过来，直接弹）
+    if(walk.p>=1&&!walk.top){walk.top=1;walk.atEndTip=1;walk.hold=null;walk.to=null;walk.run=walk.hrun=false;if(walk.keys>0)walk.keys=0;sfx('bloom');wxMarkEndBtn(true);wxTip(wxEndTipText(),true);
+      if(walk.goal===WX_PAV){walk.goal=-1;wxArriveModal()}else walk.after='arrive'}
+    else if(walk.p>=1&&walk.goal===WX_PAV&&!walk.busy&&open){walk.goal=-1;walk.to=null;walk.run=walk.hrun=false;wxArriveModal()}
     if(!moving&&!walk.busy&&open){walk.still+=dt;
-      if(walk.after){const a=walk.after;walk.after=null;walk.still=0;wxPlay(a)}
+      if(walk.after){const a=walk.after;walk.after=null;walk.still=0;if(a==='arrive')wxPlay('arrive',null,()=>{if(walk&&walk.p>=.99&&$('#modal').hidden)wxArriveModal()},true);else wxPlay(a)}
       else if(walk.still>7&&!walk.soft){walk.still=-3*Math.random();const n=walk.near>=0&&walk.spots[walk.near]?.k;wxPlay(n==='npc'?'wave':n==='flower'?'smell':pick(['smell','look']),null,null,true)}}else walk.still=0;
     wxRAF=requestAnimationFrame(step)};
   wxRAF=requestAnimationFrame(step)}
@@ -3516,7 +3555,9 @@ function wxPx2P(clientX){const q=wxQ,r=q.pano.getBoundingClientRect();return cla
 /* 点下去的地方，地上漾开一圈，告诉你她要往哪儿去 */
 function wxGoal(p){const q=wxQ;if(!q||wxRM())return;const g=document.createElement('i');g.className='wx-goal';g.style.left=(q.W*.28+q.D*p)+'px';q.spots.appendChild(g);setTimeout(()=>g.remove(),900)}
 function wxPoint(e){if(!walk||!wxQ||e.button>0)return;
-  if(e.target.closest('.xs,button,.walk-top,.walk-bot'))return;const pid=e.pointerId;walk.goal=-1;walk.run=false;walk.hold={x:e.clientX,t:performance.now()};walk.to=wxPx2P(e.clientX);
+  if(e.target.closest('.xs,button,.walk-top,.walk-bot'))return;
+  if(walk.top&&walk.p>=.995){const wr=wxQ.walker.getBoundingClientRect();if(wxPx2P(e.clientX)>=.995&&e.clientX>wr.left+wr.width*.5){wxTip(wxEndTipText(),true);wxMarkEndBtn(true);return}}
+  const pid=e.pointerId;walk.goal=-1;walk.run=false;walk.hold={x:e.clientX,t:performance.now()};walk.to=wxPx2P(e.clientX);
   if(Math.abs(walk.to-walk.p)*wxQ.D>20)wxGoal(walk.to);
   const mv=ev=>{if(ev.pointerId===pid&&walk&&walk.hold)walk.hold.x=ev.clientX},up=ev=>{if(ev.pointerId!==pid)return;removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);
     // 按得久是“按住走”，松手就收脚停下；一下轻点是“走到那儿”，点得远就跑过去
@@ -3528,17 +3569,19 @@ function wxKey(e,down){if(!walk||view!=='wild'||e.target.closest?.('input,textar
   if(down&&!$('#modal').hidden)return;
   if(k==='ArrowLeft'||k==='a'||k==='A'){walk.keys=down?-1:walk.keys<0?0:walk.keys;walk.to=null;walk.goal=-1;e.preventDefault()}
   else if(k==='ArrowRight'||k==='d'||k==='D'){walk.keys=down?1:walk.keys>0?0:walk.keys;walk.to=null;walk.goal=-1;e.preventDefault()}
-  else if(down&&(k==='Enter'||k===' '||k==='e'||k==='E')&&walk.near>=0&&!e.repeat&&!e.target.closest?.('button')){e.preventDefault();wxGoUse(walk.near)}}
+  else if(down&&(k==='Enter'||k===' '||k==='e'||k==='E')&&!e.repeat&&!e.target.closest?.('button')){
+    if(walk.near>=0){e.preventDefault();wxGoUse(walk.near)}else if(walk.p>=.985){e.preventDefault();wxArriveModal()}}}
 addEventListener('keydown',e=>wxKey(e,true));addEventListener('keyup',e=>wxKey(e,false));addEventListener('blur',()=>{if(walk){walk.keys=0;walk.shift=false}});
 $('#wild').addEventListener('pointerdown',e=>{if(e.target.closest('.pano.wx'))wxPoint(e)});
 $('#wild').addEventListener('click',e=>{const m=e.target.closest('[data-wxmap]');if(m){if(m.getAttribute('aria-disabled')==='true')return;wxs().map=m.dataset.wxmap;sfx('place');save();wxRender();return}
   if(e.target.closest('#wxAct')&&walk&&walk.near>=0)return wxGoUse(walk.near);
+  const pv=e.target.closest('.wx-pav');if(pv&&walk&&wxQ&&!walk.busy){const d=(1-walk.p)*wxQ.D;if(Math.abs(d)<=Math.max(80,wxQ.walker.offsetWidth*.9))return wxArriveModal();walk.hold=null;walk.keys=0;walk.to=1;walk.goal=WX_PAV;walk.run=Math.abs(d)>wxQ.W*.45;return}
   const sp=e.target.closest('.xs');if(sp&&walk&&wxQ)wxGoUse(+sp.dataset.i)});
 
 /* 人物动作：wk_pose.webp 一排 12 帧，脚底、比例和走路帧对齐。
    0-2 弯腰/蹲下/举起小花，3-5 踮脚举团扇/跃起扑/捧手看，6-7 打水漂蓄力/出手，8 招手，9 站着，10 闻花篮，11 手搭凉棚 */
 const WXP={pick:[[0,130],[1,380],[2,620],[1,130],[0,110]],bush:[[0,130],[1,420]],bfly:[[3,300],[4,420]],caught:[[5,1300]],
-  stone:[[6,420],[7,360]],cheer:[[8,1100]],wave:[[8,620]],smell:[[10,1700]],look:[[11,1900]]};
+  stone:[[6,420],[7,360]],cheer:[[8,1100]],wave:[[8,620]],smell:[[10,1700]],look:[[11,1900]],arrive:[[11,1350]]};
 const WXHIT={pick:2,wave:1};
 let wxSeqT=0;
 function wxFrame(f){const w=wxQ&&wxQ.walker;if(!w)return;let ps=$('.ps',w);if(!ps){ps=document.createElement('i');ps.className='ps';w.appendChild(ps)}
@@ -3570,7 +3613,7 @@ function wxFx(i,txt,rare){const el=$(`#wxSpots .xs[data-i="${i}"]`),pano=wxQ&&wx
   for(let k=0;k<6;k++){const s=document.createElement('span');s.className='spark';s.style.cssText=`left:${x}px;top:${y}px;--dx:${rint(-40,40)}px;--dy:${rint(-50,20)}px;z-index:11`;pano.appendChild(s);setTimeout(()=>s.remove(),1000)}
   if(txt){const t=document.createElement('span');t.className='pop';t.style.cssText=`left:${x}px;top:${y}px;z-index:11`;t.textContent=txt;pano.appendChild(t);setTimeout(()=>t.remove(),1300)}
   sfx(rare?'rare':'coin');buzz(10)}
-function wxTake(i){const el=$(`#wxSpots .xs[data-i="${i}"]`);walk.spots[i].done=true;walk.near=-2;if(el){if(wxFly(el))el.remove();else{el.classList.add('taken');setTimeout(()=>el.remove(),450)}}wxNear();$('#wbag').innerHTML=bagHTML();hud();save()}
+function wxTake(i){const el=$(`#wxSpots .xs[data-i="${i}"]`);walk.spots[i].done=true;walk.near=-2;if(el){if(wxFly(el))el.remove();else{el.classList.add('taken');setTimeout(()=>el.remove(),450)}}wxNear();$('#wbag').innerHTML=bagHTML();hud();save();wxCheckDone()}
 function wxUse(i){if(!walk||!$('#modal').hidden||walk.busy)return;const s=walk.spots[i];if(!s||s.done)return;walk.to=null;walk.goal=-1;walk.keys=0;walk.hold=null;
   if(Math.abs(s.t-walk.p)*(wxQ?wxQ.D:1)>2){walk.face=s.t>walk.p?1:-1;wxPaint(true)}
   if(s.k==='npc')return wxPlay('wave',wxTalk);
@@ -3601,7 +3644,7 @@ function wxTalk(){const m=walk.map,Q=WQ[m],st=wxStep(m),nd=wxNeeds(m),ok=wxReady
 function wxQuestDone(m){const Q=WQ[m],st=wxStep(m),X=wxs();if(!st||!wxReady(m))return;const n=st.need;
   if(n.give)for(const k in n.give)takeCut(k,n.give[k]);if(n.bfly&&!st.keepBfly)S.bfly-=n.bfly;
   const got=giveRw(st.rw);if(st.open)got.push(`新地方「${WMAPS[st.open].n}」`);X.q[m]=(X.q[m]||0)+1;addExp(20);if(walk)(walk.got.misc=walk.got.misc||[]).push(`${Q.n}的心事`);
-  checkBadges();hud();save();if(walk){$('#wbag').innerHTML=bagHTML();wxRedrawNpc()}
+  checkBadges();hud();save();if(walk){$('#wbag').innerHTML=bagHTML();wxRedrawNpc();wxCheckDone()}
   modal(`<div class="center wx-talk"><img class="wx-ava" src="${A(Q.img)}" alt="" draggable="false"><h2 class="h-title" style="justify-content:center">${Q.n}<i class="seal">${Q.seal}</i></h2><p class="say">「${st.thx}」</p><div class="rwl">${got.map(g=>`<span class="req ok">${g}</span>`).join('')}</div>${!wxStep(m)?`<p class="muted">${Q.n}的心事都了了。</p>`:''}<button class="btn primary" data-act="close">收下</button></div>`);sfx('rare');confetti(['#fff','#e9c46a','#f2a7b5'])}
 
 /* ---------- 小游戏 ---------- */
@@ -3662,14 +3705,23 @@ function wxGameBush(i){const m=walk.map,st=wxStep(m),wantLetter=m==='zhu'&&st&&s
     return()=>{over=true;T.forEach(clearTimeout)}})}
 
 /* ---------- 回家 ---------- */
-function wxEnd(quiet){if(!walk)return;const g=walk.got,M=WMAPS[walk.map];walk=null;wxStopScene();bump('walk');
-  const L=[];if(g.bfly)L.push(`蝴蝶 ×${g.bfly}`);if(g.dew)L.push(`露水 ×${g.dew}`);if(g.clay)L.push(`陶土 ×${g.clay}`);
-  const cnt=a=>{const m={};(a||[]).forEach(i=>m[i]=(m[i]||0)+1);return m},sd=cnt(g.seeds),ct=cnt(g.cut);for(const i in ct)L.push(`${F[i].n} ×${ct[i]}`);for(const i in sd)L.push(`${F[i].n}花种 ×${sd[i]}`);(g.misc||[]).forEach(x=>L.push(x));
+function wxArriveModal(){if(!walk||!$('#modal').hidden)return;
+  walk.hold=null;walk.to=null;walk.keys=0;walk.run=walk.hrun=false;walk.goal=-1;
+  const M=WMAPS[walk.map],Q=WQ[walk.map],left=wxLeft(),ready=wxReady(walk.map),allDone=left===0&&!ready,L=wxLootList(walk.got),seal=M.st[M.st.length-1][1];
+  const msg=allDone?`一路走到${M.pav}，这一路的物事都收齐了。歇一口气，带着收获回家吧。`
+    :ready&&left>0?`一路走到${M.pav}，路就到这里了。回头路上${Q.n}还在等你交差，也还有 ${left} 处没细看。`
+    :ready?`一路走到${M.pav}，路就到这里了。回头路上，${Q.n}还在等你交差呢。`
+    :`一路走到${M.pav}，路就到这里了。回头路上还有 ${left} 处没细看，也可以这就回家。`;
+  modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">${seal}</p><h2 class="h-title" style="justify-content:center">${allDone?'满篮归来':'亭边小歇'}</h2><p class="say">${msg}</p><div class="rwl">${L.map(x=>`<span class="req ok">${x}</span>`).join('')||'<span class="muted">风很好，云走得很慢。</span>'}</div><p class="muted">${pick(wxFlavorLine(walk.map))}</p><button class="btn" data-act="wxstay">${allDone?'再看会儿风景':'回头再逛逛'}</button><button class="btn primary" data-act="wxhome">${L.length?'带着收获回家':'回家'}</button></div>`);
+  $('#modal [data-act="wxstay"]')?.addEventListener('click',()=>closeModal());
+  $('#modal [data-act="wxhome"]')?.addEventListener('click',()=>{if(!walk)return;const nm=M.n;walk.leaving=1;closeModal();sfx('harvest');wxEnd(true);toast(`从${nm}回到了小院`)})}
+function wxEnd(quiet){if(!walk)return;const g=walk.got,m=walk.map,M=WMAPS[m];walk=null;wxStopScene();bump('walk');
+  const L=wxLootList(g);
   save();hud();if(view==='wild')wxRender();refreshDock();if(quiet)return;
-  modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">${M.n}归来</p><h2 class="h-title" style="justify-content:center">${L.length?'这一趟的收获':'空着手，也很好'}</h2><div class="rwl">${L.map(x=>`<span class="req ok">${x}</span>`).join('')||'<span class="muted">风很好，云走得很慢。</span>'}</div><p class="muted">${pick(['溪水比昨天清了一点。','半山腰的石头上晒着一只猫。','回来的路上，鞋尖沾了草籽。','山顶的风里有花的味道。','竹叶上的水珠落进了衣领。','荷叶下面，有条小鱼一直跟着你。'])}</p><button class="btn primary" data-act="close">收下</button></div>`)}
+  modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">${M.n}归来</p><h2 class="h-title" style="justify-content:center">${L.length?'这一趟的收获':'空着手，也很好'}</h2><div class="rwl">${L.map(x=>`<span class="req ok">${x}</span>`).join('')||'<span class="muted">风很好，云走得很慢。</span>'}</div><p class="muted">${pick(wxFlavorLine(m))}</p><button class="btn primary" data-act="close">收下</button></div>`)}
 
 renderWild=wxRender;startWalk=wxStart;endWalk=wxEnd;mountJourney=wxMount;measureJourney=wxMeasure;stopJourney=wxStopScene;
-const wxCloseBase=closeModal;closeModal=()=>{if(wxGameStop){const f=wxGameStop;wxGameStop=null;f()}wxCloseBase();if(walk&&view==='wild')wxLoop()};
+const wxCloseBase=closeModal;closeModal=()=>{if(wxGameStop){const f=wxGameStop;wxGameStop=null;f()}wxCloseBase();if(walk&&!walk.leaving&&view==='wild'){if(walk.clearedNotice){walk.clearedNotice=0;wxShowCleared()}wxLoop()}};
 
 function resetGardenModes(){
   harvestSummary=null;

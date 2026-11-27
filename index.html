@@ -700,6 +700,8 @@ body{margin:0;background:var(--jade)}
 #gnd{border-radius:0;-webkit-mask-image:linear-gradient(transparent,#000 32px);mask-image:linear-gradient(transparent,#000 32px)}
 .cot{height:auto;aspect-ratio:6/5;object-fit:contain;object-position:center bottom;pointer-events:none}
 .bough{height:auto;aspect-ratio:3/2;object-fit:contain;filter:none}
+/* 桃枝只是画角的点缀：宽不超过屏宽四成，也按屏高收（56vh），横屏、矮窗口里不会垂到花畦上 */
+.bough{width:min(40vw,360px,56vh)}
 .fgl,.fgr{height:auto;aspect-ratio:536/720;object-fit:contain;filter:none;opacity:1}
 .cloud{opacity:calc(.4 - var(--night)*.28);filter:blur(5px)}
 .plot .bed-art{pointer-events:none}.plot.dry .bed-art{filter:sepia(.6) saturate(.55) brightness(1.2)}
@@ -1006,7 +1008,7 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
   .wstart .finds{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(min(135px,100%),1fr))}
 }
 .plots{width:min(100%,640px,max(260px,calc((100vh - 400px)*1.12)));width:min(100%,640px,max(260px,calc((100dvh - 400px)*1.12)))}
-@media (min-width:760px) and (min-aspect-ratio:11/10){
+@media (min-width:600px) and (min-aspect-ratio:11/10){
   .plots{grid-template-columns:repeat(6,1fr);width:min(100%,900px,max(420px,calc((100vh - 380px)*2.5)));width:min(100%,900px,max(420px,calc((100dvh - 380px)*2.5)))}
 }
 .hint .tut{display:inline-block;margin-right:8px;padding:0 8px;border-radius:99px;background:var(--rouge);color:#fff6e4;font-size:11.5px;font-weight:600;line-height:20px;letter-spacing:.04em;white-space:nowrap;vertical-align:1px}
@@ -1025,7 +1027,7 @@ body{touch-action:manipulation}
   .showart{width:min(100%,220px)}
 }
 /* phones: while the third row is all unbroken ground, show two rows and let the beds grow */
-@media not all and (min-width:760px) and (min-aspect-ratio:11/10){
+@media not all and (min-width:600px) and (min-aspect-ratio:11/10){
   .plots[data-rows="2"] .plot:nth-child(n+9){display:none}
   .plots[data-rows="2"]{width:min(100%,640px,max(260px,calc((100vh - 366px)*1.7)));width:min(100%,640px,max(260px,calc((100dvh - 366px)*1.7)))}
 }
@@ -1381,6 +1383,29 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 /* 列表页的底图铺满整屏（包括顶栏后面），只有列表内容被限制在顶栏下面 */
 .view.list{background:none}
 .view.list::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--view-bg,none);pointer-events:none}
+/* 花畦：按提示条和操作条之间实际剩下的高度撑满（.g-field 是尺寸容器），不再用「屏高减一个估算值」——
+   那个估算值是按竖屏手机定的，窗口稍矮一点，花畦就缩成一小撮，上下左右却空着一大片。
+   系数是实测的：花畦整体高 ≈ 宽 × 斜率 + 名牌高，反过来求宽。
+   横着的窗口（宽 ≥ 600 且宽 > 高）一律排成 6 列两行：高度是瓶颈，排成 4 列三行每块地只剩一小撮 */
+.g-field{flex:1 1 0;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center}
+.g-field .plots{margin-top:auto}
+@supports (height:1cqh){
+  .g-field{container-type:size}
+  .g-field .plots{width:min(100%,640px,max(220px,calc((100cqh - 22px)*1.19)))}
+  @media not all and (min-width:600px) and (min-aspect-ratio:11/10){.g-field .plots[data-rows="2"]{width:min(100%,640px,max(220px,calc((100cqh - 15px)*1.78)))}}
+  @media (min-width:600px) and (min-aspect-ratio:11/10){.g-field .plots{width:min(100%,900px,max(220px,calc((100cqh - 13px)*2.67)))}}
+}
+/* 小院工具：不垫整条纸板。圆瓷钮和「照料」直接立在草地上，跟导航栏同宽对齐；
+   原来那条 86px 高的纸条中间大半是空的，又把花田往上挤。花匠在岗写成「照料」下面一行小字（阿禾替你照料） */
+#v-garden{padding-bottom:calc(var(--dock-room) + var(--c-round) + 16px)}
+#v-garden .action-bar{width:min(540px,calc(100% - 24px));min-height:0;padding:0;border:0;border-image:none;border-radius:0;background:none;filter:none;align-items:flex-end;pointer-events:none}
+#v-garden .action-bar>*{pointer-events:auto}
+/* 三个工具钮挨在一起成一组，靠右（右手拇指那一侧），不再左右两头各放一个：分开放，操作区就散了 */
+#v-garden .action-bar.g-tools{justify-content:flex-end;gap:8px}
+#v-garden .action-bar>.btn:last-child{margin-left:0}
+#waterAll .wa-t{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+#hireTag{font-size:10.5px;letter-spacing:0;opacity:.75;white-space:nowrap}
+#hireTag:not([hidden]){display:block}
 /* 矮屏（横屏手机等，高度 ≤ 500）：导航栏图标与文字并排、操作条收窄边框，把高度让给花畦和画面 */
 @media (max-height:500px){
   #app{--dock-room:calc(54px + env(safe-area-inset-bottom,0px))}
@@ -1388,7 +1413,21 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   #dock .dock-tab,#dock .dock-tab.on{flex-direction:row;gap:4px}
   #dock .dock-tab svg{width:20px;height:20px}
   .action-bar{min-height:0;border-width:8px;border-image-width:8px;padding:0 4px}
-  #v-garden{padding-bottom:calc(var(--dock-room) + var(--c-round) + 28px)}
+  #v-garden{padding-bottom:calc(var(--dock-room) + var(--c-round) + 16px)}
+}
+/* 横屏手机：高度是花田最缺的。工具组接在导航栏右边，跟导航栏连成底下一排（整排居中），花田一直铺到导航栏上沿。
+   只在小院这样排：别的页面没有工具组，导航栏照常居中 */
+@media (max-height:500px) and (min-aspect-ratio:4/3) and (min-width:600px){
+  #app{--gt:calc(2*var(--c-round) + 152px);--dw:min(540px,calc(100vw - 34px - var(--gt)))}
+  #app[data-at=garden] #dock{width:var(--dw);left:calc((100vw - var(--dw) - 10px - var(--gt))/2);transform:none}
+  #v-garden .action-bar{bottom:calc(4px + env(safe-area-inset-bottom,0px));left:auto;right:calc((100vw - var(--dw) - 10px - var(--gt))/2);transform:none;width:var(--gt)}
+  #v-garden #waterAll{padding-inline:10px}
+  #v-garden{padding-bottom:calc(var(--dock-room) + 6px)}
+}
+/* 再宽一些的横屏：提示语放进顶栏中间那段空当，不再单占一行 */
+@media (max-height:500px) and (min-aspect-ratio:4/3) and (min-width:760px){
+  .top{pointer-events:none}.top>*{pointer-events:auto}
+  #v-garden .hint{position:fixed;z-index:7;top:calc(var(--top-room)/2 + 1px);left:50%;transform:translate(-50%,-50%);max-width:calc(100% - 480px);margin:0}
 }
 /* 浮层提示：点等级、花币弹出，套用小卡皮肤 */
 .tip-pop{position:absolute;z-index:16;width:min(268px,calc(100% - 24px));padding:4px 6px;font-size:13px;line-height:1.6;animation:dlg .2s ease}
@@ -1504,12 +1543,11 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   <main>
     <section class="view gut" id="v-garden">
       <div class="hint" id="hint"></div>
-      <div class="g-space"></div>
-      <div class="plots" id="plots"></div>
-      <div class="action-bar g-tools"><span class="hire" id="hireTag" hidden></span>
+      <div class="g-field"><div class="plots" id="plots"></div></div>
+      <div class="action-bar g-tools">
         <button class="tool" id="fertBtn" aria-pressed="false"><img src="assets/ic_dew.webp" width="192" height="192" alt="" draggable="false"><span id="fertTxt">露水</span></button>
         <button class="tool" id="polBtn" aria-pressed="false"><img src="assets/ic_bfly.webp" width="192" height="192" alt="" draggable="false"><span id="polTxt">授粉</span></button>
-        <button class="btn primary lg" id="waterAll"><img src="assets/ic_can.webp" width="192" height="192" alt="" draggable="false">照料</button>
+        <button class="btn primary lg" id="waterAll"><img src="assets/ic_can.webp" width="192" height="192" alt="" draggable="false"><span class="wa-t">照料<small id="hireTag" hidden></small></span></button>
       </div>
     </section>
     <section class="view gut" id="v-studio" hidden><div class="sheet">
@@ -2099,7 +2137,7 @@ function tend(now){let shown=false;S.plots.forEach((q,i)=>{if(!q||i>=plotCount()
     if(q.pest){q.pest=null;if(el){shown=true;fxAt(el,(x,y)=>addFx('pop',x,y+10,'','阿禾清理了花畦'))}}
     else if(q.wu<=now+1500){grow(q,now);q.wu=now+waterMs(q);if(el){shown=true;fxAt(el,(x,y)=>{addFx('can',x+16,y-34,'','',CAN);addFx('pop',x,y+10,'','阿禾浇了水')})}}})}
 const gameDur=ms=>{const h=Math.ceil(ms/1000/DAY*24),d=Math.floor(h/24),r=h%24;return d?`${d} 天${r?` ${r} 小时`:''}`:`${h} 小时`};
-function hireTag(){const t=$('#hireTag'),left=(S.hire||0)-Date.now();t.hidden=left<=0;if(left>0)t.textContent=`花匠阿禾在岗 · 还能看护 ${gameDur(left)}`}
+function hireTag(){const t=$('#hireTag'),left=(S.hire||0)-Date.now();t.hidden=left<=0;if(left>0){const d=gameDur(left);t.textContent=`阿禾在岗 · ${d.replace(/ \d+ 小时$/,'')}`;t.title=`花匠阿禾在岗，还能看护 ${d}`}}
 function bloomFx(el,f){fxAt(el,(x,y)=>{for(let k=0;k<8;k++)addFx('spark',x,y-10,`--dx:${rint(-55,55)}px;--dy:${rint(-70,20)}px;animation-delay:${k*.04}s`);addFx('pop',x,y-24,'',`${f.n}开了`)});sfx('bloom');buzz(8)}
 function flyBfly(ea,eb,done){const v=$('#v-garden').getBoundingClientRect(),pt=el=>{const r=el.getBoundingClientRect();return[r.left-v.left+r.width/2,r.top-v.top+r.height*.3]},A=pt(ea),B=pt(eb),M=[(A[0]+B[0])/2,Math.min(A[1],B[1])-56];
   const b=document.createElement('span');b.className='bfly';b.innerHTML=BFLY;b.style.left=A[0]+'px';b.style.top=A[1]+'px';$('#v-garden').appendChild(b);

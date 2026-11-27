@@ -1246,6 +1246,9 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
    --lean 前倾/后仰、--bob 跑步起伏都绕脚底转，影子不跟着歪 */
 .pano.wx.go .wj-walker .wk{animation:none}
 .pano.wx .wj-walker .wk,.pano.wx .wj-walker .ps{transform:translateY(var(--bob,0px)) rotate(var(--lean,0deg));transform-origin:50% 100%}
+/* 站着不动时轻轻呼吸，不是一张定住的贴纸 */
+.pano.wx .wj-walker.idle .ps{animation:wxbreath 3.4s ease-in-out infinite}
+@keyframes wxbreath{50%{transform:scaleY(1.014)}}
 /* 影子跟着动作变：跃起扑蝶时人离了地，影子缩小变淡；蹲下时铺开一点 */
 .pano.wx .wj-shadow{transition:transform .18s,opacity .18s}
 .pano.wx .wj-walker[data-f="4"] .wj-shadow{transform:scale(.62);opacity:.5}
@@ -1257,7 +1260,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 /* 走进新的一段路，地名轻轻浮上来 */
 .wx-place.flash b{animation:wxplace .7s ease-out}
 @keyframes wxplace{from{opacity:0;translate:0 6px}}
-@media (prefers-reduced-motion:reduce){.wx-place.flash b{animation:none}.pano.wx .wj-shadow{transition:none}}
+@media (prefers-reduced-motion:reduce){.pano.wx .wj-walker.idle .ps,.wx-place.flash b{animation:none}.pano.wx .wj-shadow{transition:none}}
 /* 选地图：小卡皮肤，选中的一张同 .pkc.on */
 .wild-rest{overflow-x:hidden}.wild-rest .legs{flex-wrap:wrap;min-width:0}
 .wx-maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:6px}
@@ -3342,9 +3345,11 @@ function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{w
     const moving=Math.abs(walk.v)>6;
     if(moving!==walk.mv){walk.mv=moving;if(!walk.busy&&!walk.soft)wxFrame(moving?-1:9)}
     q.pano.classList.toggle('go',moving);wxStride(dt,base,moving,(walk.v-pv)/(dt||1));wxPaint(false,dt);
+    // 走到路的尽头，手搭凉棚望一望
+    if(walk.p>=1&&!walk.top){walk.top=1;walk.after='look'}
     if(!moving&&!walk.busy&&open){walk.still+=dt;
       if(walk.after){const a=walk.after;walk.after=null;walk.still=0;wxPlay(a)}
-      else if(walk.still>7&&!walk.soft){walk.still=-3*Math.random();wxPlay(pick(['smell','look']),null,null,true)}}else walk.still=0;
+      else if(walk.still>7&&!walk.soft){walk.still=-3*Math.random();const n=walk.near>=0&&walk.spots[walk.near]?.k;wxPlay(n==='npc'?'wave':n==='flower'?'smell':pick(['smell','look']),null,null,true)}}else walk.still=0;
     wxRAF=requestAnimationFrame(step)};
   wxRAF=requestAnimationFrame(step)}
 /* 一步一步：走路帧、跑起来的前倾和起伏、急刹后仰、落脚扬起的尘土 */
@@ -3384,7 +3389,7 @@ const WXP={pick:[[0,130],[1,380],[2,620],[1,130],[0,110]],bush:[[0,130],[1,420]]
 const WXHIT={pick:2,wave:1};
 let wxSeqT=0;
 function wxFrame(f){const w=wxQ&&wxQ.walker;if(!w)return;let ps=$('.ps',w);if(!ps){ps=document.createElement('i');ps.className='ps';w.appendChild(ps)}
-  w.classList.toggle('pose',f>=0);w.dataset.f=f;if(f>=0)ps.style.backgroundPositionX=(f/11*100).toFixed(4)+'%'}
+  w.classList.toggle('pose',f>=0);w.classList.toggle('idle',f===9);w.dataset.f=f;if(f>=0)ps.style.backgroundPositionX=(f/11*100).toFixed(4)+'%'}
 function wxCut(){clearTimeout(wxSeqT);if(walk){walk.soft=false;walk.busy=false}wxQ&&wxQ.pano.classList.remove('acting')}
 /* 播一段动作。hit 在“手碰到”那一帧调用，done 在播完后调用；soft 的小动作一走路就打断 */
 function wxPlay(name,hit,done,soft){wxCut();const seq=WXP[name];if(!walk||!wxQ||!seq){hit&&hit();done&&done();return}

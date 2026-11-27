@@ -993,10 +993,14 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
   .wstart .finds{grid-template-columns:repeat(auto-fit,minmax(min(128px,100%),1fr))}
 }
 @media (min-width:600px) and (max-height:580px){
-  #v-wild .wstart{width:min(100%,900px);border-width:16px;border-image-width:16px;gap:6px 12px;grid-template-columns:auto minmax(0,1fr);align-items:center}
-  .wstart .h-title{width:auto;margin:0}
+  /* 横屏：宽有余、高不够。上一行标题＋说明，中间地图卡横排一行，下一行背包在左、脚力条在右 */
+  #v-wild .wstart{width:min(100%,900px);border-width:16px;border-image-width:16px;gap:8px 14px;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"t s" "m m" "b i";align-items:center}
+  #v-wild .wstart .h-title{grid-area:t;width:auto;margin:0}
+  #v-wild .wstart .h-sub{grid-area:s}
+  #v-wild .wx-maps{grid-area:m;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+  #v-wild .wstart .bag{grid-area:b;margin:0}
+  #v-wild .wstart .wild-info{grid-area:i;justify-self:end;width:min(100%,380px)}
   .wstart .finds{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(min(135px,100%),1fr))}
-  .wstart .wild-info{justify-self:end}
 }
 .plots{width:min(100%,640px,max(260px,calc((100vh - 400px)*1.12)));width:min(100%,640px,max(260px,calc((100dvh - 400px)*1.12)))}
 @media (min-width:760px) and (min-aspect-ratio:11/10){
@@ -1447,8 +1451,18 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   #v-studio .st-side button{width:34px;height:34px}
   #v-studio .st-pop{inset:4px 42px auto 4px;width:auto;max-height:calc(100% - 8px)}
 }
-@media (max-height:600px){
-  .wstart .wild-info{position:sticky;bottom:0;z-index:1}
+/* 山野出发页在矮窗口里（手机横屏、半屏小窗，高度 ≤ 700）：整页放不下，脚力条吸在底部，
+   其余各块收紧一档（标题条、说明、地图卡、脚力条；「去××」大钮降为常规钮高），让地图卡尽量露全。
+   吸底时滚动区不留下内边距，免得脚力条下面再透出一截被盖住的卡片 */
+@media (max-height:700px){
+  #v-wild .wild-rest{padding-bottom:0}
+  #v-wild .wstart{gap:6px}
+  #v-wild .wstart .h-title{min-height:40px;padding-block:4px;font-size:22px}
+  #v-wild .wstart .h-sub{font-size:13px;line-height:1.55}
+  #v-wild .wx-map{--ui-edge:10px}
+  #v-wild .wx-map b{font-size:17px}
+  #v-wild .wstart .wild-info{position:sticky;bottom:0;z-index:1;padding:5px 6px 5px 12px;flex-wrap:nowrap}
+  #v-wild #walkGo{height:var(--c-md)}
 }
 #shop .card .nm{font-size:16px}
 #shop .card .meta,#shop .card .btn.sm{font-size:13px}

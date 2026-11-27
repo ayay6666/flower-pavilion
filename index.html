@@ -1242,6 +1242,10 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #wbag.bump{animation:bagbump .36s ease}
 @keyframes bagbump{40%{transform:scale(1.06)}}
 @media (prefers-reduced-motion:reduce){.xs.k-bfly.flee .bf,#wbag.bump{animation:none}}
+/* 走进新的一段路，地名轻轻浮上来 */
+.wx-place.flash b{animation:wxplace .7s ease-out}
+@keyframes wxplace{from{opacity:0;translate:0 6px}}
+@media (prefers-reduced-motion:reduce){.wx-place.flash b{animation:none}}
 /* 选地图：小卡皮肤，选中的一张同 .pkc.on */
 .wild-rest{overflow-x:hidden}.wild-rest .legs{flex-wrap:wrap;min-width:0}
 .wx-maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:6px}
@@ -3261,7 +3265,7 @@ function wxPaint(force,dt){const q=wxQ;if(!q||!q.D)return;const p=walk?walk.p:0,
   // 翻面过 0 的那一下别薄成一条线：最窄留 0.14
   const sx=Math.sign(fv||1)*Math.max(.14,Math.abs(fv));
   q.walker.style.transform=`translate3d(${R(X-cam)}px,0,0) translateX(-50%) scaleX(${sx.toFixed(3)})`;q.mist.style.opacity=(.06+.24*p).toFixed(3);
-  if(walk){const d=$('#wdot');if(d)d.style.left=(p*100).toFixed(1)+'%';const tg=$('#wstretch'),nm=wxStretch(walk.map,p);if(tg&&tg.textContent!==nm)tg.textContent=nm;wxNear()}}
+  if(walk){const d=$('#wdot');if(d)d.style.left=(p*100).toFixed(1)+'%';const tg=$('#wstretch'),nm=wxStretch(walk.map,p);if(tg&&tg.textContent!==nm){tg.textContent=nm;const pl=tg.parentNode;pl.classList.remove('flash');void pl.offsetWidth;pl.classList.add('flash')}wxNear()}}
 
 /* ---------- 一趟出门 ---------- */
 function wxStart(){if(legs()<1||walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';S.legs--;X.trips++;

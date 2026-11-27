@@ -61,13 +61,13 @@ python3 build.py --subset-font
 .
 ├── index.html                  # 游戏主入口（HTML / CSS / JS 与内嵌书法字体子集）
 ├── build.py                    # 单文件离线打包与字体子集更新脚本
-├── assets/                     # 326 张 WebP 游戏美术资源
+├── assets/                     # 326 张 WebP 游戏美术资源（CC BY-NC 4.0，见 assets/LICENSE.md）
 │   ├── jq/                     # 二十四节气当令花插图（00.webp ~ 23.webp）
 │   └── st/                     # 花材与植物贴图
 ├── .github/workflows/
 │   ├── pages.yml               # 校验 build.py 并自动部署 GitHub Pages
 │   └── release.yml             # 推送 v* 标签时自动发布单文件离线版 Release
-└── LICENSE                     # MIT License
+└── LICENSE                     # 源代码的 MIT License
 ```
 
 ---
@@ -85,5 +85,6 @@ git push origin v1.0.0
 
 ## 开源协议与字体声明
 
-- 本项目代码采用 [MIT License](LICENSE) 开源。
+- 本项目**源代码**（HTML / CSS / JavaScript、`build.py` 等）采用 [MIT License](LICENSE) 开源。
+- `assets/` 下的**美术素材**（含单文件离线版中内嵌的图片）采用 [CC BY-NC 4.0](assets/LICENSE.md) 授权：可署名转载、非商业二创，**不得商用**（含售卖、接广告或内购、做周边等）。商业授权请提 issue 联系作者。
 - 内嵌标题书法字体「马善政楷体（Ma Shan Zheng）」遵循 [SIL Open Font License 1.1](https://scripts.sil.org/OFL) 开源协议。

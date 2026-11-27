@@ -640,7 +640,7 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 .bub:not(.ok)::before{content:"";position:absolute;left:6px;bottom:-5px;width:8px;height:6px;background:inherit;clip-path:polygon(0 0,100% 0,10% 100%)}
 .bub svg{display:block;width:13px;height:13px}
 @media (max-width:700px){.tb{left:var(--xm);top:var(--ym)}.npc{z-index:var(--zm)}.npc::before{width:calc(min(46px,6vh)*var(--dm,1))}.npc .chibi{width:calc(min(50px,6.5vh)*var(--s,1)*var(--dm,1))}}
-.talk{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(94%,680px);display:flex;gap:12px;align-items:flex-end;background:#fffdf6 var(--grain);border-radius:22px;padding:14px 16px 14px 10px;box-shadow:0 14px 34px rgba(20,40,40,.3),inset 0 0 0 2px rgba(255,255,255,.8);z-index:4;animation:talkin .3s cubic-bezier(.2,1.3,.4,1)}
+.talk{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(94%,560px);display:flex;gap:12px;align-items:flex-end;background:#fffdf6 var(--grain);border-radius:22px;padding:14px 16px 14px 10px;box-shadow:0 14px 34px rgba(20,40,40,.3),inset 0 0 0 2px rgba(255,255,255,.8);z-index:4;animation:talkin .3s cubic-bezier(.2,1.3,.4,1)}
 /* 小镇整图：跟小院一样铺满整个页面，顶栏和底栏浮在画上；多出来的部分滑动看。
    人物按站位给的 z-index（几十）只在整图内部比前后，isolation 把整图关成一层，对话框（.talk）才能盖在所有人物上面 */
 .tscroll{position:absolute;inset:0 0 calc(-1*var(--dock-room));isolation:isolate;z-index:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:none;touch-action:pan-x pan-y}
@@ -663,22 +663,23 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 /* 画上不写地名：花铺、沈记书店的招牌本来就画在图里，其余房子不叠任何牌子或纸签（压在画上都出戏）。
    人名、「门还关着」也不浮在画上：点人物、点房子，对话框里有名字；陶坊关着门会说明怎么开。读屏从 aria-label 读到 */
 .tspot .bub{top:-15px;right:-17px}
-.tfig{position:absolute;left:var(--fx);top:var(--fy);height:max(var(--fh),44px);translate:-50% -100%;padding:0;border:0;background:none;display:block;cursor:pointer}
+.tfig{position:absolute;left:var(--fx);top:var(--fy);height:max(var(--fh),56px);translate:-50% -100%;padding:0;border:0;background:none;display:block;cursor:pointer}
 .tfig.still{pointer-events:none}
+/* 小人画得窄（手机竖屏只有十几像素宽），手指点的范围至少放到 48px 宽，上下也多留一点；看起来不变 */
+.tfig::after{content:"";position:absolute;left:50%;top:-8px;bottom:-10px;width:max(100% + 16px,48px);translate:-50% 0}
 .tfig::before{content:"";position:absolute;left:50%;bottom:-4px;width:100%;height:10px;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(70,50,30,.32),transparent)}
-.tfig .chibi{position:relative;display:block;height:100%;width:auto;max-width:none;animation:bobc 2.8s ease-in-out infinite}
-.tfig:nth-of-type(odd) .chibi{animation-delay:-1.3s}
+/* 小镇的人站在画里，跟房子树木一样是静的，不上下浮动（浮着像贴纸）；要说话的提示交给对话泡 */
+.tfig .chibi{position:relative;display:block;height:100%;width:auto;max-width:none}
 /* 小镇里的对话泡：宣纸色、细褐边，跟画同一种纸墨质地，不用亮白底加投影（像手机通知）；
    跟着整图缩放，手机横屏时整图比较小，固定像素的泡会盖住旁边的人和房子 */
 .tfig .bub{top:5%;right:auto;left:calc(100% - 7px)}
-.tfig .bub:not(.ok){font-size:clamp(10px,2.4cqmin,13px);min-width:2.3em;height:1.6em;padding:0 .5em;font-weight:700;background:#f8efdb;border:1px solid rgba(107,69,40,.55);box-shadow:0 1px 1.5px rgba(60,38,20,.25);color:#4a2c18}
+.tfig .bub:not(.ok){font-size:clamp(9px,2cqmin,11px);min-width:2.1em;height:1.45em;padding:0 .4em;font-weight:700;background:#f8efdb;border:1px solid rgba(107,69,40,.55);box-shadow:0 1px 1.5px rgba(60,38,20,.25);color:#4a2c18}
 /* 有边的泡，尾巴用转 45° 的小方块带两条边，盖住泡底那段边线 */
-.tfig .bub:not(.ok)::before{left:3px;right:auto;bottom:-4px;width:6px;height:6px;clip-path:none;border:solid rgba(107,69,40,.55);border-width:0 1px 1px 0;rotate:45deg}
+.tfig .bub:not(.ok)::before{left:3px;right:auto;bottom:-3px;width:5px;height:5px;clip-path:none;border:solid rgba(107,69,40,.55);border-width:0 1px 1px 0;rotate:45deg}
 .tfig .bub svg{width:1em;height:1em}
 .tfig.bl .bub{left:auto;right:calc(100% - 6px)}
 .tfig.bl .bub:not(.ok)::before{left:auto;right:3px}
 .ava.face{background:#efe4cc none 50% 3%/190% auto no-repeat;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
-@media (prefers-reduced-motion:reduce){.tfig .chibi{animation:none}}
 @keyframes talkin{from{transform:translate(-50%,24px);opacity:0}}
 .tface{flex-shrink:0;margin-top:-48px}.tface .chibi{width:92px}
 .tbody{flex:1;min-width:0;display:grid;gap:6px}
@@ -964,10 +965,17 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 .dlg-choices .btn.green{width:100%;height:auto;min-height:var(--c-lg);white-space:normal;line-height:1.4}
 .order .who{padding-right:var(--c-sm)}
 .order-x{position:absolute;top:2px;right:2px;display:grid;place-items:center;font-size:14px}
-.talk{padding-top:40px}
+/* 对话框不再为关闭钮单留一条 40px 的空行：关闭钮压在名字行右端，名字行右边让出一个钮的宽度 */
+.talk .tname{padding-right:calc(var(--c-md) + 4px);min-height:var(--c-md)}
+/* 对话框里的立绘一律只露头和上半身，放在左上角：全身像比台词高，探出框顶就会被对话框的滚动区切掉头 */
+.talk{align-items:flex-start}.talk .tface{--tf:clamp(52px,14vmin,72px);margin-top:0;width:var(--tf);height:calc(var(--tf)*1.3);overflow:hidden}.talk .tface .chibi{width:var(--tf)}
+/* 矮屏（横屏手机）：对话框只能占画面下半截，需求标签和按钮并成一行，名字、台词和按钮才放得下 */
+@media (max-height:500px){.talk .say{min-height:0}.talk{border-width:16px;border-image-width:16px}.talk .tbody{grid-template-columns:minmax(0,1fr) auto;align-items:center}.talk .tname,.talk .say{grid-column:1/-1}}
+/* 极矮屏（SE 横屏，高 ≤ 360）：给画面留 170px 后对话框只剩 96px，放不下一句台词；改成只给顶栏和画面上沿留 96px */
+@media (max-height:360px){.talk{max-height:calc(100% - 96px)}}
 .tb.bld:not(button){pointer-events:none}
 .tb.bld:not(button):hover,.tb.bld:not(button):active{transform:translate(-50%,-100%)}
-@media(max-width:600px){.top .brand .logo{font-size:20px}.dlg-actions{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}.dlg-actions .btn{width:100%}.action-bar{width:calc(100% - 24px)}.talk{padding-top:40px}}
+@media(max-width:600px){.top .brand .logo{font-size:20px}.dlg-actions{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}.dlg-actions .btn{width:100%}.action-bar{width:calc(100% - 24px)}}
 @media(max-width:600px){
   .findlg .dlg-actions{display:flex;flex-wrap:wrap;align-items:stretch}
   .findlg .dlg-actions .btn{flex:1 1 auto;width:auto;max-width:100%;padding-inline:6px}
@@ -1290,6 +1298,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
      花艺台评分章是 60 的圆，因为里面要放 22px 的大分数
    窗口
    · 大面板 ui_panel：弹窗、手账页、出游卡、对话
+     矮屏（高 ≤ 500，横屏手机）上的小镇对话框边框收到 16px：它压在小镇画面上，又要放下名字、台词和按钮，28px 的花边太占地方
    · 标题两种：页面标题用卷轴 ui_ribbon（山野、手账各页）；弹窗标题一律用题字 .ink-t（modal() 自动套上，见 inkTitles）
    · 小卡 ui_card：卡片、订单、浮层提示（.tip-pop）、底部操作条
    · 牌匾 ui_btn_paper：提示语

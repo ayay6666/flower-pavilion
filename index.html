@@ -677,7 +677,7 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 /* 小镇里的对话泡：宣纸色、细褐边，跟画同一种纸墨质地，不用亮白底加投影（像手机通知）；
    跟着整图缩放，手机横屏时整图比较小，固定像素的泡会盖住旁边的人和房子 */
 .tfig .bub{top:5%;right:auto;left:calc(100% - 7px)}
-.tfig .bub:not(.ok){font-size:clamp(9px,2cqmin,11px);min-width:2.1em;height:1.45em;padding:0 .4em;font-weight:700;background:#f8efdb;border:1px solid rgba(107,69,40,.55);box-shadow:0 1px 1.5px rgba(60,38,20,.25);color:#4a2c18}
+.tfig .bub:not(.ok){font-size:clamp(11px,2cqmin,12px);min-width:2.1em;height:1.45em;padding:0 .4em;font-weight:700;background:#f8efdb;border:1px solid rgba(107,69,40,.55);box-shadow:0 1px 1.5px rgba(60,38,20,.25);color:#4a2c18}
 /* 有边的泡，尾巴用转 45° 的小方块带两条边，盖住泡底那段边线 */
 .tfig .bub:not(.ok)::before{left:3px;right:auto;bottom:-3px;width:5px;height:5px;clip-path:none;border:solid rgba(107,69,40,.55);border-width:0 1px 1px 0;rotate:45deg}
 .tfig .bub svg{width:1em;height:1em}
@@ -762,7 +762,7 @@ body{margin:0;background:var(--jade)}
 #dock{position:absolute;z-index:10;left:50%;bottom:calc(8px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(540px,calc(100% - 24px));height:60px;display:flex;gap:5px}
 .dock-tab{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid var(--line);border-radius:7px;background:#f4ecda var(--grain) center/256px;color:var(--ink-soft);box-shadow:0 3px 8px var(--shadow);font-family:var(--f-display);font-size:17px;line-height:1.2;transition:color .16s,background .16s,transform .16s}.dock-tab svg{width:24px;height:24px}.dock-tab.on{color:var(--rouge);background:var(--rouge-soft) var(--grain) center/256px;border-color:var(--rouge);box-shadow:inset 0 -3px var(--rouge),0 3px 8px var(--shadow)}.dock-tab:active{transform:translateY(2px)}.dock-dot{position:absolute;right:12px;top:7px;width:7px;height:7px;border-radius:50%;background:var(--rouge);box-shadow:0 0 0 2px #f4ecda}
 .view,#v-garden{padding-bottom:calc(var(--dock-room) + 14px);animation:placeFade .18s ease-out both;clip-path:none}@keyframes placeFade{from{opacity:.35}to{opacity:1}}
-#v-garden .g-tools{flex-shrink:0;margin-top:10px;gap:10px}#v-garden .hint{flex-shrink:0}.kfoot{bottom:0}#v-town,#v-wild{padding:0}#town{bottom:var(--dock-room)}.talk{bottom:12px;max-height:calc(100% - 170px);overflow-y:auto;overscroll-behavior:contain}.hud-back:not([hidden])~.phase{display:inline-block}
+#v-garden .g-tools{flex-shrink:0;margin-top:10px;gap:10px}#v-garden .hint{flex-shrink:0}.kfoot{bottom:0}#v-town,#v-wild{padding:0}#town{bottom:var(--dock-room)}.tfolk{position:absolute;right:max(12px,env(safe-area-inset-right,0px));bottom:10px;z-index:3;margin:0}#talk:not([hidden])~.tfolk{display:none}.talk{bottom:12px;max-height:calc(100% - 170px);overflow-y:auto;overscroll-behavior:contain}.hud-back:not([hidden])~.phase{display:inline-block}
 .shop-head{position:sticky;top:0;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;margin-bottom:12px;background:#f4ecda var(--grain) center/256px;border:1px solid var(--line);border-radius:7px}.shop-head .h-title{font-size:25px}.tray-empty{min-width:0;font-size:12px}.tray-empty p{margin:6px 2px}.tray .tray-empty .btn{display:flex;align-items:center;justify-content:center;width:100%;height:auto;min-height:36px;padding:6px 8px;white-space:normal;border-radius:7px;font-size:12px;background:var(--jade) var(--grain) center/256px;border:1px solid var(--line);color:var(--rouge);cursor:pointer}
 .wstart .finds{gap:6px}.wstart .finds>div{padding:7px 9px}.wstart .h-title{font-size:25px}
 #v-wild .walk-top{z-index:12;top:64px;gap:16px;padding:8px 14px;background:none;border:0;box-shadow:none}.wstretch{flex-shrink:0;min-width:64px;text-align:center;padding:3px 12px;background:#f4ecda var(--grain) center/256px;border:1px solid var(--line);border-radius:7px;color:var(--ink);font:20px/1.3 var(--f-display);box-shadow:0 2px 6px var(--shadow)}.walk-top .wpath{margin-right:9px;background:repeating-linear-gradient(90deg,#615d50 0 6px,transparent 6px 12px);filter:drop-shadow(0 1px 1px #f4ecda)}
@@ -1367,6 +1367,9 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .snd,.ib,.so-x,.dlg-x,.talk-x,.lvring{width:var(--c-md);height:var(--c-md);min-width:0;padding:0;flex-shrink:0}
 .order-x,.mode-exit{width:var(--c-sm);height:var(--c-sm);padding:0;flex-shrink:0}
 .g-tools .tool,.st-side button{width:var(--c-round);height:var(--c-round);flex:0 0 var(--c-round)}
+/* 特例：小镇的「寻人」钮压在画上，只占右下角一枚，圆瓷片缩到 --c-lg：图标是画里那种对话泡，下面一行小字是还有几位在等 */
+.g-tools.tfolk .tool{width:var(--c-lg);height:var(--c-lg);flex:0 0 var(--c-lg);padding:0;font-size:10px;gap:0}
+.g-tools.tfolk .tool svg{width:22px;height:18px}
 /* ---- 自适应：按容器实际大小收放，不按某一款手机写死 ---- */
 /* 顶栏放不下时（窄屏且有返回钮），先让出店名 */
 @media (max-width:420px){.top .brand .hud-back:not([hidden])~.logo{display:none}}
@@ -2593,7 +2596,7 @@ const BACK={kiln:['town','小镇']};
 let view='garden',prevView='garden',wakeFx=()=>{};
 const wishCoins=()=>30+Math.min(level()-1,20)*5;
 function go(v){if(SUBS[v])v=subSel[v];if(v==='folk')v='town';const par=parOf(v);if(par!==v)subSel[par]=v;if(walk&&v!=='wild')endWalk(true);
-  if(par==='book'&&parOf(view)!=='book')prevView=view;if(v==='studio'&&view!=='studio')hist=[];if(v!=='town')talkId=null;view=v;
+  if(par==='book'&&parOf(view)!=='book')prevView=view;if(v==='studio'&&view!=='studio')hist=[];if(v!=='town')talkId=null;else if(view!=='town')tcam=null;view=v;
   $$('.view').forEach(e=>e.hidden=e.id!=='v-'+v);const bk=par==='book'?[prevView,'合上']:BACK[v],bb=$('#backBtn');bb.hidden=!bk;if(bk){bb.dataset.to=bk[0];$('#backTxt').textContent=bk[1]}
   $('#app').dataset.at=par;if(v==='town')$('#app').style.setProperty('--hz',Math.round(innerHeight*.4)+'px');
   ({garden:()=>{refreshPlots();hints();layoutScene()},studio:renderStudio,shop:renderShop,codex:renderCodex,gallery:renderGallery,wild:renderWild,town:renderTown,kiln:renderKiln,goals:renderGoals})[v]();$$('.grid>*,.works>*').forEach((e,i)=>e.style.setProperty('--i',Math.min(i,16)));wakeFx()}
@@ -2601,7 +2604,7 @@ function bind(){
   $('#backBtn').addEventListener('click',()=>go($('#backBtn').dataset.to||'garden'));
   $('#bookBtn').addEventListener('click',()=>{if(parOf(view)!=='book')go('book')});
   bindTownCam();
-  $('#town').addEventListener('click',e=>{if(e.target.closest('[data-hire]')){const receipt=payHire();if(receipt){sfx('coin');hud();save();talkId=null;renderTown();hireTag();toast(receipt)}return}const f=e.target.closest('[data-folk]'),x=e.target.closest('[data-talkx]'),n=e.target.closest('[data-talk]');
+  $('#town').addEventListener('click',e=>{if(e.target.closest('[data-hire]')){const receipt=payHire();if(receipt){sfx('coin');hud();save();talkId=null;renderTown();hireTag();toast(receipt)}return}if(e.target.closest('[data-seek]')){sfx('place');return townNext()}const f=e.target.closest('[data-folk]'),x=e.target.closest('[data-talkx]'),n=e.target.closest('[data-talk]');
     if(f&&!f.disabled)folkDone(f.dataset.folk);else if(x){talkId=null;$('#talk').hidden=true;$$('#town [data-own]').forEach(q=>q.classList.remove('on'))}else if(n){sfx('place');openTalk(n.dataset.talk)}});
   $('#plots').addEventListener('click',e=>{if(Date.now()-sweepJust<400)return;const p=e.target.closest('.plot');if(p)plotClick(p)});initSweep();
   $('#waterAll').addEventListener('click',()=>{let n=0,c=0;$$('#plots .plot').forEach((el,i)=>{const q=S.plots[i];if(!q||i>=plotCount())return;
@@ -2973,18 +2976,36 @@ function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==T
       lab=who?(t.own==='he'?`${sign}，花匠阿禾`:`${t.sign}，${folkLabel(who)}`):sign.replace(' · ','，');
     return`<button class="tspot${who&&talkId===who.id?' on':''}" ${who?`data-own="${who.id}" data-talk="${who.id}"`:`data-go="${t.go}"`} style="--l:${r[0]}%;--t:${r[1]}%;--w:${r[2]}%;--h:${r[3]}%" aria-label="${lab}"></button>`};
   $('#town').innerHTML=`<div class="tscroll" id="tscroll"><div class="tworld${TOWN.safe?' bleed':''}" id="tworld"><img class="tplate" src="${A(TOWN.img)}" width="${TOWN.w}" height="${TOWN.h}" alt="" draggable="false">`+
-    TOWN.spots.map(spot).join('')+Object.keys(TOWN.folk).map(townFigure).join('')+'</div></div><div class="talk" id="talk" hidden></div>';
+    TOWN.spots.map(spot).join('')+Object.keys(TOWN.folk).map(townFigure).join('')+'</div></div><div class="talk" id="talk" hidden></div>'+townRow();
   layoutTown();if(!S.tzTip&&tz.W){S.tzTip=1;save();toast(matchMedia('(pointer:coarse)').matches?'小镇比屏幕大：拖动看看，双指可以放大缩小':'小镇比屏幕大：拖动看看，滚轮可以放大缩小')}
   if(talkId)openTalk(talkId,true)}
 /* 小镇是一张比屏幕大的地图（城镇经营游戏那样）：单指或鼠标拖着看，双指、滚轮、触控板捏合缩放，镜头不出整图（连出血）的边。
    tcam={s,x,y}：s＝原图一像素在屏幕上多大，x/y＝整图（连出血）左上角在 #tscroll 里的位置；人物、热区都按安全区（.tworld）的百分比放。
    缩放范围：最小是整图刚好盖满屏幕；最大到人物约 180px 高。
-   进门的默认：安全区放进顶栏和底栏之间一屏看全，但人物至少要有约 80px 高（手机上就会放大，要拖着看）；镜头对准安全区中心。 */
+   进门的默认：安全区放进顶栏和底栏之间一屏看全，但人物至少要有约 80px 高（手机上就会放大，要拖着看）。
+   一屏放得下（电脑）就对准安全区中心；放不下就对准最该去找的乡邻（能交付的优先），每次进小镇都重新对准。 */
+/* 有事的乡邻：能交付的排前面，其余按委托顺序；已是知己的不算 */
+const townBusy=()=>{const l=FOLK.filter(c=>fstep(c)&&TOWN.folk[c.id]);return[...l.filter(c=>fstate(c).ok),...l.filter(c=>!fstate(c).ok)]};
+/* 右下角一枚「寻人」钮：每点一下，镜头滑到下一位有事的乡邻并打开对话（能交付的排在前），轮完再从头。画上不用叠任何字 */
+let seekLast=null;
+function townRow(){const n=townBusy().length;if(!n)return'';
+  return`<div class="g-tools tfolk"><button class="tool" data-seek="1" aria-label="寻人：还有 ${n} 位乡邻在等你" title="寻人"><svg viewBox="0 0 24 20" aria-hidden="true"><path d="M4 1.5h16a2.5 2.5 0 0 1 2.5 2.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4H4A2.5 2.5 0 0 1 1.5 12V4A2.5 2.5 0 0 1 4 1.5z" fill="#f8efdb" stroke="#6b4528" stroke-opacity=".6"/><g fill="#4a2c18"><circle cx="7.5" cy="8" r="1.5"/><circle cx="12" cy="8" r="1.5"/><circle cx="16.5" cy="8" r="1.5"/></g></svg>${n}位</button></div>`}
+function townNext(){const l=townBusy();if(!l.length)return;const i=l.findIndex(c=>c.id===(talkId||seekLast)),c=l[(i+1)%l.length];seekLast=c.id;townSeek(c.id)}
+let glideRAF=0;
+function townGlide(tx,ty){if(!tcam)return;cancelAnimationFrame(glideRAF);const s=tcam.s;tx=clamp(tx,tz.W-TOWN.w*s,0);ty=clamp(ty,tz.H-TOWN.h*s,0);
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){tcam.x=tx;tcam.y=ty;return townApply()}
+  const x0=tcam.x,y0=tcam.y,t0=performance.now();
+  const f=t=>{const k=Math.min(1,(t-t0)/460),e=1-Math.pow(1-k,3);tcam.x=x0+(tx-x0)*e;tcam.y=y0+(ty-y0)*e;townApply();if(k<1)glideRAF=requestAnimationFrame(f)};glideRAF=requestAnimationFrame(f)}
+/* 点乡邻钮：先开对话，再把人挪到对话框上面那块画面的正中 */
+function townSeek(id){openTalk(id);const f=$(`#tworld .tfig[data-own="${id}"]`);if(!f||!tcam)return;
+  const r=f.getBoundingClientRect(),t=$('#talk'),top=tz.T+tz.top,bot=t&&!t.hidden?t.getBoundingClientRect().top-8:tz.T+tz.top+tz.ah;
+  townGlide(tcam.x+tz.L+tz.W/2-(r.left+r.width/2),tcam.y+(top+bot)/2-(r.top+r.height/2))}
 function townLimits(R){const[sx,sy,sw,sh]=TOWN.safe||[0,0,TOWN.w,TOWN.h],
     top=($('header.top')?.getBoundingClientRect().bottom||R.top)-R.top+4,bot=($('#dock')?.getBoundingClientRect().top||R.bottom)-R.top-4,ah=Math.max(120,bot-top),
     fh=Math.min(...Object.values(TOWN.folk).map(q=>q[2]))/100*sh,
     lo=Math.max(R.width/TOWN.w,R.height/TOWN.h),hi=Math.max(lo*1.6,180/fh);
-  return{lo,hi,s0:clamp(Math.max(Math.min(R.width/sw,ah/sh),80/fh),lo,hi),top,ah,L:R.left,T:R.top,W:R.width,H:R.height}}
+  const fit=Math.min(R.width/sw,ah/sh);
+  return{lo,hi,fit,s0:clamp(Math.max(fit,80/fh),lo,hi),top,ah,L:R.left,T:R.top,W:R.width,H:R.height}}
 function townApply(){const w=$('#tworld');if(!w||!tcam||!tz.W)return;const[sx,sy,sw,sh]=TOWN.safe||[0,0,TOWN.w,TOWN.h],
     s=tcam.s=clamp(tcam.s,tz.lo,tz.hi);
   tcam.x=clamp(tcam.x,tz.W-TOWN.w*s,0);tcam.y=clamp(tcam.y,tz.H-TOWN.h*s,0);
@@ -2995,13 +3016,14 @@ function layoutTown(){const w=$('#tworld'),sc=$('#tscroll');if(!w||!sc)return;co
   const old=tz,[sx,sy,sw,sh]=TOWN.safe||[0,0,TOWN.w,TOWN.h];tz=townLimits(R);
   w.style.setProperty('--bl',sx/sw*100+'%');w.style.setProperty('--br',(TOWN.w-sx-sw)/sw*100+'%');
   w.style.setProperty('--bt',sy/sh*100+'%');w.style.setProperty('--bb',(TOWN.h-sy-sh)/sh*100+'%');
-  if(!tcam){const s=tz.s0;tcam={s,x:tz.W/2-(sx+sw/2)*s,y:tz.top+tz.ah/2-(sy+sh/2)*s}}
+  if(!tcam){const s=tz.s0,c=s>tz.fit*1.02&&townBusy()[0];seekLast=c?c.id:null;const q=c&&TOWN.folk[c.id],wx=q?sx+q[0]/100*sw:sx+sw/2,wy=q?sy+(q[1]-q[2]/2)/100*sh:sy+sh/2;
+    tcam={s,x:tz.W/2-wx*s,y:tz.top+tz.ah/2-wy*s}}
   else if(old.W&&(old.W!==tz.W||old.H!==tz.H)){const cx=(old.W/2-tcam.x)/tcam.s,cy=(old.H/2-tcam.y)/tcam.s;tcam.x=tz.W/2-cx*tcam.s;tcam.y=tz.H/2-cy*tcam.s}
   sc.scrollLeft=sc.scrollTop=0;townApply()}
 /* 拖动和缩放。拖过（手指挪动超过几像素）的那一下不算点击，免得拖地图时误点开人物或房子；松手时带一点惯性 */
 function bindTownCam(){const T=$('#town'),pts=new Map();let g=null,fling=0,dragged=false;
   const pair=()=>{const[a,b]=[...pts.values()];return{x:(a.x+b.x)/2,y:(a.y+b.y)/2,d:Math.hypot(a.x-b.x,a.y-b.y)}};
-  T.addEventListener('pointerdown',e=>{const sc=e.target.closest('#tscroll');if(!sc||(e.button||0)>0||!tcam)return;cancelAnimationFrame(fling);
+  T.addEventListener('pointerdown',e=>{const sc=e.target.closest('#tscroll');if(!sc||(e.button||0)>0||!tcam)return;cancelAnimationFrame(fling);cancelAnimationFrame(glideRAF);
     if(!pts.size){dragged=false;g={sx:e.clientX,sy:e.clientY,vx:0,vy:0,t:e.timeStamp,moved:false}}
     pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
     if(pts.size===2){g.moved=dragged=true;g.p=pair();sc.classList.add('grab');for(const id of pts.keys())try{sc.setPointerCapture(id)}catch(_){}}});
@@ -3019,7 +3041,7 @@ function bindTownCam(){const T=$('#town'),pts=new Map();let g=null,fling=0,dragg
       if(Math.hypot(vx,vy)>.03&&view==='town')fling=requestAnimationFrame(f)};fling=requestAnimationFrame(f)};
   T.addEventListener('pointerup',up);T.addEventListener('pointercancel',up);
   T.addEventListener('click',e=>{if(dragged&&e.target.closest('#tscroll')){dragged=false;e.stopPropagation();e.preventDefault()}},true);
-  T.addEventListener('wheel',e=>{if(!e.target.closest('#tscroll')||!tcam)return;e.preventDefault();cancelAnimationFrame(fling);
+  T.addEventListener('wheel',e=>{if(!e.target.closest('#tscroll')||!tcam)return;e.preventDefault();cancelAnimationFrame(fling);cancelAnimationFrame(glideRAF);
     const d=e.deltaMode===1?e.deltaY*16:e.deltaY;townZoom(e.clientX,e.clientY,Math.exp(-d*(e.ctrlKey?.01:.0015)))},{passive:false});
   // 用键盘 Tab 到画外的人物或房子时，镜头挪过去（不让浏览器自己滚动 #tscroll）
   T.addEventListener('focusin',e=>{const b=e.target.closest('#tworld button'),sc=$('#tscroll');if(!b||!sc||!tcam)return;sc.scrollLeft=sc.scrollTop=0;if(pts.size)return;

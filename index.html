@@ -2955,9 +2955,9 @@ function bindTownCam(){const T=$('#town'),pts=new Map();let g=null,fling=0,dragg
     const dt=Math.max(1,e.timeStamp-g.t);g.t=e.timeStamp;g.vx=g.vx*.3+dx/dt*.7;g.vy=g.vy*.3+dy/dt*.7;
     tcam.x+=dx;tcam.y+=dy;townApply()});
   const up=e=>{if(!pts.delete(e.pointerId)||!g)return;g.p=pts.size>=2?pair():null;if(pts.size)return;
-    $('#tscroll')?.classList.remove('grab');let{vx,vy}=g;
+    $('#tscroll')?.classList.remove('grab');let{vx,vy}=g;const v=Math.hypot(vx,vy);if(v>2){vx*=2/v;vy*=2/v}
     if(!g.moved||e.timeStamp-g.t>90||e.type==='pointercancel'||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-    let last=performance.now();const f=t=>{const dt=Math.min(32,t-last);last=t;const k=Math.pow(.93,dt/16);vx*=k;vy*=k;
+    let last=performance.now();const f=t=>{const dt=Math.min(32,t-last);last=t;const k=Math.pow(.92,dt/16);vx*=k;vy*=k;
       const ox=tcam.x,oy=tcam.y;tcam.x+=vx*dt;tcam.y+=vy*dt;townApply();if(tcam.x===ox)vx=0;if(tcam.y===oy)vy=0;
       if(Math.hypot(vx,vy)>.03&&view==='town')fling=requestAnimationFrame(f)};fling=requestAnimationFrame(f)};
   T.addEventListener('pointerup',up);T.addEventListener('pointercancel',up);

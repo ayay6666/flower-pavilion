@@ -1223,6 +1223,17 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .wx-map .wx-q{grid-column:1/-1;font-size:11.5px;line-height:1.6;color:#4f6f5c}
 .wx-map[aria-disabled=true] b{color:var(--ink-soft)}
 .cu{display:block;width:24px;height:24px;object-fit:contain}
+/* 人物动作帧：与走路帧同高、脚底对齐，帧格更宽，好放下伸手和跃起的姿势 */
+.wj-walker .ps{position:absolute;left:50%;bottom:0;height:100%;aspect-ratio:420/360;translate:-50% 0;background:url("assets/wk_pose.webp") 0 0/1200% 100% no-repeat;pointer-events:none;display:none}
+.wj-walker.pose .wk{visibility:hidden}.wj-walker.pose .ps{display:block}
+/* 小物件看着小，手指点的范围放大一圈 */
+.xs::before{content:"";position:absolute;inset:-14px -12px -8px}
+.xs.k-bfly.flee .bf{animation:bfflee .7s ease-in forwards}
+@keyframes bfflee{to{translate:-60% -260%;opacity:.2}}
+.pano.acting .wx-act{visibility:hidden}
+#wbag.bump{animation:bagbump .36s ease}
+@keyframes bagbump{40%{transform:scale(1.06)}}
+@media (prefers-reduced-motion:reduce){.xs.k-bfly.flee .bf,#wbag.bump{animation:none}}
 .cu.unk{filter:brightness(0);opacity:.16}
 .cu.big{position:relative;width:min(120px,32vw);height:min(120px,32vw);margin:0 auto}
 .wx-ava{display:block;height:min(150px,22vh);width:auto;margin:0 auto 2px}
@@ -3175,7 +3186,7 @@ const cuImg=(c,cls='')=>`<img class="cu ${cls}" src="${A(WCU[c][2])}" alt="${WCU
 
 /* ---------- 出发前：选地图 ---------- */
 function wxRender(){if(walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';const l=legs(),mx=S.legMax||3,M=WMAPS[X.map];
-  $('#wild').innerHTML=`${wxSceneHTML(X.map)}<div class="wild-rest"><div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">点地面走过去，看见喜欢的就去拿。草丛、溪边、花丛里还藏着小游戏，路上会遇到熟人。</p>
+  $('#wild').innerHTML=`${wxSceneHTML(X.map)}<div class="wild-rest"><div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">按住地面就一直走，看见喜欢的点一下就去拿。草丛、溪边、花丛里还藏着小游戏，路上会遇到熟人。</p>
   <div class="wx-maps" role="radiogroup" aria-label="选一处去走走">${WMAP_IDS.map(m=>{const W=WMAPS[m],open=wxOpen(m),q=X.q[m]||0,Q=WQ[m],n=W.cu.filter(c=>X.cu[c]).length;
     return`<button class="wx-map${m===X.map?' on':''}" data-wxmap="${m}" role="radio" aria-checked="${m===X.map}"${open?'':lockAttr(wxLockTxt(m))}><b>${W.n}</b><small>${open?W.sub:wxLockTxt(m)}</small>${open?`<span class="wx-cus" aria-label="拾遗 ${n} / 4">${W.cu.map(c=>X.cu[c]?cuImg(c):cuImg(c,'unk')).join('')}</span><span class="wx-q">${Q.n} ${q>=Q.steps.length?'· 心事已了':`· ${q} / ${Q.steps.length}`}${wxReady(m)?' · 可以去找他了':''}</span>`:''}</button>`}).join('')}</div>
   <div class="bag">${bagHTML()}</div>
@@ -3188,10 +3199,10 @@ function wxSceneHTML(m){const M=WMAPS[m],r=rng(M.seed),back=[],cross=[];
   M.plan.forEach(a=>(a[0]==='bridge'?cross:back).push(prop(a)));
   return`<div class="pano wx" data-map="${m}"><div class="journey"><div class="wj-layer wj-sky" aria-hidden="true"><img src="${A('assets/mountains.webp')}" width="1600" height="528" alt="" draggable="false"></div><div class="wj-layer wj-hills" aria-hidden="true"><img src="${A('assets/w_hills.webp')}" width="1600" height="294" alt="" draggable="false"></div><div class="wj-layer wj-props" aria-hidden="true">${back.join('')}</div><div class="wj-layer wj-ground" aria-hidden="true" style="background-image:url('${A(M.ground)}')"></div><div class="wj-layer wj-crossing" aria-hidden="true">${cross.join('')}</div><div class="wj-layer wx-deco" aria-hidden="true">${(M.deco||[]).map(([k,t])=>{const d=WPROP[k];return`<img class="wj-prop wx-dec k-${k}" data-t="${t}" src="${A(d[3])}" width="${d[0]}" height="${d[1]}" alt="" draggable="false" style="--flip:${r()<.5?-1:1}">`}).join('')}</div><div class="wj-layer wx-spots" id="wxSpots"></div><div class="wj-walker" aria-hidden="true"><i class="wj-shadow"></i><i class="wk"></i></div><div class="wj-mist" aria-hidden="true"></div></div></div>`}
 let wxQ=null,wxRAF=0,wxRO=null;
-function wxStopScene(){cancelAnimationFrame(wxRAF);wxRAF=0;if(wxRO)wxRO.disconnect();wxRO=null;wxQ=null}
+function wxStopScene(){cancelAnimationFrame(wxRAF);wxRAF=0;clearTimeout(wxSeqT);if(wxRO)wxRO.disconnect();wxRO=null;wxQ=null}
 function wxMount(){wxStopScene();const p=$('#wild .pano');if(!p||view!=='wild')return;
   wxQ={pano:p,sky:$('.wj-sky',p),hills:$('.wj-hills',p),props:$('.wj-props',p),ground:$('.wj-ground',p),cross:$('.wj-crossing',p),deco:$('.wx-deco',p),spots:$('.wx-spots',p),walker:$('.wj-walker',p),mist:$('.wj-mist',p),W:0,H:0,D:0};
-  wxMeasure();if(typeof ResizeObserver!=='undefined'){wxRO=new ResizeObserver(wxMeasure);wxRO.observe(p)}if(walk)wxLoop()}
+  wxMeasure();if(typeof ResizeObserver!=='undefined'){wxRO=new ResizeObserver(wxMeasure);wxRO.observe(p)}wxFrame(9);if(walk){walk.mv=null;walk.busy=walk.soft=false;wxLoop()}}
 function wxMeasure(){const q=wxQ;if(!q)return;const W=q.pano.clientWidth,H=q.pano.clientHeight;if(!W||!H)return;const D=Math.max(W*5,H*8);Object.assign(q,{W,H,D});
   q.sky.style.width=W*1.12+'px';q.hills.style.width=Math.max(W+D*.10,H*.38*1600/294)+'px';[q.props,q.ground,q.cross,q.deco,q.spots].forEach(el=>el.style.width=W+D+'px');
   $$('.wj-prop',q.pano).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');$$('.xs',q.spots).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');if(walk)walk.near=-2;wxPaint(true)}
@@ -3203,9 +3214,9 @@ function wxPaint(force){const q=wxQ;if(!q||!q.D)return;const p=walk?walk.p:0,{W,
 
 /* ---------- 一趟出门 ---------- */
 function wxStart(){if(legs()<1||walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';S.legs--;X.trips++;
-  walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1};
+  walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1,hold:null,busy:false,soft:false,mv:null,still:0,after:null};
   const M=WMAPS[walk.map];
-  $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">点地面走过去，点东西就去拿</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn" id="walkEnd">回家</button></div>`;
+  $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">按住地面一直走，点东西就去拿</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn" id="walkEnd">回家</button></div>`;
   $('#wbag').innerHTML=bagHTML();wxDrawSpots();wxMount();sfx('place');save();refreshDock();
   setTimeout(()=>{const t=$('#wxTip');if(t)t.classList.add('fade')},6000)}
 function wxGen(m){const M=WMAPS[m],X=wxs(),r=rng((X.trips*977+dayNo()*131+m.charCodeAt(0)*7)>>>0),q=X.q[m]||0,st=wxStep(m),list=[],put=(k,o={})=>list.push({k,...o});
@@ -3241,36 +3252,82 @@ function wxNear(){if(!walk||!wxQ)return;const lim=wxReach()/wxQ.D;let best=-1,bd
   if(best===walk.near)return;walk.near=best;$$('#wxSpots .xs.near').forEach(e=>e.classList.remove('near'));const b=$('#wxAct');
   if(best<0){if(b)b.hidden=true;return}const el=$(`#wxSpots .xs[data-i="${best}"]`);el?.classList.add('near');if(b&&el){b.hidden=false;b.textContent=wxLabel(walk.spots[best]);b.style.left=el.style.left;b.style.top=Math.max(wxQ.H*.16,el.offsetTop-b.offsetHeight-6)+'px'}}
 function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{wxRAF=0;if(!walk||view!=='wild'||!wxQ||!wxQ.pano.isConnected)return;
-    const dt=Math.min(.05,(now-walk.last)/1000);walk.last=now;let to=walk.to;if(walk.keys)to=walk.keys<0?0:1;
-    const moving=to!=null&&Math.abs(to-walk.p)>1e-4&&$('#modal').hidden;
-    if(moving){const sp=clamp(wxQ.W*.75,240,420)/wxQ.D*dt,d=to-walk.p;walk.face=d<0?-1:1;walk.p=Math.abs(d)<=sp?to:walk.p+Math.sign(d)*sp;
-      if(walk.p===to&&!walk.keys){walk.to=null;if(walk.goal>=0){const g=walk.goal;walk.goal=-1;wxUse(g)}}}
-    wxQ.pano.classList.toggle('go',!!moving);wxPaint();if(!document.hidden)wxRAF=requestAnimationFrame(step)};
+    const dt=Math.min(.05,(now-walk.last)/1000);walk.last=now;
+    if(walk.hold)walk.to=wxPx2P(walk.hold.x);
+    let to=walk.to;if(walk.keys)to=walk.keys<0?0:1;
+    const open=$('#modal').hidden,want=to!=null&&Math.abs(to-walk.p)>1e-4&&open;
+    if(want&&walk.soft)wxCut();
+    const moving=want&&!walk.busy;
+    if(moving){const sp=clamp(wxQ.W*.75,240,420)/wxQ.D*dt,d=to-walk.p;walk.face=d<0?-1:1;walk.p=Math.abs(d)<=sp?to:walk.p+Math.sign(d)*sp}
+    // 到了：差不到一个像素也算到（帧间隔很短时会停在离目标一丝丝的地方）
+    if(walk.to!=null&&!walk.keys&&!walk.hold&&!walk.busy&&open&&Math.abs(walk.to-walk.p)<=1e-4){walk.p=walk.to;walk.to=null;if(walk.goal>=0){const g=walk.goal;walk.goal=-1;wxUse(g)}}
+    if(moving!==walk.mv){walk.mv=moving;if(!walk.busy&&!walk.soft)wxFrame(moving?-1:9)}
+    wxQ.pano.classList.toggle('go',!!moving);wxPaint();
+    if(!moving&&!walk.busy&&open){walk.still+=dt;
+      if(walk.after){const a=walk.after;walk.after=null;walk.still=0;wxPlay(a)}
+      else if(walk.still>7&&!walk.soft){walk.still=-3*Math.random();wxPlay(pick(['smell','look']),null,null,true)}}else walk.still=0;
+    wxRAF=requestAnimationFrame(step)};
   wxRAF=requestAnimationFrame(step)}
 function wxPx2P(clientX){const q=wxQ,r=q.pano.getBoundingClientRect(),X=walk.p*q.D+q.W*.28,cam=clamp(X-q.W*.42,0,q.D);return clamp((clientX-r.left+cam-q.W*.28)/q.D,0,1)}
-function wxPoint(e){if(!walk||!wxQ||e.button>0)return;const sp=e.target.closest('.xs');
-  if(sp||e.target.closest('button,.walk-top,.walk-bot'))return;walk.goal=-1;walk.to=wxPx2P(e.clientX);const pid=e.pointerId,mv=ev=>{if(ev.pointerId===pid&&walk)walk.to=wxPx2P(ev.clientX)},up=ev=>{if(ev.pointerId!==pid)return;removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up)};
+function wxPoint(e){if(!walk||!wxQ||e.button>0)return;
+  if(e.target.closest('.xs,button,.walk-top,.walk-bot'))return;const pid=e.pointerId;walk.goal=-1;walk.hold={x:e.clientX,t:performance.now()};walk.to=wxPx2P(e.clientX);
+  const mv=ev=>{if(ev.pointerId===pid&&walk&&walk.hold)walk.hold.x=ev.clientX},up=ev=>{if(ev.pointerId!==pid)return;removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);
+    if(walk&&walk.hold){const long=performance.now()-walk.hold.t>320;walk.hold=null;if(long)walk.to=null}};
   addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)}
 function wxKey(e,down){if(!walk||view!=='wild'||!$('#modal').hidden||e.target.closest?.('input,textarea'))return;const k=e.key;
   if(k==='ArrowLeft'||k==='a'||k==='A'){walk.keys=down?-1:walk.keys<0?0:walk.keys;walk.to=down?null:walk.p;walk.goal=-1;e.preventDefault()}
   else if(k==='ArrowRight'||k==='d'||k==='D'){walk.keys=down?1:walk.keys>0?0:walk.keys;walk.to=down?null:walk.p;walk.goal=-1;e.preventDefault()}
-  else if(down&&(k==='Enter'||k===' '||k==='e'||k==='E')&&walk.near>=0&&!e.repeat&&!e.target.closest?.('button')){e.preventDefault();wxUse(walk.near)}}
+  else if(down&&(k==='Enter'||k===' '||k==='e'||k==='E')&&walk.near>=0&&!e.repeat&&!e.target.closest?.('button')){e.preventDefault();wxGoUse(walk.near)}}
 addEventListener('keydown',e=>wxKey(e,true));addEventListener('keyup',e=>wxKey(e,false));
 $('#wild').addEventListener('pointerdown',e=>{if(e.target.closest('.pano.wx'))wxPoint(e)});
 $('#wild').addEventListener('click',e=>{const m=e.target.closest('[data-wxmap]');if(m){if(m.getAttribute('aria-disabled')==='true')return;wxs().map=m.dataset.wxmap;sfx('place');save();wxRender();return}
-  if(e.target.closest('#wxAct')&&walk&&walk.near>=0)return wxUse(walk.near);
-  const sp=e.target.closest('.xs');if(sp&&walk&&wxQ){const i=+sp.dataset.i,s=walk.spots[i];if(!s||s.done)return;if(Math.abs(s.t-walk.p)*wxQ.D<=wxReach())return wxUse(i);walk.to=clamp(s.t-(s.t>walk.p?1:-1)*(wxReach()-30)/wxQ.D,0,1);walk.goal=i}});
+  if(e.target.closest('#wxAct')&&walk&&walk.near>=0)return wxGoUse(walk.near);
+  const sp=e.target.closest('.xs');if(sp&&walk&&wxQ)wxGoUse(+sp.dataset.i)});
+
+/* 人物动作：wk_pose.webp 一排 12 帧，脚底、比例和走路帧对齐。
+   0-2 弯腰/蹲下/举起小花，3-5 踮脚举团扇/跃起扑/捧手看，6-7 打水漂蓄力/出手，8 招手，9 站着，10 闻花篮，11 手搭凉棚 */
+const WXP={pick:[[0,130],[1,380],[2,620],[1,130],[0,110]],bush:[[0,130],[1,420]],bfly:[[3,300],[4,420]],caught:[[5,1300]],
+  stone:[[6,420],[7,360]],cheer:[[8,1100]],wave:[[8,620]],smell:[[10,1700]],look:[[11,1900]]};
+const WXHIT={pick:2,wave:1};
+let wxSeqT=0;
+function wxFrame(f){const w=wxQ&&wxQ.walker;if(!w)return;let ps=$('.ps',w);if(!ps){ps=document.createElement('i');ps.className='ps';w.appendChild(ps)}
+  w.classList.toggle('pose',f>=0);if(f>=0)ps.style.backgroundPositionX=(f/11*100).toFixed(4)+'%'}
+function wxCut(){clearTimeout(wxSeqT);if(walk){walk.soft=false;walk.busy=false}wxQ&&wxQ.pano.classList.remove('acting')}
+/* 播一段动作。hit 在“手碰到”那一帧调用，done 在播完后调用；soft 的小动作一走路就打断 */
+function wxPlay(name,hit,done,soft){wxCut();const seq=WXP[name];if(!walk||!wxQ||!seq){hit&&hit();done&&done();return}
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){hit&&hit();done&&done();return}
+  if(soft)walk.soft=true;else{walk.busy=true;wxQ.pano.classList.add('acting')}let k=0;const at=WXHIT[name]??seq.length;
+  const step=()=>{if(!walk||!wxQ)return;if(k===at&&hit){const h=hit;hit=null;h()}
+    if(k>=seq.length){walk.busy=walk.soft=false;wxQ.pano.classList.remove('acting');wxFrame(walk.mv?-1:9);done&&done();return}
+    wxFrame(seq[k][0]);wxSeqT=setTimeout(step,seq[k][1]);k++};
+  step()}
+/* 走到东西旁边、正好伸手够得着的地方再动手；乡邻站远一点说话 */
+const wxStand=s=>wxQ.walker.offsetWidth*(s.k==='npc'?.95:s.k==='flower'||s.k==='bush'?.55:.45);
+function wxGoUse(i){if(!walk||!wxQ||walk.busy)return;const s=walk.spots[i];if(!s||s.done)return;const d=(s.t-walk.p)*wxQ.D,want=wxStand(s);
+  walk.hold=null;walk.keys=0;if(Math.abs(d)<=want+16)return wxUse(i);walk.to=clamp(s.t-Math.sign(d)*want/wxQ.D,0,1);walk.goal=i}
+/* 拾起的东西画一道弧飞进左下角的背包 */
+function wxFly(el){const bag=$('#wbag');if(!bag||!el.animate||!$('#modal').hidden||matchMedia('(prefers-reduced-motion:reduce)').matches)return false;
+  const r=el.getBoundingClientRect(),b=bag.getBoundingClientRect();if(!r.width)return false;const c=el.cloneNode(true),x=r.left+r.width/2,y=r.top+r.height;
+  c.removeAttribute('data-i');c.removeAttribute('aria-label');c.setAttribute('aria-hidden','true');c.classList.remove('near');c.classList.add('xs-fly');
+  c.style.cssText=`position:fixed;left:${x}px;top:${y}px;bottom:auto;height:${r.height}px;z-index:30;pointer-events:none;animation:none`;document.body.appendChild(c);
+  const dx=b.left+Math.min(b.width,140)/2-x,dy=b.top+b.height*.6-y,T=(tx,ty,k)=>`translate(calc(-50% + ${tx}px),calc(-100% + ${ty}px)) scale(${k})`;
+  c.animate([{transform:T(0,0,1)},{transform:T(0,-14,.5),offset:.22},{transform:T(dx*.5,dy*.5-26,.4),offset:.6},{transform:T(dx,dy,.22),opacity:.5}],{duration:760,easing:'ease-in-out'}).onfinish=()=>{c.remove();bag.classList.remove('bump');void bag.offsetWidth;bag.classList.add('bump')};
+  return true}
 
 /* 拿到东西：飘字、火花、背包刷新 */
 function wxFx(i,txt,rare){const el=$(`#wxSpots .xs[data-i="${i}"]`),pano=wxQ&&wxQ.pano;if(!el||!pano)return;const pr=pano.getBoundingClientRect(),r=el.getBoundingClientRect(),x=r.left-pr.left+r.width/2,y=r.top-pr.top+r.height*.35;
   for(let k=0;k<6;k++){const s=document.createElement('span');s.className='spark';s.style.cssText=`left:${x}px;top:${y}px;--dx:${rint(-40,40)}px;--dy:${rint(-50,20)}px;z-index:11`;pano.appendChild(s);setTimeout(()=>s.remove(),1000)}
   if(txt){const t=document.createElement('span');t.className='pop';t.style.cssText=`left:${x}px;top:${y}px;z-index:11`;t.textContent=txt;pano.appendChild(t);setTimeout(()=>t.remove(),1300)}
   sfx(rare?'rare':'coin')}
-function wxTake(i){const el=$(`#wxSpots .xs[data-i="${i}"]`);walk.spots[i].done=true;walk.near=-2;if(el){el.classList.add('taken');setTimeout(()=>el.remove(),450)}wxNear();$('#wbag').innerHTML=bagHTML();hud();save()}
-function wxUse(i){if(!walk||!$('#modal').hidden)return;const s=walk.spots[i];if(!s||s.done)return;const g=walk.got,X=wxs();walk.to=null;walk.goal=-1;walk.keys=0;
-  if(s.k==='npc')return wxTalk();
-  if(s.k==='bfly')return wxGameBfly(i);if(s.k==='stone')return wxGameStone(i);if(s.k==='bush')return wxGameBush(i);
-  if(s.k==='curio')return wxCurio(i);
+function wxTake(i){const el=$(`#wxSpots .xs[data-i="${i}"]`);walk.spots[i].done=true;walk.near=-2;if(el){if(wxFly(el))el.remove();else{el.classList.add('taken');setTimeout(()=>el.remove(),450)}}wxNear();$('#wbag').innerHTML=bagHTML();hud();save()}
+function wxUse(i){if(!walk||!$('#modal').hidden||walk.busy)return;const s=walk.spots[i];if(!s||s.done)return;walk.to=null;walk.goal=-1;walk.keys=0;walk.hold=null;
+  if(Math.abs(s.t-walk.p)*(wxQ?wxQ.D:1)>2){walk.face=s.t>walk.p?1:-1;wxPaint(true)}
+  if(s.k==='npc')return wxPlay('wave',wxTalk);
+  if(s.k==='bfly'){$(`#wxSpots .xs[data-i="${i}"]`)?.classList.add('flee');return wxPlay('bfly',null,()=>wxGameBfly(i))}
+  if(s.k==='stone')return wxPlay('stone',null,()=>wxGameStone(i));
+  if(s.k==='bush')return wxPlay('bush',null,()=>wxGameBush(i));
+  wxPlay('pick',()=>{if(walk&&!s.done)s.k==='curio'?wxCurio(i):wxGive(i)})}
+function wxGive(i){const s=walk.spots[i],g=walk.got,X=wxs();
   let txt,rare=false;
   if(s.k==='dew'){S.dew++;g.dew=(g.dew||0)+1;bump('dewc');txt='露水 +1'}
   else if(s.k==='clay'){S.clay++;g.clay=(g.clay||0)+1;txt='陶土 +1'}
@@ -3309,7 +3366,7 @@ function wxGameBfly(i){const N=5,T=12000;
     const box=$('.wx-box',root),bs=[];let got=0,raf=0,t0=performance.now(),over=false;
     for(let k=0;k<N;k++){const b=document.createElement('button');b.className='g-b';b.setAttribute('aria-label','蝴蝶');b.innerHTML=BFLY;box.appendChild(b);bs.push({el:b,x:.15+Math.random()*.7,y:.2+Math.random()*.55,a:Math.random()*6.28,v:.12+Math.random()*.08,ph:Math.random()*6.28,on:true});
       b.addEventListener('pointerdown',e=>{e.preventDefault();const q=bs[k];if(!q.on||over)return;q.on=false;got++;b.classList.add('caught');buzz(12);sfx('coin');$('#gCnt').textContent=`${got} / ${N}`;bs.forEach(o=>o.v*=1.12);if(got===N)finish()})}
-    const finish=()=>{if(over)return;over=true;cancelAnimationFrame(raf);const n=Math.max(1,got);S.bfly+=n;walk.got.bfly=(walk.got.bfly||0)+n;bump('bfly',n);const L=[`蝴蝶 ×${n}`];
+    const finish=()=>{if(over)return;over=true;cancelAnimationFrame(raf);const n=Math.max(1,got);if(got&&walk)walk.after='caught';S.bfly+=n;walk.got.bfly=(walk.got.bfly||0)+n;bump('bfly',n);const L=[`蝴蝶 ×${n}`];
       if(got===N){S.dew++;walk.got.dew=(walk.got.dew||0)+1;L.push('露水 ×1');addExp(8)}else addExp(4);
       wxGameEnd(i,got===N?'一只不落，全请来了！':got?`请来了 ${got} 只。`:'它们飞得太快了……临走一只落在你肩上。',L)};
     const fr=now=>{const k=(now-t0)/T;$('#gTime').style.transform=`scaleX(${Math.max(0,1-k)})`;if(k>=1)return finish();const dt=1/60;
@@ -3332,7 +3389,7 @@ function wxGameStone(i){const m=walk.map;
     btn.addEventListener('click',throwIt);box.addEventListener('pointerdown',e=>{e.preventDefault();throwIt()});
     const finish=()=>{if(over)return;over=true;cancelAnimationFrame(raf);$('#gRow')?.remove();const L=[];
       if(best>=6){L.push(rwSeed(true));S.dew++;walk.got.dew=(walk.got.dew||0)+1;L.push('露水 ×1');addExp(10)}else if(best>=4){S.dew+=2;walk.got.dew=(walk.got.dew||0)+2;L.push('露水 ×2');L.push(rwSeed(false));addExp(6)}else{S.dew++;walk.got.dew=(walk.got.dew||0)+1;L.push('露水 ×1');addExp(3)}
-      const st=wxStep(m);let ex='';if(m==='he'&&st&&st.need.flag==='skip5'&&best>=5&&!wxs().fl.skip5){wxs().fl.skip5=1;ex='<p class="muted">沈先生在亭子里看见了，正冲你招手。</p>';wxRedrawNpc()}
+      if(best>=5&&walk)walk.after='cheer';const st=wxStep(m);let ex='';if(m==='he'&&st&&st.need.flag==='skip5'&&best>=5&&!wxs().fl.skip5){wxs().fl.skip5=1;ex='<p class="muted">沈先生在亭子里看见了，正冲你招手。</p>';wxRedrawNpc()}
       wxGameEnd(i,`最好的一次漂了 ${best} 下。`,L,ex)};
     return()=>{over=true;cancelAnimationFrame(raf)}})}
 

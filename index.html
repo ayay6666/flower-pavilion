@@ -1604,7 +1604,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
     <div id="gnd"></div>
     <img class="cot" src="assets/cottage.webp" width="640" height="415" alt="" draggable="false">
     <img class="bough" id="bough" src="assets/bough.webp" width="900" height="444" alt="" draggable="false">
-    <img class="fgl" id="fgl" src="assets/corner.webp" width="536" height="720" alt="" draggable="false"><img class="fgr" id="fgr" src="assets/corner.webp" width="536" height="720" alt="" draggable="false">
+    <img class="fgl" id="fgl" loading="lazy" src="assets/corner.webp" width="536" height="720" alt="" draggable="false"><img class="fgr" id="fgr" loading="lazy" src="assets/corner.webp" width="536" height="720" alt="" draggable="false">
     <canvas id="fx"></canvas>
     <div class="veil"></div><div class="rainveil"></div>
     <i class="fly" style="left:14%;top:58%"></i><i class="fly" style="left:32%;top:70%;animation-delay:-3s"></i><i class="fly" style="left:52%;top:55%;animation-delay:-5s"></i><i class="fly" style="left:68%;top:74%;animation-delay:-2s"></i><i class="fly" style="left:84%;top:60%;animation-delay:-6s"></i><i class="fly" style="left:44%;top:84%;animation-delay:-4s"></i>
@@ -4163,7 +4163,7 @@ function start(data){
     modal(`<div class="center"><h2 class="h-title" style="justify-content:center">小院在别处开着</h2><p class="say">另一个窗口正在照看这座小院。为免两边的存档互相覆盖，这个窗口先歇下了。</p><button class="btn primary" data-act="reload">在这里继续</button></div>`,false,{dismissible:false});stale=true});
   window.claude?.hot?.snapshot?.(()=>({S}));
   if(S.intro&&awayMsg)modal(awayMsg);else if(S.intro&&S.termSeen!==term().n)termModal();
-  if(!S.intro)modal(`<div class="center welcome-art"><img class="splash" src="${A('assets/splash.webp')}" width="900" height="600" alt="" draggable="false"><h2 class="logo big" style="font-size:40px;margin:4px 0">${[...'花信小筑'].map((c,i)=>`<span style="--i:${i}">${c}</span>`).join('')}</h2><p class="muted" style="margin:0">风有信，花不误。一方小院，四时花开。</p></div>
+  if(!S.intro)modal(`<div class="center welcome-art"><img class="splash" src="${A('assets/splash.webp')}" fetchpriority="high" width="900" height="600" alt="" draggable="false"><h2 class="logo big" style="font-size:40px;margin:4px 0">${[...'花信小筑'].map((c,i)=>`<span style="--i:${i}">${c}</span>`).join('')}</h2><p class="muted" style="margin:0">风有信，花不误。一方小院，四时花开。</p></div>
    <p class="say" style="text-align:center;margin:12px 0 4px">花铺掌柜会陪你走一遍：<b>播种 → 照料 → 采花 → 插花</b>。<br>授粉育种、山野散步、乡邻往来，之后慢慢都会遇到。不赶时间。</p>
    <div class="center"><button class="btn primary" data-act="start">推开院门</button></div>`);
 }

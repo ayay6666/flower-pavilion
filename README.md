@@ -35,6 +35,8 @@ python3 -m http.server 8770
 
 启动后在浏览器中访问 `http://localhost:8770`。
 
+GitHub Pages 发布时会压缩场景图和图标，并将内嵌书法字体拆成可独立缓存的文件。本地安装 WebP 工具 `cwebp` 后，运行 `python3 build_pages.py` 和 `python3 -m http.server 8770 --directory dist/pages` 即可预览发布版。
+
 ---
 
 ## 单文件打包与字体子集维护

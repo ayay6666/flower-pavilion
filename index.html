@@ -683,7 +683,7 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 .tfig .bub svg{width:1em;height:1em}
 .tfig.bl .bub{left:auto;right:calc(100% - 6px)}
 .tfig.bl .bub:not(.ok)::before{left:auto;right:3px}
-.ava.face{background:#efe4cc none 50% 3%/190% auto no-repeat;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
+.ava.face{background:#efe4cc none 58% 5%/125% auto no-repeat;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
 @keyframes talkin{from{transform:translate(-50%,24px);opacity:0}}
 .tface{flex-shrink:0;margin-top:-48px}.tface .chibi{width:92px}
 .tbody{flex:1;min-width:0;display:grid;gap:6px}
@@ -963,7 +963,7 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 @media (max-width:760px){#v-kiln{padding-bottom:calc(var(--dock-room) + 8px)}.knav{position:sticky;bottom:14px;z-index:4;justify-content:flex-end;pointer-events:none}.knav .btn{pointer-events:auto;box-shadow:0 3px 10px rgba(64,45,25,.28)}}
 .kwheel{--kw-off:178px;max-width:min(420px,100%,max(200px,calc((100vh - var(--dock-room) - var(--kw-off))*.788)));max-width:min(420px,100%,max(200px,calc((100dvh - var(--dock-room) - var(--kw-off))*.788)))}
 @media (max-width:760px){.kwheel{--kw-off:240px}}
-/* 露水、授粉模式里，提示卡右边挂一枚小关闭钮（跟订单卡的 ✕ 同一款 --c-sm 纸钮），和字排在同一行，不另起一行写红字「退出」 */
+/* 露水、授粉模式里，提示卡右边挂一枚小关闭钮（--c-sm 小纸钮），和字排在同一行，不另起一行写红字「退出」 */
 .hint.has-x{display:flex;align-items:center;gap:8px;text-align:left}.hint.has-x>span{flex:1;min-width:0}
 .mode-exit{display:grid;place-items:center;font-size:14px;color:var(--ink-soft)}
 .dialog.has-dlg-x{padding-top:42px}
@@ -973,8 +973,24 @@ button:disabled:hover,button[aria-disabled="true"]:hover{transform:none}
 .dlg-actions .btn.lg{height:auto;min-height:var(--c-lg)}
 .dlg-choices{display:grid;gap:8px;margin-top:12px}
 .dlg-choices .btn.green{width:100%;height:auto;min-height:var(--c-lg);white-space:normal;line-height:1.4}
-.order .who{padding-right:var(--c-sm)}
-.order-x{position:absolute;top:2px;right:2px;display:grid;place-items:center;font-size:14px}
+.btn.order-decline{margin-left:auto;flex-shrink:0;color:var(--ink-soft)}
+.order .foot .btn.sm{margin-left:auto;flex-shrink:0}
+.btn.order-track.on{color:#2c4c38;font-weight:700}
+.order.ready .foot{border-top-color:rgba(66,118,86,.45)}
+.st-obar{display:flex;align-items:center;gap:6px;flex:0 0 auto;padding:4px 8px;border:1px solid var(--line);border-radius:10px;background:rgba(249,243,229,.9);min-width:0}
+.st-obar[hidden]{display:none}
+.st-obar.ready{border-color:rgba(66,118,86,.45);background:rgba(232,243,234,.92)}
+.st-obar-who{border:0;background:none;padding:0;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;flex-shrink:0;cursor:pointer}
+.st-obar-reqs{display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1;cursor:pointer}
+.st-obar-reqs::-webkit-scrollbar{display:none}
+.st-obar-reqs .req{margin:0;white-space:nowrap;flex-shrink:0}
+.st-obar-x{border:0;background:none;color:var(--ink-soft);font-size:14px;width:26px;height:26px;display:grid;place-items:center;flex-shrink:0;cursor:pointer;border-radius:6px}
+.findlg .dlg-actions,.findlg .fin-deliver{margin-top:0}
+.fin-deliver{flex-shrink:0;max-height:28%;overflow-y:auto;gap:6px}
+.fin-deliver .btn.green{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.fin-deliver .btn.green small{font-size:12px;opacity:.85;font-weight:400}
+.fin-target{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;flex-shrink:0;padding:6px 10px;border-radius:8px;background:rgba(209,223,207,.55);color:#2c4c38;font-size:12.5px}
+.fin-target .meta{font-size:12px;color:#2c4c38}
 /* 对话框不再为关闭钮单留一条 40px 的空行：关闭钮压在名字行右端，名字行右边让出一个钮的宽度 */
 .talk .tname{padding-right:calc(var(--c-md) + 4px);min-height:var(--c-md)}
 /* 对话框里的立绘一律只露头和上半身，放在左上角：全身像比台词高，探出框顶就会被对话框的滚动区切掉头 */
@@ -1104,7 +1120,7 @@ body{touch-action:manipulation}
 @media (min-width:1001px){
   #v-studio .studio{grid-template-columns:minmax(0,1fr) minmax(280px,360px)}
   .side-col{min-width:0;min-height:0;overflow-y:auto}
-  .so-x,.st-side .so-btn{display:none}
+  .so-x,.st-side .so-btn,#stOrderBar,.order-track{display:none}
 }
 @media (max-width:1000px){
   .side-col{position:fixed;z-index:7;left:12px;right:12px;top:62px;bottom:calc(var(--dock-room) + 6px);display:none;flex-direction:column;margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--jade) var(--grain) center/384px;box-shadow:0 12px 34px rgba(53,38,25,.35)}
@@ -1206,23 +1222,41 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .pano.wx{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .pano.wx .wj-walker{left:0;transform:translate3d(28vw,0,0) translateX(-50%);height:max(96px,25%)}
 .wx-spots{top:0;height:100%;z-index:5}
-/* 地面条上沿淡入，山脚往下多垫一截，免得出现一道硬直线、树和竹子被拦腰截断 */
+/* 地面条上沿淡入，山脚和路边景物往下多垫一截埋进实色草沿，免得出现硬直线或素材悬空 */
 .pano.wx .wj-hills{bottom:30%}
-.pano.wx .wj-ground{-webkit-mask-image:linear-gradient(transparent,#000 15%);mask-image:linear-gradient(transparent,#000 15%)}
+.pano.wx .wj-props .wj-prop{bottom:31%}
+.pano.wx .wj-ground{-webkit-mask-image:linear-gradient(transparent,#000 12%);mask-image:linear-gradient(transparent,#000 12%)}
 /* 荷塘的荷叶、睡莲只长在路前面的水里，不上岸、不盖住石板路 */
 .wx-deco{top:0;height:100%;z-index:4}
 .wx-deco .wx-dec{bottom:-2%;height:12cqh;transform:translateX(-50%) scaleX(var(--flip))}.wx-deco .wx-dec.k-lily{bottom:2%;height:5.5cqh}.wx-deco .wx-dec.k-mush{bottom:3%;height:7cqh}
 .pano.wx .wj-walker{z-index:5}
 /* 画里的东西用 Tab 选中时也只泛柔光，不画矩形框（框压在画上像截图标注） */
-.xs:focus-visible,.wx-box button:focus-visible{outline:none;filter:drop-shadow(0 0 5px rgba(255,246,206,.95)) drop-shadow(0 0 2px #fff)}
+.xs:focus-visible,.wx-rab:focus-visible,.wx-drift:focus-visible,.wx-skybf:focus-visible{outline:none;filter:drop-shadow(0 0 5px rgba(255,246,206,.95)) drop-shadow(0 0 2px #fff)}
 .xs{position:absolute;bottom:var(--b);height:11cqh;padding:0;margin:0;border:0;background:none;line-height:0;pointer-events:auto;cursor:pointer;transform:translateX(-50%);transform-origin:50% 100%;-webkit-tap-highlight-color:transparent;transition:transform .25s,opacity .4s,filter .2s;filter:drop-shadow(0 2px 2px rgba(46,45,31,.18))}
 .xs img,.xs>svg{display:block;height:100%;width:auto;max-width:none;pointer-events:none}
 .xs .ico{width:auto;height:100%}
 .xs::after{content:"";position:absolute;top:-2px;right:6%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,#fff 22%,rgba(255,238,170,.85) 44%,transparent 70%);animation:twk 2.6s ease-in-out infinite;animation-delay:calc(var(--b)*-.17s);pointer-events:none}
-.xs.k-npc::after{content:none}
+.xs.k-npc::after,.xs.k-bfly.spooked::after{content:none}
 .xs.near{filter:drop-shadow(0 0 5px rgba(255,246,206,.95)) drop-shadow(0 0 2px #fff);transform:translateX(-50%) scale(1.06)}
 .xs.taken{opacity:0;transform:translateX(-50%) translateY(-40%) scale(.6);pointer-events:none}
 .xs.k-dew{height:9cqh}.xs.k-clay{height:8cqh}.xs.k-seed{height:12cqh}.xs.k-page{height:7.5cqh}.xs.k-stone{height:9cqh}.xs.k-bush{height:13cqh}
+.xs.k-tree{bottom:22%;height:30cqh;width:14cqh;z-index:1;filter:none}
+.xs.k-tree::after{top:14%;right:38%}
+.xs.k-tree.near{filter:none;transform:translateX(-50%)}
+.pano.wx .wj-props .wj-prop{transition:filter .3s ease}
+.wj-prop.wx-live{filter:drop-shadow(0 0 3px rgba(255,248,214,.55))}
+.wj-prop.near-prop{filter:drop-shadow(0 0 9px rgba(255,244,202,.95)) drop-shadow(0 2px 4px rgba(46,45,31,.2))}
+.wj-prop.shake{animation:wxshake .78s ease-out}
+@keyframes wxshake{0%,100%{transform:translateX(-50%) scaleX(var(--flip)) rotate(0deg)}18%{transform:translateX(-50%) scaleX(var(--flip)) rotate(3.5deg)}40%{transform:translateX(-50%) scaleX(var(--flip)) rotate(-2.4deg)}64%{transform:translateX(-50%) scaleX(var(--flip)) rotate(1.2deg)}84%{transform:translateX(-50%) scaleX(var(--flip)) rotate(-.5deg)}}
+.wx-leaf{position:absolute;bottom:var(--b,52%);width:1.7cqh;height:1.1cqh;border-radius:70% 15%;pointer-events:none;z-index:6;animation:wxleaf 1.45s ease-in forwards}
+.wx-leaf.leaf-peach{background:radial-gradient(circle at 35% 35%,#ffdce6,#f29bb6)}
+.wx-leaf.leaf-bamboo{background:radial-gradient(circle at 35% 35%,#a6cc93,#5a8955);width:2cqh;height:.75cqh;border-radius:80% 10%}
+.wx-leaf.leaf-pine{background:#3e6144;width:2.1cqh;height:.35cqh;border-radius:2px}
+.wx-leaf.leaf-willow{background:radial-gradient(circle at 35% 35%,#c9dca0,#79a266);width:2cqh;height:.65cqh;border-radius:80% 10%}
+@keyframes wxleaf{0%{opacity:0;transform:translate(0,0) rotate(0deg)}15%{opacity:.95}100%{opacity:0;transform:translate(var(--dx,18px),var(--dy,90px)) rotate(var(--rot,220deg))}}
+.wx-drop{position:absolute;bottom:16%;height:8.5cqh;transform:translateX(-50%);pointer-events:none;z-index:6;animation:wxdrop .48s cubic-bezier(.3,0,.6,1) both}
+.wx-drop img,.wx-drop svg{display:block;height:100%;width:auto}
+@keyframes wxdrop{0%{transform:translate(-50%,-240%) scale(.75);opacity:0}25%{opacity:1}72%{transform:translate(-50%,0) scale(1)}86%{transform:translate(-50%,-18%) scale(.98)}100%{transform:translate(-50%,0) scale(1)}}
 .xs.k-flower{height:19cqh;aspect-ratio:1;animation:swayx 4s ease-in-out infinite;animation-delay:calc(var(--b)*-.3s)}
 .xs.k-flower .ico{position:absolute;left:50%;bottom:0;height:100%;width:auto;translate:-50% 0;transform-origin:50% 100%}.xs.k-flower .ico:nth-child(1){rotate:-17deg;scale:.8}.xs.k-flower .ico:nth-child(3){rotate:15deg;scale:.88}
 .xs.fl-lotus{height:14cqh;aspect-ratio:auto;animation:none}.xs.fl-waterlily{height:7cqh;aspect-ratio:auto;animation:none}
@@ -1231,9 +1265,30 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .xs .glint{position:absolute;left:50%;top:50%;width:70%;height:70%;translate:-50% -50%;background:radial-gradient(circle,#fff 12%,rgba(255,236,160,.9) 26%,transparent 60%),linear-gradient(0deg,transparent 46%,rgba(255,250,220,.95) 50%,transparent 54%),linear-gradient(90deg,transparent 46%,rgba(255,250,220,.95) 50%,transparent 54%);animation:glintx 1.8s ease-in-out infinite}
 .xs .glint.g2{width:40%;height:40%;left:78%;top:22%;animation-delay:-.9s}
 .xs.k-bfly{height:12cqh}
-.xs .bf{position:absolute;width:3.6cqh;aspect-ratio:34/30;left:var(--x);top:var(--y);animation:bfwander 5s ease-in-out infinite}
+.xs .bf{position:absolute;width:3.6cqh;aspect-ratio:34/30;left:var(--x);top:var(--y);animation:bfwander 5s ease-in-out infinite;transition:transform .45s ease,opacity .35s ease}
 .xs .bf svg{width:100%;height:100%}.xs .bf .wings{transform-origin:17px 15px;animation:flap .32s ease-in-out infinite alternate}
 .xs .bf.b1{--x:10%;--y:-30%}.xs .bf.b2{--x:55%;--y:-55%;animation-delay:-1.6s}.xs .bf.b3{--x:80%;--y:-20%;animation-delay:-3.2s}
+.xs.k-bfly.perched{filter:drop-shadow(0 0 8px rgba(239,191,82,.95)) drop-shadow(0 0 2px #fff)}
+.xs.k-bfly.perched .bf{transform:translateY(30%) scale(.92)}
+.xs.k-bfly.perched .bf .wings{animation-duration:.75s}
+.xs.k-bfly.spooked{filter:drop-shadow(0 2px 2px rgba(46,45,31,.12))}
+.xs.k-bfly.spooked .bf{transform:translateY(-195%) scale(.82);opacity:.65}
+.xs.k-bfly.spooked .bf .wings{animation-duration:.14s}
+.wx-skybf{position:absolute;z-index:10;width:max(42px,6.4cqh);aspect-ratio:34/30;padding:4px;border:0;background:none;transform:translate(-50%,-50%) scaleX(var(--f,1));cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 0 7px rgba(255,216,120,.95)) drop-shadow(0 2px 4px rgba(46,45,31,.25))}
+.wx-skybf::before{content:"";position:absolute;inset:-14px}
+.wx-skybf svg{width:100%;height:100%;overflow:visible}.wx-skybf .wings{transform-origin:17px 15px;animation:flap .22s ease-in-out infinite alternate}
+.xs.k-bush.rustle>img{animation:wxrustle .14s 6 alternate ease-in-out;transform-origin:50% 100%}
+@keyframes wxrustle{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+.wx-rab{position:absolute;bottom:14%;height:11cqh;padding:0;margin:0;border:0;background:none;z-index:6;cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent;transform:translate3d(-50%,var(--ry,0px),0) scaleX(var(--rf,1));transform-origin:50% 100%;transition:opacity .3s}
+.wx-rab::before{content:"";position:absolute;inset:-16px -14px -10px}
+.wx-rab::after{content:"";position:absolute;left:18%;right:18%;bottom:-3%;height:16%;border-radius:50%;background:radial-gradient(ellipse,rgba(46,45,31,.28),transparent 70%);pointer-events:none}
+.wx-rab img{display:block;height:100%;width:auto;pointer-events:none;filter:drop-shadow(0 0 6px rgba(255,248,220,.88)) drop-shadow(0 2px 3px rgba(46,45,31,.22))}
+.wx-gust{position:absolute;left:-25%;width:32%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(255,252,240,.78) 38%,rgba(225,240,228,.55) 72%,transparent);pointer-events:none;z-index:9;animation:wxgust 1.65s ease-out forwards}
+@keyframes wxgust{0%{opacity:0;transform:translateX(0)}22%{opacity:.9}100%{opacity:0;transform:translateX(420%)}}
+.wx-drift{position:absolute;bottom:var(--b,34%);height:9.5cqh;padding:0;margin:0;border:0;background:none;z-index:6;cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent;transform:translateX(-50%);animation:wxdriftbob 1.9s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(239,191,82,.95)) drop-shadow(0 2px 4px rgba(46,45,31,.22))}
+.wx-drift::before{content:"";position:absolute;inset:-16px}
+.wx-drift img{display:block;height:100%;width:auto;pointer-events:none}
+@keyframes wxdriftbob{50%{transform:translateX(-50%) translateY(-8px) rotate(5deg)}}
 .xs.k-npc{height:max(96px,25%)}
 .wx-mark{position:absolute;top:-4%;left:72%;min-width:26px;height:26px;padding:0 6px;border-radius:13px;background:var(--jade) var(--grain) center/256px;border:1px solid var(--line);box-shadow:0 2px 6px var(--shadow);color:var(--ink);font:700 15px/24px var(--f-body);font-style:normal;text-align:center;animation:bob3 1.8s ease-in-out infinite}
 .wx-mark.ready{background:var(--rouge);border-color:var(--rouge);color:#fff6e4}
@@ -1320,32 +1375,25 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 /* 矮屏（横屏手机）：拾遗图、乡邻立绘、光芒按屏高缩小，弹窗一屏放下，不出滚动条 */
 @media (max-height:500px) and (min-aspect-ratio:4/3){.wx-talk{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:16px;align-items:center;text-align:left}.wx-talk>.wx-ava{grid-row:1/span 4;height:min(46vh,170px)!important;margin:0}.wx-talk>.ink-t,.dialog .center.wx-talk>.ink-t{margin:0}.wx-talk>.rwl{justify-content:flex-start;margin:4px 0}.wx-talk>.say{margin:4px 0}}
 @media (max-height:500px){.cu.big{width:min(120px,22vh);height:min(120px,22vh)}.wx-ava{height:26vh}.dialog .reveal .rays{width:min(260px,52vh);height:min(260px,52vh)}.dialog .center .ink-t{margin:2px auto 4px}}
-/* 小游戏：都装在大面板弹窗里，画面统一 3:2 */
-.wx-box{position:relative;width:min(100%,66vh);width:min(100%,66dvh);aspect-ratio:3/2;margin:6px auto 4px;border-radius:12px;overflow:hidden;background:center/cover;box-shadow:inset 0 0 0 1px var(--line);touch-action:none;user-select:none;-webkit-user-select:none}
-.g-time{position:absolute;left:10px;right:10px;top:8px;height:6px;border-radius:6px;background:rgba(255,255,255,.55)}.g-time i{display:block;height:100%;border-radius:6px;background:#e0a93b;transform-origin:left}
-.g-cnt{position:absolute;right:8px;top:20px;padding:1px 8px;border-radius:5px;background:var(--jade) var(--grain) center/256px;border:1px solid var(--line);font-size:13px;color:var(--ink)}
-.g-fl{position:absolute;left:50%;bottom:-4%;width:78%;translate:-50% 0;pointer-events:none}
-.g-b{position:absolute;width:max(44px,14%);aspect-ratio:34/30;padding:4px;border:0;background:none;transform:translate(-50%,-50%) scaleX(var(--f,1));cursor:pointer;-webkit-tap-highlight-color:transparent}
-.g-b svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 2px 3px rgba(60,40,20,.3))}.g-b .wings{transform-origin:17px 15px;animation:flap .22s ease-in-out infinite alternate}
-.g-b.caught{pointer-events:none;animation:gcatch .5s ease-in forwards}
-@keyframes gcatch{to{transform:translate(-50%,-160%) scale(.3);opacity:0}}
-.g-rock{position:absolute;left:8%;top:92%;width:3.4%;aspect-ratio:1.5;border-radius:50%;background:#8d918c;box-shadow:inset -2px -2px 0 rgba(0,0,0,.25);transform:translate(-50%,-50%)}
-.g-ripple{position:absolute;width:9%;aspect-ratio:3;border:2px solid rgba(255,255,255,.9);border-radius:50%;transform:translate(-50%,-50%) scale(.2);animation:grip 1.1s ease-out forwards;pointer-events:none}
-@keyframes grip{to{transform:translate(-50%,-50%) scale(1.5);opacity:0}}
-.g-big{position:absolute;left:50%;top:28%;transform:translate(-50%,-50%);font:400 30px/1.2 var(--f-display);color:#fff;text-shadow:0 2px 6px rgba(30,40,50,.55);opacity:0;white-space:nowrap;pointer-events:none}
+/* 打水漂：装在大面板弹窗里，画面 3:2，水面开阔好看清石子连跳与水花涟漪 */
+.wx-box{position:relative;width:min(100%,66vh);width:min(100%,66dvh);aspect-ratio:3/2;margin:6px auto 4px;border-radius:12px;overflow:hidden;background:center/cover;box-shadow:inset 0 0 0 1px var(--line);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.g-cnt{position:absolute;right:8px;top:10px;padding:2px 9px;border-radius:6px;background:var(--jade) var(--grain) center/256px;border:1px solid var(--line);font-size:12.5px;color:var(--ink);z-index:4;pointer-events:none}
+.g-rock{position:absolute;left:8%;top:90%;width:clamp(14px,3.8%,22px);aspect-ratio:1.55;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ebe7dc 0%,#989c95 55%,#5a5f5b 100%);box-shadow:inset -2px -2px 0 rgba(0,0,0,.28),0 2px 4px rgba(24,38,36,.35);transform:translate(-50%,-50%);pointer-events:none;z-index:3}
+.g-rock-sh{position:absolute;left:8%;top:91.5%;width:clamp(12px,3.4%,20px);aspect-ratio:2.4;border-radius:50%;background:rgba(24,48,46,.32);filter:blur(1.5px);transform:translate(-50%,-50%);pointer-events:none;z-index:2}
+.g-ripple{position:absolute;width:clamp(28px,10%,52px);aspect-ratio:3;border:2px solid rgba(255,255,255,.92);border-radius:50%;transform:translate(-50%,-50%) scale(.2);animation:grip 1.1s ease-out forwards;pointer-events:none;z-index:2}
+.g-ripple.r2{border-width:1.5px;border-color:rgba(255,255,255,.68);animation-delay:.12s;animation-duration:1.25s}
+@keyframes grip{to{transform:translate(-50%,-50%) scale(calc(1.55 * var(--rs,1)));opacity:0}}
+.g-splash{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.92);transform:translate(-50%,-50%);animation:gsplash .42s ease-out forwards;pointer-events:none;z-index:3}
+@keyframes gsplash{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(calc(-50% + var(--sx)),calc(-50% + var(--sy))) scale(.35)}}
+.g-big{position:absolute;left:50%;top:28%;transform:translate(-50%,-50%);font:400 32px/1.2 var(--f-display);color:#fff;text-shadow:0 2px 8px rgba(30,40,50,.62);opacity:0;white-space:nowrap;pointer-events:none;z-index:5}
 .g-big.on{animation:gbig 1.5s ease-out}
 @keyframes gbig{15%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}70%{opacity:1;transform:translate(-50%,-60%)}100%{opacity:0;transform:translate(-50%,-80%)}}
-/* 横屏矮屏：小游戏弹窗左右两栏，左边游戏画面、右边标题提示和操作，整屏放得下，不出滚动条 */
-@media (max-height:500px) and (min-aspect-ratio:4/3){.dialog.wide:has(.wx-g){max-width:min(680px,100%)}.wx-g{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-areas:'box title' 'box tip' 'box meter' 'box row' 'box end';align-content:center;align-items:center;column-gap:16px}.wx-g>.ink-t{grid-area:title}.wx-g>#gTip{grid-area:tip;font-size:13px;line-height:1.6}.wx-g>.wx-box{grid-area:box;width:100%;max-height:calc(100dvh - 110px);margin:0}.wx-g>.g-meter{grid-area:meter;width:auto;margin:6px 6px 0}.wx-g>#gRow{grid-area:row;margin-top:8px}.wx-g>#gEnd{grid-area:end}.wx-g #gEnd .rwl{margin:6px 0}.wx-g #gEnd .dlg-actions{margin-top:6px}}
 .g-meter{position:relative;height:20px;width:min(100% - 12px,66dvh);margin:10px auto 0;border-radius:10px;background:#e2d6b8;box-shadow:inset 0 0 0 1px var(--line)}
 .g-sweet{position:absolute;top:0;bottom:0;left:58%;width:32%;border-radius:10px;background:linear-gradient(90deg,transparent,rgba(224,169,59,.55) 25%,#e0a93b 40% 60%,rgba(224,169,59,.55) 75%,transparent)}
 .g-needle{position:absolute;top:-5px;bottom:-5px;width:4px;margin-left:-2px;border-radius:2px;background:var(--rouge);box-shadow:0 0 0 1px #fff6e4}
-.g-bu{position:absolute;bottom:16%;width:36%;padding:0;border:0;background:none;transform:translateX(-50%);transition:left .42s cubic-bezier(.5,0,.5,1);z-index:2;cursor:pointer;line-height:0}
-.g-bu img{width:100%;height:auto}.g-bu.rustle img{animation:rustle .14s 6 alternate ease-in-out}
-@keyframes rustle{from{transform:rotate(-2.5deg)}to{transform:rotate(2.5deg)}}
-.g-rab{position:absolute;bottom:24%;width:18%;height:auto;transform:translate(-50%,30%);opacity:0;transition:opacity .3s,transform .35s;z-index:1;pointer-events:none}
-.g-rab.show{opacity:1;transform:translate(-50%,-22%);z-index:3}
-@media (prefers-reduced-motion:reduce){.xs,.xs::after,.xs .glint,.xs .bf,.xs .bf .wings,.wx-mark,.g-b .wings,.g-bu.rustle img{animation:none}}
+.wx-g #gRow{justify-content:center;margin-top:10px}
+@media (max-height:500px) and (min-aspect-ratio:4/3){.dialog.wide:has(.wx-g){max-width:min(680px,100%)}.wx-g{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-areas:'box title' 'box tip' 'box meter' 'box row' 'box end';align-content:center;align-items:center;column-gap:16px}.wx-g>.ink-t{grid-area:title}.wx-g>#gTip{grid-area:tip;font-size:13px;line-height:1.6}.wx-g>.wx-box{grid-area:box;width:100%;max-height:calc(100dvh - 110px);margin:0}.wx-g>.g-meter{grid-area:meter;width:auto;margin:6px 6px 0}.wx-g>#gRow{grid-area:row;margin-top:8px}.wx-g>#gEnd{grid-area:end}.wx-g #gEnd .rwl{margin:6px 0}.wx-g #gEnd .dlg-actions{margin-top:6px}}
+@media (prefers-reduced-motion:reduce){.xs,.xs::after,.xs .glint,.xs .bf,.xs .bf .wings,.wx-mark,.wj-prop.shake,.wx-leaf,.wx-gust,.wx-drift,.wx-skybf .wings,.xs.k-bush.rustle>img,.g-ripple,.g-splash{animation:none}.xs .bf,.wj-prop{transition:none}}
 /* ================= UI 规范（按钮与窗口的唯一来源） =================
    新界面只从这里挑现成的档位和皮肤，不再给某一个按钮或窗口单独写高度/宽度/皮肤。
    确实需要不一样时，先在这里加一档，并写清楚为什么。
@@ -1378,7 +1426,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .btn.sm,.chip,.ksteps button{height:var(--c-sm)}
 .btn.lg,.st-quick button{height:var(--c-lg)}
 .snd,.ib,.so-x,.dlg-x,.talk-x,.lvring{width:var(--c-md);height:var(--c-md);min-width:0;padding:0;flex-shrink:0}
-.order-x,.mode-exit{width:var(--c-sm);height:var(--c-sm);padding:0;flex-shrink:0}
+.mode-exit{width:var(--c-sm);height:var(--c-sm);padding:0;flex-shrink:0}
 .g-tools .tool,.st-side button{width:var(--c-round);height:var(--c-round);flex:0 0 var(--c-round)}
 /* 特例：小镇的「寻人」钮压在画上，只占右下角一枚，圆瓷片缩到 --c-lg：图标是画里那种对话泡，下面一行小字是还有几位在等 */
 .g-tools.tfolk .tool{width:var(--c-lg);height:var(--c-lg);flex:0 0 var(--c-lg);padding:0;font-size:10px;gap:0}
@@ -1411,17 +1459,26 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   @media not all and (min-width:600px) and (min-aspect-ratio:11/10){.g-field .plots[data-rows="2"]{width:min(100%,640px,max(220px,calc((100cqh - 15px)*1.78)))}}
   @media (min-width:600px) and (min-aspect-ratio:11/10){.g-field .plots{width:min(100%,900px,max(220px,calc((100cqh - 13px)*2.67)))}}
 }
-/* 小院工具：不垫整条纸板。圆瓷钮和「照料」直接立在草地上，跟导航栏同宽对齐；
-   原来那条 86px 高的纸条中间大半是空的，又把花田往上挤。花匠在岗写成「照料」下面一行小字（阿禾替你照料） */
-#v-garden{padding-bottom:calc(var(--dock-room) + var(--c-round) + 16px)}
-#v-garden .action-bar{width:min(540px,calc(100% - 24px));min-height:0;padding:0;border:0;border-image:none;border-radius:0;background:none;filter:none;align-items:flex-end;pointer-events:none}
+/* 小院工具：不垫整条纸板。三枚等高横向宣纸条钮居中成组，直接立在草地上，与底栏材质统一；
+   花匠在岗写成「照料」下面一行小字（阿禾在岗 · X天） */
+#v-garden{padding-bottom:calc(var(--dock-room) + var(--c-lg) + 16px)}
+#v-garden .action-bar{width:min(540px,calc(100% - 24px));min-height:0;padding:0;border:0;border-image:none;border-radius:0;background:none;filter:none;align-items:center;pointer-events:none}
 #v-garden .action-bar>*{pointer-events:auto}
-/* 三个工具钮挨在一起成一组，靠右（右手拇指那一侧），不再左右两头各放一个：分开放，操作区就散了 */
-#v-garden .action-bar.g-tools{justify-content:flex-end;gap:8px}
+/* 三个工具钮居中并排成一组，与花田和导航栏对称对齐 */
+#v-garden .action-bar.g-tools{justify-content:center;gap:8px}
 #v-garden .action-bar>.btn:last-child{margin-left:0}
+#v-garden .g-tools .tool{width:auto;height:var(--c-lg);flex:0 1 auto;min-width:0;flex-direction:row;align-items:center;justify-content:center;gap:5px;padding:0 10px;border-style:solid;border-color:transparent;border-width:8px;border-image:url('assets/ui_card.webp') 40 fill / 8px stretch;border-radius:9px;background:none;box-shadow:none;filter:drop-shadow(0 2px 3px rgba(66,46,28,.15));color:var(--ink);font-size:15px;line-height:1.2;letter-spacing:.03em;white-space:nowrap}
+#v-garden .g-tools .tool:hover{filter:drop-shadow(0 3px 5px rgba(66,46,28,.25))}
+#v-garden .g-tools .tool.on{border-image:url('assets/ui_card.webp') 40 fill / 8px stretch;background:none;color:#8b3028;filter:drop-shadow(0 0 2px rgba(173,56,46,.75)) drop-shadow(0 0 8px rgba(239,191,82,.9))}
+#v-garden .g-tools .tool img{width:24px;height:24px;object-fit:contain}
 #waterAll .wa-t{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
 #hireTag{font-size:10.5px;letter-spacing:0;opacity:.75;white-space:nowrap}
 #hireTag:not([hidden]){display:block}
+@media (max-width:420px){
+  #v-garden .action-bar.g-tools{gap:6px}
+  #v-garden .g-tools .tool,#v-garden #waterAll{padding-inline:6px;font-size:13.5px;gap:4px}
+  #v-garden .g-tools .tool img,#v-garden #waterAll img{width:20px;height:20px}
+}
 /* 矮屏（横屏手机等，高度 ≤ 500）：导航栏图标与文字并排、操作条收窄边框，把高度让给花畦和画面 */
 @media (max-height:500px){
   #app{--dock-room:calc(54px + env(safe-area-inset-bottom,0px))}
@@ -1429,15 +1486,18 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   #dock .dock-tab,#dock .dock-tab.on{flex-direction:row;gap:4px}
   #dock .dock-tab svg{width:20px;height:20px}
   .action-bar{min-height:0;border-width:8px;border-image-width:8px;padding:0 4px}
-  #v-garden{padding-bottom:calc(var(--dock-room) + var(--c-round) + 16px)}
+  #v-garden{padding-bottom:calc(var(--dock-room) + var(--c-lg) + 16px)}
 }
 /* 横屏手机：高度是花田最缺的。工具组接在导航栏右边，跟导航栏连成底下一排（整排居中），花田一直铺到导航栏上沿。
    只在小院这样排：别的页面没有工具组，导航栏照常居中 */
 @media (max-height:500px) and (min-aspect-ratio:4/3) and (min-width:600px){
-  #app{--gt:calc(2*var(--c-round) + 152px);--dw:min(540px,calc(100vw - 34px - var(--gt)))}
+  #app{--sa:max(env(safe-area-inset-left,0px),env(safe-area-inset-right,0px));--gt:264px;--dw:min(540px,calc(100vw - 34px - 2*var(--sa) - var(--gt)))}
+  #app:has(#hireTag:not([hidden])){--gt:304px}
   #app[data-at=garden] #dock{width:var(--dw);left:calc((100vw - var(--dw) - 10px - var(--gt))/2);transform:none}
-  #v-garden .action-bar{bottom:calc(4px + env(safe-area-inset-bottom,0px));left:auto;right:calc((100vw - var(--dw) - 10px - var(--gt))/2);transform:none;width:var(--gt)}
-  #v-garden #waterAll{padding-inline:10px}
+  #v-garden .action-bar{bottom:calc(4px + env(safe-area-inset-bottom,0px));left:auto;right:calc((100vw - var(--dw) - 10px - var(--gt))/2);transform:none;width:max-content}
+  #v-garden .action-bar.g-tools{gap:6px}
+  #v-garden .g-tools .tool,#v-garden #waterAll{height:46px;padding-inline:5px;font-size:13px;gap:4px}
+  #v-garden .g-tools .tool img,#v-garden #waterAll img{width:19px;height:19px}
   #v-garden{padding-bottom:calc(var(--dock-room) + 6px)}
 }
 /* 再宽一些的横屏：提示语放进顶栏中间那段空当，不再单占一行 */
@@ -1467,7 +1527,6 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .ink-t{display:inline-flex;align-items:center;justify-content:center;gap:9px;margin:0;padding:0;background:none;border:0;font:400 clamp(22px,calc(16px + 2vmin),28px)/1.2 var(--f-display);letter-spacing:.2em;color:var(--ink)}
 .ink-t .seal{display:inline-block;writing-mode:vertical-rl;padding:4px 3px;border-radius:3px;background:#b03a2e;color:#fbeee0;font:400 12px/1.05 var(--f-display);letter-spacing:.06em;font-style:normal;box-shadow:inset 0 0 0 1.5px rgba(251,238,224,.6),0 1px 2px rgba(66,46,28,.2)}
 .wx-place b{font-weight:400;text-shadow:0 0 3px #fbf5e6,0 0 9px #fbf5e6,0 0 16px rgba(251,245,230,.8)}
-.wx-g>.ink-t{display:flex;margin:2px 0 4px}
 /* 弹窗里：居中的弹窗标题单独占一行居中；四字印文排成两列，从右往左读 */
 /* 弹窗只许竖着滚：出窑、拾遗等弹窗里旋转的光芒会比弹窗宽，不能因此冒出横向滚动条 */
 .dialog{overflow-x:hidden}
@@ -1583,6 +1642,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
             <div class="st-pop" id="stPop" hidden></div>
             <p class="st-tip" id="stTip" aria-live="polite"></p></div>
           </div>
+          <div class="st-obar" id="stOrderBar" hidden></div>
           <div class="st-deck" id="stDeck" data-mode="tray">
             <div class="st-tabs" id="stTabs" role="tablist" aria-label="花材与调整"><button data-deck="tray" role="tab">花材</button><button data-deck="stem" role="tab">调整</button></div>
             <div class="st-panel"><div class="trayw"><div class="tray" id="tray"></div></div><div class="insp" id="seltools"></div></div>
@@ -1910,8 +1970,8 @@ function stemSVG(id,bx,by,hx,hy,o={}){const q=o.geo||stemGeo(id,bx,by,hx,hy,o);i
   const bloom=band(x,y,phB,tb,-1999,1999-tb+ov,fs);
   const open=`<g transform="translate(${R(bx)},${R(by)}) rotate(${R(rot)})">`,inner=`<g transform="scale(${R(fl*sc*1000)/1000},${R(sc*1000)/1000})">`;
   const under=stemUnder(img,bx,by,rot+fl*parts[0][2],parts[0][3],fl,sc,o.deep);
-  const sp=open+inner+stem+'</g></g>',bp=open+halo+inner+bloom+'</g></g>';
-  return o.split?[sp,bp,under]:under+sp+bp}
+  const whole=open+halo+inner+stem+bloom+'</g></g>';
+  return o.split?[whole,under]:under+whole}
 /* In a see-through vessel the stem carries on under water from where it leans on the rim (bx,by), straight along its own
    direction A there (a cut stem is a stiff rod; it does not bend in water), until its cut end meets the floor or, for a stem
    leaning well out, the opposite wall it is braced against, the way a leaning stem is held in a tall vase (投入). Drawn from
@@ -1974,8 +2034,8 @@ function normalize(s,e){const b=sbase(s,e),dx=s.x-b[0],dy=s.y-b[1],l=Math.hypot(
   L=Math.max(46,L);s.x=R(b[0]+sn*L);s.y=R(b[1]-cs*L);
   const b2=sbase(s,e),g=stemGeo(s.id,b2[0],b2[1],s.x,s.y,stemOpt(s,e));
   if(g){const tp=stemTip(b2,g);if(Math.hypot(tp[0]-s.x,tp[1]-s.y)>.6){s.x=R(clamp(tp[0],EDGE,520-EDGE));s.y=R(clamp(tp[1],EDGE,560-EDGE))}}}
-function stemPair(s,e,live){const b=sbase(s,e),org=`transform-origin:${R(b[0])}px ${R(b[1])}px`,opt={...stemOpt(s,e),split:true},geo=stemGeo(s.id,b[0],b[1],s.x,s.y,opt),[pa,pb,under]=stemSVG(s.id,b[0],b[1],s.x,s.y,{...opt,geo}),sw=live?` class="sw" style="${org};animation-delay:-${(s.seed%55)/10}s"`:'',tp=live&&geo?stemTip(b,geo):[s.x,s.y],m=live?stemMid(s,e,geo):null;
-  return[`<g class="stem${s.in?' in':''}" data-k="${s.k}" data-part="a" style="${org}"><g${sw}>${pa}</g></g>`,`<g class="stem${s.in?' in':''}" data-k="${s.k}" data-part="b" style="${org}"><g${sw}>${pb}</g>${live?`<path d="M${R(b[0])},${R(b[1])}Q${R(2*m[0]-(b[0]+tp[0])/2)},${R(2*m[1]-(b[1]+tp[1])/2)} ${R(tp[0])},${R(tp[1])}" stroke="transparent" stroke-width="22" stroke-linecap="round" fill="none"/><circle cx="${R(tp[0])}" cy="${R(tp[1])}" r="36" fill="transparent"/>`:''}</g>`,geo,under]}
+function stemNode(s,e,live){const b=sbase(s,e),org=`transform-origin:${R(b[0])}px ${R(b[1])}px`,opt={...stemOpt(s,e),split:true},geo=stemGeo(s.id,b[0],b[1],s.x,s.y,opt),[body,under]=stemSVG(s.id,b[0],b[1],s.x,s.y,{...opt,geo}),sw=live?` class="sw" style="${org};animation-delay:-${(s.seed%55)/10}s"`:'',tp=live&&geo?stemTip(b,geo):[s.x,s.y],m=live?stemMid(s,e,geo):null;
+  return[`<g class="stem${s.in?' in':''}" data-k="${s.k}" style="${org}"><g${sw}>${body}</g>${live?`<path d="M${R(b[0])},${R(b[1])}Q${R(2*m[0]-(b[0]+tp[0])/2)},${R(2*m[1]-(b[1]+tp[1])/2)} ${R(tp[0])},${R(tp[1])}" stroke="transparent" stroke-width="22" stroke-linecap="round" fill="none"/><circle cx="${R(tp[0])}" cy="${R(tp[1])}" r="36" fill="transparent"/>`:''}</g>`,geo,under]}
 const FORMS={free:{n:'自由'},upright:{n:'直立型',g:[[-15,1],[-45,.75],[75,.56]]},slant:{n:'倾斜型',g:[[-45,1],[-15,.75],[75,.56]]},cascade:{n:'悬崖型',g:[[104,1],[-20,.75],[50,.5]]}};
 function guideTips(e,form){return(FORMS[form]?.g||[]).map(([d,r])=>{const a=d/DEG,L=e.U*r;return[R(clamp(e.cx+Math.sin(a)*L,EDGE,520-EDGE)),R(clamp(e.my-Math.cos(a)*L,EDGE,452))]})}
 function guideSVG(e,form){const tips=guideTips(e,form);if(!tips.length)return'';
@@ -1983,15 +2043,21 @@ function guideSVG(e,form){const tips=guideTips(e,form);if(!tips.length)return'';
     return`<path d="${d}" fill="none" stroke="#1d2b33" stroke-opacity=".16" stroke-width="4"/><path d="${d}" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="1.5" stroke-dasharray="5 6"/><circle cx="${t[0]}" cy="${t[1]}" r="15" fill="#fff" fill-opacity=".4" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 4"/><text x="${t[0]}" y="${t[1]+4.5}" text-anchor="middle" font-size="13" fill="#1d2b33">${'主副客'[i]}</text>`}).join('')+'</g>'}
 function stageSVG(w,live){
   if(w.pot)ensurePot(w.pot);
-  const e=veff(w.vase,w.kx),v=e.v,b=BGS[w.bg]||BGS[0],tr='transform="translate(60,22)"',kx=200+(w.kx||0),sp=w.stems.map(s=>stemPair(s,e,live));
-  return`<svg viewBox="0 0 520 560" xmlns="http://www.w3.org/2000/svg"><rect width="520" height="560" fill="url(#bg${w.bg||0})"/><rect width="520" height="470" fill="url(#lamp)"/><rect y="470" width="520" height="90" fill="${b.tb}"/><rect y="470" width="520" height="3" fill="#fff" opacity=".22"/><ellipse cx="268" cy="502" rx="${Math.min(v.mw+48,150)}" ry="9" fill="#000" opacity=".2"/>${live?guideSVG(e,w.form):''}<g ${tr}>${v.back||''}<ellipse cx="200" cy="${v.my}" rx="${v.mw}" ry="${v.ry}" fill="${v.inner}"/>${v.kenzan?`<ellipse cx="170" cy="${v.my-3}" rx="46" ry="3" fill="#fff" opacity=".28"/><ellipse cx="${kx}" cy="${v.my+1}" rx="16" ry="4.5" fill="#20252b"/><ellipse cx="${kx}" cy="${v.my}" rx="13" ry="3.2" fill="#59626c"/>`:''}</g><g class="stems"><g class="submerged">${sp.map((p,i)=>p[3]?`<g data-under="${w.stems[i].k}">${p[3]}</g>`:'').join('')}</g>${sp.map(p=>p[0]).join('')}${sp.map(p=>p[1]).join('')}</g><g pointer-events="none"><g ${tr}><path d="${v.body}" fill="${v.fill}"${v.stroke?` stroke="${v.stroke}" stroke-width="1.5"`:''}/>${v.extra||''}<path d="M${200-v.mw},${v.my}A${v.mw},${v.ry} 0 0 0 ${200+v.mw},${v.my}" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.5"/></g>${live?'<circle id="ring" r="34" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="5 5" visibility="hidden"/>':''}</g>${live?'<circle id="bh" r="9.5" fill="#fff" stroke="#7f6bc4" stroke-width="2.5" visibility="hidden"/>':''}</svg>`}
+  const e=veff(w.vase,w.kx),v=e.v,b=BGS[w.bg]||BGS[0],tr='transform="translate(60,22)"',kx=200+(w.kx||0),sp=w.stems.map(s=>stemNode(s,e,live));
+  return`<svg viewBox="0 0 520 560" xmlns="http://www.w3.org/2000/svg"><rect width="520" height="560" fill="url(#bg${w.bg||0})"/><rect width="520" height="470" fill="url(#lamp)"/><rect y="470" width="520" height="90" fill="${b.tb}"/><rect y="470" width="520" height="3" fill="#fff" opacity=".22"/><ellipse cx="268" cy="502" rx="${Math.min(v.mw+48,150)}" ry="9" fill="#000" opacity=".2"/>${live?guideSVG(e,w.form):''}<g ${tr}>${v.back||''}<ellipse cx="200" cy="${v.my}" rx="${v.mw}" ry="${v.ry}" fill="${v.inner}"/>${v.kenzan?`<ellipse cx="170" cy="${v.my-3}" rx="46" ry="3" fill="#fff" opacity=".28"/><ellipse cx="${kx}" cy="${v.my+1}" rx="16" ry="4.5" fill="#20252b"/><ellipse cx="${kx}" cy="${v.my}" rx="13" ry="3.2" fill="#59626c"/>`:''}</g><g class="stems"><g class="submerged">${sp.map((p,i)=>p[2]?`<g data-under="${w.stems[i].k}">${p[2]}</g>`:'').join('')}</g>${sp.map(p=>p[0]).join('')}</g><g pointer-events="none"><g ${tr}><path d="${v.body}" fill="${v.fill}"${v.stroke?` stroke="${v.stroke}" stroke-width="1.5"`:''}/>${v.extra||''}<path d="M${200-v.mw},${v.my}A${v.mw},${v.ry} 0 0 0 ${200+v.mw},${v.my}" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.5"/></g>${live?'<circle id="ring" r="34" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="5 5" visibility="hidden"/>':''}</g>${live?'<circle id="bh" r="9.5" fill="#fff" stroke="#7f6bc4" stroke-width="2.5" visibility="hidden"/>':''}</svg>`}
 
 /* ================= state ================= */
 const KEY='huaxin-xiaozhu-v1';
 let S;
 function fresh(){return{coins:60,exp:0,seeds:{daisy:3,tulip:2,eucalyptus:1},cut:{},fert:1,plots:Array(12).fill(null),codex:{daisy:1,tulip:1,eucalyptus:1},vases:['white'],vase:'white',bg:0,arr:[],orders:[],gallery:[],sound:true,nid:1,t0:Date.now(),intro:false,tut:1,done:0,rec:{},kx:0,form:'free',v:2,bfly:2,dew:1,clay:0,legs:3,legD:0,legMax:3,folk:{},st:{},wishes:null,badges:{},pots:[],kiln:false,deep:0,best:{},land:6,hire:0}}
 function load(d){S=fresh();let o=d;if(!o){try{o=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}}
-  if(o&&typeof o==='object'&&Array.isArray(o.plots)){const old=o.v!==2;Object.assign(S,o);if(old){[...S.arr,...S.gallery.flatMap(w=>w.stems||[])].forEach(s=>{s.x+=60;s.y+=22});S.gallery.forEach(w=>{if(w.bg>0)w.bg++});if(S.bg>0)S.bg++;S.v=2}}
+  if(o&&Array.isArray(o.plots)){
+    Object.assign(S,o);
+    // 旧版曾接受花艺台不是数组的存档，保留小院和花架，让它仍能打开。
+    if(!Array.isArray(S.arr))S.arr=[];
+    if(o.v!==2){[...S.arr,...S.gallery.flatMap(w=>w.stems||[])].forEach(s=>{s.x+=60;s.y+=22});S.gallery.forEach(w=>{if(w.bg>0)w.bg++});if(S.bg>0)S.bg++;S.v=2}
+  }
+  S.wx={map:'xi',q:{},pages:0,fl:{},cu:{},trips:0,...S.wx};
   if(o&&o.land===undefined&&Array.isArray(o.plots))S.land=Math.max(6,Math.min(12,5+level()));
   if(o&&o.tut===undefined&&Array.isArray(o.plots))S.tut=o.intro||o.done?99:1;
   if(o&&o.dew===undefined&&o.fert)S.dew=o.fert;S.pots=(S.pots||[]).filter(q=>q&&q.r);S.pots.forEach(q=>VASES[q.id]=potVase(q));(S.gallery||[]).forEach(w=>{if(w.pot&&w.pot.r&&!VASES[w.vase])GVASES[w.vase]=potVase(w.pot)});S.vases=S.vases.filter(v=>VASES[v]);
@@ -2003,14 +2069,40 @@ function save(){clearTimeout(saveT);saveT=setTimeout(writeSave,250)}
 function exportSave(){S.seen=Date.now();const d=new Date(),ymd=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
   try{const u=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download=`花信小筑-存档-${ymd}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('存档已导出，请收好这个文件')}catch(e){toast('导出没有成功，换个浏览器再试试')}}
 let importText='';
+const isSaveRecord=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+function validSave(o){
+  if(!isSaveRecord(o)||!Number.isFinite(o.coins)||!isSaveRecord(o.seeds)||!Array.isArray(o.plots))return false;
+  const optional=(record,key,check)=>!Object.hasOwn(record,key)||check(record[key]);
+  const listOf=check=>value=>Array.isArray(value)&&value.every(check);
+  const flower=id=>typeof id==='string'&&Object.hasOwn(F,id);
+  const stem=s=>isSaveRecord(s)&&flower(s.id)&&Number.isFinite(s.x)&&Number.isFinite(s.y);
+  const pot=p=>isSaveRecord(p)&&typeof p.id==='string'&&typeof p.name==='string'&&typeof p.gl==='string'&&
+    Number.isFinite(p.H)&&Array.isArray(p.r)&&p.r.length>=2&&p.r.every(Number.isFinite);
+  const work=w=>isSaveRecord(w)&&listOf(stem)(w.stems)&&optional(w,'pot',p=>p===null||pot(p));
+  const order=o=>isSaveRecord(o)&&typeof o.who==='string'&&isSaveRecord(o.req)&&
+    optional(o.req,'sp',id=>id===null||flower(id))&&optional(o.req,'roles',listOf(role=>typeof role==='string'))&&
+    optional(o,'seed',id=>id===null||flower(id));
+  const wild=x=>isSaveRecord(x)&&['q','fl','cu'].every(key=>optional(x,key,isSaveRecord))&&
+    ['trips','pages'].every(key=>optional(x,key,Number.isFinite));
+  const lists={arr:listOf(stem),gallery:listOf(work),pots:listOf(pot),orders:listOf(order),vases:listOf(v=>typeof v==='string')};
+  return o.plots.every(p=>p===null||(isSaveRecord(p)&&typeof p.id==='string'))&&
+    Object.entries(lists).every(([key,check])=>optional(o,key,check))&&
+    ['cut','codex','best','folk','st','badges','rec'].every(key=>optional(o,key,isSaveRecord))&&
+    optional(o,'wishes',w=>w===null||(isSaveRecord(w)&&listOf(isSaveRecord)(w.list)))&&
+    optional(o,'wx',x=>x===null||wild(x));
+}
 function importSave(){const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
   inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;if(f.size>5e6)return toast('这个文件太大，不像是存档');const rd=new FileReader();
     rd.onload=()=>{let o=null;try{o=JSON.parse(rd.result)}catch(e){}
-      if(!o||typeof o!=='object'||!Array.isArray(o.plots)||typeof o.coins!=='number'||!o.seeds||typeof o.seeds!=='object')return toast('这不是花信小筑的存档文件');
+      if(!validSave(o))return toast('这不是有效的花信小筑存档，当前小院已保留');
       importText=JSON.stringify(o);const lv=(()=>{let l=1;for(let i=1;i<XP.length;i++)if((o.exp||0)>=XP[i])l=i+1;return l})();
       modal(`<div class="center"><h2 class="h-title" style="justify-content:center">导入存档</h2><p class="say">文件里是一座 Lv.${lv} 的小院，有 ${Math.round(o.coins)} 花币。<br>导入后会<b>覆盖</b>现在的小院，无法撤回。</p><div class="row" style="justify-content:center"><button class="btn" data-act="close">取消</button><button class="btn primary" data-act="doImport">覆盖并导入</button></div></div>`)};
     rd.readAsText(f)};inp.click()}
-function doImport(){if(!importText)return;clearTimeout(saveT);try{localStorage.setItem(KEY,importText);stale=true;location.reload()}catch(e){toast('导入没有成功：浏览器不让写入存档')}}
+function doImport(){
+  if(!importText)return;
+  try{localStorage.setItem(KEY,importText)}catch(e){return toast('导入没有成功：浏览器不让写入存档')}
+  clearTimeout(saveT);stale=true;location.reload();
+}
 const level=()=>{let l=1;for(let i=1;i<XP.length;i++)if(S.exp>=XP[i])l=i+1;return l};
 const plotCount=()=>S.land||6;
 function addExp(n,showGain=true){const b=level();S.exp+=Math.round(n);const a=level();if(a>b){let gift='';if(a>8){const c=a*15;S.coins+=c;S.dew++;S.bfly++;gift=`乡邻送来贺礼：${c} 花币，露水与蝴蝶各一`}lvBanner(a,gift)}else if(showGain&&n>=1)gainTag($('#lvring'),`+${Math.round(n)}`,'xp');hud()}
@@ -2061,7 +2153,7 @@ function modal(html,wide,options={}){if(stale)return;
   if(!$('#pngView').hidden)closePngView();
   m.innerHTML=`<div class="dialog${wide?' wide':''}" role="dialog" aria-modal="true">${html}</div>`;
   const d=$('.dialog',m),seedChoice=!!$('[data-act="plant"]',d);
-  const actions=$$('[data-act]',d).filter(b=>b.dataset.act!=='plant'&&!b.hasAttribute('data-o'));
+  const actions=$$('[data-act]',d).filter(b=>b.dataset.act!=='plant'&&!b.closest('.dlg-choices'));
   actions.forEach(b=>{
     if(b.dataset.act==='close'){
       const cancel=actions.length>1||seedChoice,reward=b.textContent.trim()==='收下';
@@ -2110,7 +2202,7 @@ let coinShown=null;function coinAnim(){const c=$('#coins'),b=S.coins;if(coinShow
   (function st(t){const k=clamp((t-t0)/600,0,1);c.textContent=Math.round(a+(b-a)*k);if(k<1&&coinShown===b)requestAnimationFrame(st)})(t0)}
 function hud(){const l=level();$('#lv').textContent=l;coinAnim();
   const a=XP[l-1],b=XP[l]||a;$('#lvring').style.setProperty('--p',(b>a?clamp((S.exp-a)/(b-a),0,1)*100:100)+'%');
-  $('#snd').classList.toggle('off',!S.sound);$('#snd').setAttribute('aria-pressed',S.sound?'true':'false');$('#snd').setAttribute('aria-label',S.sound?'声音已开，点一下关闭':'声音已关，点一下打开');$('#fertTxt').textContent=`露水×${S.dew}`;$('#polTxt').textContent=`授粉×${S.bfly}`}
+  $('#snd').classList.toggle('off',!S.sound);$('#snd').setAttribute('aria-pressed',S.sound?'true':'false');$('#snd').setAttribute('aria-label',S.sound?'声音已开，点一下关闭':'声音已关，点一下打开');$('#fertTxt').textContent=`露水 ×${S.dew}`;$('#polTxt').textContent=`授粉 ×${S.bfly}`}
 
 /* ================= audio ================= */
 const AU={ctx:null,timer:0,idx:4,lp:null};
@@ -2381,7 +2473,7 @@ function initStage(){const st=$('#stage');let dragRAF=0,dragEv=null;
   const paintDrag=()=>{dragRAF=0;if(!drag||!dragEv)return;const s=stemOf(sel);if(!s)return;const p=svgPt(dragEv),en=curE();if(drag.h){pushHist(drag.h);drag.h=null}
     if(drag.bow){const m=stemMid(s,en),b=m[2],a=m[4],q=(p.x-(b[0]+s.x)/2)*Math.cos(a)+(p.y-(b[1]+s.y)/2)*Math.sin(a);s.bow=clamp((-q/m[3]*7-m[5])*75/m[7],-.9,.9);normalize(s,en)}
     else{s.x=clamp(p.x+drag.ox,12,508);s.y=clamp(p.y+drag.oy,14,548);snap(s,en);normalize(s,en)}
-    const [ga,gb,geo,under]=stemPair(s,en,true),els=st.querySelectorAll(`.stem[data-k="${s.k}"]`);const sub=st.querySelector(`[data-under="${s.k}"]`);if(sub)sub.innerHTML=under;if(els[0])els[0].outerHTML=ga;if(els[1])els[1].outerHTML=gb;updHandles(geo)};
+    const [gEl,geo,under]=stemNode(s,en,true),el=st.querySelector(`.stem[data-k="${s.k}"]`),sub=st.querySelector(`[data-under="${s.k}"]`);if(sub)sub.innerHTML=under;if(el)el.outerHTML=gEl;updHandles(geo)};
   st.addEventListener('pointerdown',e=>{if(pop||!$('#meter').hidden){pop=null;$('#meter').hidden=true;renderChips()}
     const cap=()=>{st.classList.add('dragging');try{st.setPointerCapture(e.pointerId)}catch(_){ }e.preventDefault()};
     if(e.target.id==='bh'&&stemOf(sel)){drag={bow:1,h:studioSnapshot()};return cap()}
@@ -2392,7 +2484,7 @@ function initStage(){const st=$('#stage');let dragRAF=0,dragEv=null;
   const end=e=>{if(drag){if(dragRAF){cancelAnimationFrame(dragRAF);paintDrag()}dragEv=null;
     if(!drag.tap)tutFlag.drag=1;
     else if(e.type==='pointerup'){if(drag.wasSel){const hits=S.arr.filter(q=>Math.hypot(q.x-drag.pt.x,q.y-drag.pt.y)<34).reverse();if(hits.length>1){const idx=hits.findIndex(q=>q.k===sel);sel=hits[(idx+1)%hits.length].k}}deck='stem'}
-    drag=null;st.classList.remove('dragging');st.querySelectorAll(`.stem[data-k="${sel}"]`).forEach(g=>g.classList.add('settle'));updSel();updMeter();save()}};st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end)}
+    drag=null;st.classList.remove('dragging');st.querySelector(`.stem[data-k="${sel}"]`)?.classList.add('settle');updSel();updMeter();save()}};st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end)}
 
 /* orders */
 const TPL=[
@@ -2438,10 +2530,24 @@ function checkOrder(o,st,sc){const r=o.req,out=[],n=st.length;
   if(r.own)out.push({t:'用自己烧的陶器',ok:String(S.vase).startsWith('p_')});
   if(r.score)out.push({t:`意境 ${r.score} 以上`,ok:sc.total>=r.score});
   return out}
+let trackOrder=null;
 function renderOrders(){const sc=arrScore();
-  $('#orders').innerHTML=S.orders.map(o=>{const ck=checkOrder(o,S.arr,sc),ok=ck.every(c=>c.ok);
-    return`<div class="order"><div class="who"><span class="ava">${o.who.slice(-1)}</span>${o.who}</div><div class="say">${o.say}</div><div>${ck.map(c=>`<span class="req${c.ok?' ok':''}">${c.ok?'✓ ':''}${c.t}</span>`).join('')}</div><div class="foot"><span class="meta" style="font-size:12px">${o.story?'乡邻的委托':`${o.pal?'知己来信 · ':''}谢礼 ${price(o.coins)}${o.seed?` · ${F[o.seed].n}花种`:''}`}</span>${o.story?'':`<button class="btn order-x" data-decline="${o.k}" aria-label="婉拒" title="婉拒">✕</button>`}${ok?'<span class="req ok">可交付</span>':''}</div></div>`}).join('')||'<p class="muted">暂时没有新的花笺。</p>';
-  const d=$('#soDot'),nk=S.orders.filter(o=>checkOrder(o,S.arr,sc).every(c=>c.ok)).length;if(d){d.hidden=!nk;d.textContent=nk||''}}
+  if(trackOrder!=null&&!S.orders.some(o=>o.k===trackOrder))trackOrder=null;
+  const rows=S.orders.map(o=>{const ck=checkOrder(o,S.arr,sc);return{o,ck,ok:ck.every(c=>c.ok)}});
+  $('#orders').innerHTML=rows.map(({o,ck,ok})=>{
+    const foot=ok?`<button class="btn primary sm order-deliver" data-deliver="${o.k}">交付</button>`:`<button class="btn sm order-track${o.k===trackOrder?' on':''}" data-track="${o.k}">${o.k===trackOrder?'对照中 ✓':'照着插'}</button>`;
+    return`<div class="order${ok?' ready':''}${o.k===trackOrder?' tracking':''}"><div class="who"><span class="ava">${o.who.slice(-1)}</span>${o.who}${o.story?'':`<button class="btn sm order-decline" data-decline="${o.k}">婉拒</button>`}</div><div class="say">${o.say}</div><div>${ck.map(c=>`<span class="req${c.ok?' ok':''}">${c.ok?'✓ ':''}${c.t}</span>`).join('')}</div><div class="foot"><span class="meta" style="font-size:12px">${o.story?'乡邻的委托':`${o.pal?'知己来信 · ':''}谢礼 ${price(o.coins)}${o.seed?` · ${F[o.seed].n}花种`:''}`}</span>${foot}</div></div>`}).join('')||'<p class="muted">暂时没有新的花笺。</p>';
+  const d=$('#soDot'),nk=rows.filter(r=>r.ok).length;if(d){d.hidden=!nk;d.textContent=nk||''}
+  const bar=$('#stOrderBar');if(!bar)return;
+  const tr=rows.find(r=>r.o.k===trackOrder),okR=rows.filter(r=>r.ok);
+  if(tr){
+    bar.hidden=false;bar.classList.toggle('ready',tr.ok);
+    bar.innerHTML=`<button type="button" class="st-obar-who" data-orders="1">${tr.o.who}</button><div class="st-obar-reqs" data-orders="1">${tr.ck.map(c=>`<span class="req${c.ok?' ok':''}">${c.ok?'✓ ':''}${c.t}</span>`).join('')}</div>${tr.ok?`<button type="button" class="btn primary sm" data-deliver="${tr.o.k}">交付</button>`:'<button type="button" class="st-obar-x" data-untrack="1" aria-label="收起对照">✕</button>'}`;
+  }else if(okR.length){
+    bar.hidden=false;bar.classList.add('ready');
+    if(okR.length===1)bar.innerHTML=`<button type="button" class="st-obar-who" data-orders="1">${okR[0].o.who}</button><div class="st-obar-reqs" data-orders="1"><span class="req ok">✓ 已达标</span></div><button type="button" class="btn primary sm" data-deliver="${okR[0].o.k}">交付</button>`;
+    else bar.innerHTML=`<button type="button" class="st-obar-who" data-orders="1">花笺</button><div class="st-obar-reqs" data-orders="1"><span class="req ok">✓ ${okR.length} 份可交付</span></div><button type="button" class="btn primary sm" data-deliver="any">去交付</button>`;
+  }else{bar.hidden=true;bar.classList.remove('ready');bar.innerHTML=''}}
 const NAMES={warm:['暖阳小集','朝霞一握','向晚','春信','胭脂薄'],cool:['青岚','夜雨初歇','远山','一帘幽梦','雾蓝'],plain:['素心','初雪','月白','清供','无声'],mix:['花间一隅','四时序曲','拾花','窗下','半日闲']};
 const arrInSeason=()=>S.arr.some(s=>inSeason(s.id));
 function sellValue(sc){return Math.round(S.arr.reduce((a,s)=>a+F[s.id].val,0)*(.7+sc.total/100*1.1)*(arrInSeason()?SEASON_SELL:1))}
@@ -2453,13 +2559,17 @@ function galleryFullOfPins(){return S.gallery.filter(w=>w.pin).length>=galleryCa
 function manageFullGallery(){
   modal('<h2 class="h-title">整理花架</h2><p class="say">花架已满，架上的作品都已珍藏。这瓶花会留在花艺台。请先去花架取消一件珍藏，再回来完成作品。</p><button class="btn" data-act="close">返回</button><button class="btn primary" data-act="goto" data-v="gallery">整理花架</button>')
 }
-function finishDialog(){if(S.arr.length<3)return toast('至少插三枝花，才算一件作品');
+function finishDialog(targetKey=null){if(S.arr.length<3)return toast('至少插三枝花，才算一件作品');
   if(galleryFullOfPins())return manageFullGallery();
   const sc=arrScore(),okO=S.orders.filter(o=>checkOrder(o,S.arr,sc).every(c=>c.ok)),name=pick(NAMES[sc.tone]);
+  const target=typeof targetKey==='number'?okO.find(o=>o.k===targetKey):null;
+  const oReward=o=>o.story?'乡邻委托':`谢礼 ${o.coins} 花币${o.seed?` · ${F[o.seed].n}花种`:''}`;
+  const mid=target?`<div class="fin-target"><span>交付给 <b>${target.who}</b></span><span class="meta">${target.story?'乡邻的委托':`${target.pal?'知己来信 · ':''}谢礼 ${price(target.coins)}${target.seed?` · ${F[target.seed].n}花种`:''}`}</span></div>`:(okO.length?`<div class="fin-deliver dlg-choices">${okO.map(o=>`<button class="btn green lg" data-act="finish" data-o="${o.k}">交付给${o.who}<small>${oReward(o)}</small></button>`).join('')}</div>`:'');
+  const finBtn=target?`<button class="btn primary lg" data-act="finish" data-o="${target.k}">交付给${target.who}</button>`:`<button class="btn primary lg" data-act="finish">售出 +${sellValue(sc)} 花币${arrInSeason()?'（含当令加成）':''}</button>`;
   modal(`<div class="fin-scroll"><div class="center">${scrollHTML({...curW(),name},'unroll')}</div>
    <div class="meter2" style="margin-top:12px">${radar(sc.parts)}<div class="mscore"><b id="fscore">${sc.total}</b><small>意境</small><div class="rate pop" style="font-size:17px">${stars(starN(sc.total))}</div><p>${sc.tip}</p></div></div>
-   <label for="workName" class="muted" style="display:block;font-size:12px;margin:10px 4px 4px">为作品题名</label><input class="inp" id="workName" maxlength="8" value="${name}"><div class="dlg-choices">${okO.map(o=>`<button class="btn green lg" data-act="finish" data-o="${o.k}">交付给${o.who}</button>`).join('')}</div></div>
-   <div class="fin-act"><button class="btn lg" data-act="savepng" data-k="cur">保存画片</button><button class="btn primary lg" data-act="finish">售出 +${sellValue(sc)} 花币${arrInSeason()?'（含当令加成）':''}</button></div>`);
+   <label for="workName" class="muted" style="display:block;font-size:12px;margin:10px 4px 4px">为作品题名</label><input class="inp" id="workName" maxlength="8" value="${name}"></div>${mid}
+   <div class="fin-act"><button class="btn lg" data-act="savepng" data-k="cur">保存画片</button>${finBtn}</div>`);
   $('#modal .dialog').classList.add('findlg');
   $('#workName').addEventListener('input',e=>{$('#modal .vtn').textContent=e.target.value});countUp($('#fscore'),sc.total,900,500);setTimeout(()=>sfx('place'),1250);finishJuice(sc);
   if(sc.total>=62)setTimeout(()=>confetti(S.arr.map(s=>F[s.id].c[1])),500)}
@@ -2552,13 +2662,12 @@ async function renderWorkCanvas(w){
       scx.translate(fx,fy);scx.rotate(r);scx.scale(q.fl*q.sc,q.sc*k);scx.translate(0,u0);
       scx.beginPath();scx.rect(-999,-u1,1998,u1-u0+1.5/(q.sc*k));scx.clip();scx.rotate(-q.th/DEG);scx.drawImage(im,-q.ax,-q.ay,q.W,q.H);scx.restore()}}
   }
-  for(const {sb,q,ov,im} of items){scx.save();scx.translate(sb[0],sb[1]);scx.rotate(q.rot/DEG);scx.scale(q.fl*q.sc,q.sc);
-    for(const[px,py,ph,ta,tz]of q.parts)drawStemBand(scx,im,q,px,py,ph,ta,-tz,tz-ta+(ta===q.parts[0][3]?Math.min(ov,1):ov),1);
-    scx.restore()}
-  for(const it of items){const{sb,q,ov,im}=it;scx.save();scx.translate(sb[0],sb[1]);scx.rotate(q.rot/DEG);
+  for(const {sb,q,ov,im} of items){scx.save();scx.translate(sb[0],sb[1]);scx.rotate(q.rot/DEG);
     if(q.f.r===3&&q.st>0){const hx=q.hx2*q.fl*q.sc,hy=q.hy2*q.sc,hr=30+20*q.sc,[cr,cg,cb]=hex(q.f.c[1]),gr=scx.createRadialGradient(hx,hy,0,hx,hy,hr);
       gr.addColorStop(0,`rgba(${cr},${cg},${cb},.75)`);gr.addColorStop(1,`rgba(${cr},${cg},${cb},0)`);scx.fillStyle=gr;scx.beginPath();scx.arc(hx,hy,hr,0,Math.PI*2);scx.fill()}
-    scx.scale(q.fl*q.sc,q.sc);drawStemBand(scx,im,q,q.x,q.y,q.phB,q.tb,-1999,1999-q.tb+ov,q.fs);scx.restore()}
+    scx.scale(q.fl*q.sc,q.sc);
+    for(const[px,py,ph,ta,tz]of q.parts)drawStemBand(scx,im,q,px,py,ph,ta,-tz,tz-ta+(ta===q.parts[0][3]?Math.min(ov,1):ov),1);
+    drawStemBand(scx,im,q,q.x,q.y,q.phB,q.tb,-1999,1999-q.tb+ov,q.fs);scx.restore()}
   const cv=document.createElement('canvas');cv.width=720;cv.height=786;const c=cv.getContext('2d');
   c.fillStyle='#f4ecda';c.fillRect(0,0,720,786);
   c.save();c.shadowColor='rgba(43,32,23,.24)';c.shadowBlur=24;c.shadowOffsetY=10;c.fillStyle='#e9dcc0';c.fillRect(58,48,604,659);c.restore();
@@ -2613,7 +2722,10 @@ const BACK={kiln:['town','小镇']};
 let view='garden',prevView='garden',wakeFx=()=>{};
 const wishCoins=()=>30+Math.min(level()-1,20)*5;
 function go(v){if(SUBS[v])v=subSel[v];if(v==='folk')v='town';const par=parOf(v);if(par!==v)subSel[par]=v;if(walk&&v!=='wild')endWalk(true);
-  if(par==='book'&&parOf(view)!=='book')prevView=view;if(v==='studio'&&view!=='studio')hist=[];if(v!=='town')talkId=null;else if(view!=='town')tcam=null;view=v;
+  if(par==='book'&&parOf(view)!=='book')prevView=view;if(v==='studio'&&view!=='studio')hist=[];
+  if(v!=='town'){talkId=null;if(view==='town')cancelAnimationFrame(glideRAF)}
+  else if(view!=='town'){tcam=null;seekLast=null}
+  view=v;
   $$('.view').forEach(e=>e.hidden=e.id!=='v-'+v);const bk=par==='book'?[prevView,'合上']:BACK[v],bb=$('#backBtn');bb.hidden=!bk;if(bk){bb.dataset.to=bk[0];$('#backTxt').textContent=bk[1]}
   $('#app').dataset.at=par;if(v==='town')$('#app').style.setProperty('--hz',Math.round(innerHeight*.4)+'px');
   ({garden:()=>{refreshPlots();hints();layoutScene()},studio:renderStudio,shop:renderShop,codex:renderCodex,gallery:renderGallery,wild:renderWild,town:renderTown,kiln:renderKiln,goals:renderGoals})[v]();$$('.grid>*,.works>*').forEach((e,i)=>e.style.setProperty('--i',Math.min(i,16)));wakeFx()}
@@ -2751,8 +2863,8 @@ function bind(){
     else if(d.form){if(d.form===S.form)return;pushHist();S.form=d.form;if(S.form!=='free')toast('把三枝花分别拖到「主」「副」「客」的虚线末端')}
     else if(d.bg!==undefined){if(+d.bg===S.bg)return;pushHist();S.bg=+d.bg}else return;
     renderStage();renderChips();updMeter();save()});
-  $('#finishArr').addEventListener('click',finishDialog);
-  $('main').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
+  $('#finishArr').addEventListener('click',()=>finishDialog());
+  $('main').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){const st=b.dataset.story;go(b.dataset.go);if(st){const o=S.orders.find(x=>x.story===st);if(o){trackOrder=o.k;renderOrders()}}}});
   $('#wild').addEventListener('click',e=>{if(e.target.closest('#walkGo'))startWalk();else if(e.target.closest('#walkEnd'))endWalk();
     else if(walk&&!e.target.closest('.wi')){let best=null,bd=72;$$('#witems .wi').forEach(w=>{const r=w.getBoundingClientRect(),d=Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2));if(d<bd){bd=d;best=w}});if(best)best.click()}});
   $('#goals').addEventListener('click',e=>{const sv=e.target.closest('[data-save]');if(sv)return sv.dataset.save==='export'?exportSave():importSave();const b=e.target.closest('[data-wish]');if(!b||b.disabled)return;const w=S.wishes.list[+b.dataset.wish];if(w.got)return;const wc=wishCoins();w.got=1;S.coins+=wc;S.dew++;toast(`心愿达成：${wc} 花币，露水 +1`);sfx('coin');hud();renderGoals();save()});
@@ -2762,8 +2874,16 @@ function bind(){
   addEventListener('pointerup',()=>{kdrag=null});addEventListener('pointercancel',()=>{kdrag=null});
   // only a grabbed handle blocks page scrolling; anywhere else on the wheel scrolls as usual
   ['touchstart','touchmove'].forEach(t=>$('#kiln').addEventListener(t,e=>{if(kdrag&&e.cancelable)e.preventDefault()},{passive:false}));
-  $('#orders').addEventListener('click',e=>{const d=e.target.closest('[data-decline]');
-    if(d){S.orders=S.orders.filter(o=>o.k!==+d.dataset.decline);fillOrders();renderOrders();toast('已婉拒这份委托');save()}});
+  $('#orders').addEventListener('click',e=>{
+    const d=e.target.closest('[data-decline]'),del=e.target.closest('[data-deliver]'),tr=e.target.closest('[data-track]');
+    if(d){S.orders=S.orders.filter(o=>o.k!==+d.dataset.decline);fillOrders();renderOrders();toast('已婉拒这份委托');save()}
+    else if(del){$('#studio').classList.remove('orders-open');finishDialog(+del.dataset.deliver)}
+    else if(tr){const k=+tr.dataset.track;trackOrder=trackOrder===k?null:k;if(trackOrder!=null){$('#studio').classList.remove('orders-open');sfx('place')}renderOrders()}});
+  $('#stOrderBar').addEventListener('click',e=>{
+    const del=e.target.closest('[data-deliver]'),un=e.target.closest('[data-untrack]'),op=e.target.closest('[data-orders]');
+    if(del)finishDialog(del.dataset.deliver==='any'?null:+del.dataset.deliver);
+    else if(un){trackOrder=null;renderOrders()}
+    else if(op){pop=null;renderChips();$('#studio').classList.add('orders-open')}});
   // shop
   $('#shop').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;let receipt='';
     const poor=c=>S.coins<c&&(deny(`花币不够：需要 ${c}，还差 ${c-S.coins}`,b,true),true);
@@ -2987,7 +3107,7 @@ function townFigure(id){const q=TOWN.folk[id],c=id==='he'?HE:FOLK.find(x=>x.id==
     const bub=id==='he'?'<i class="bub">…</i>':bubHTML(c);
     return`<button class="tfig${q[3]==='l'?' bl':''}${talkId===id?' on':''}" data-own="${id}" data-talk="${id}" ${st} aria-label="${id==='he'?'花匠阿禾':folkLabel(c)}">${bub}${chibi(id)}</button>`}
 
-function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==TOWN){TOWN=pick;tcam=null}
+function renderTown(){syncStory();const away=hired(),pick=townPick();if(pick!==TOWN){cancelAnimationFrame(glideRAF);TOWN=pick;tcam=null}
   const spot=t=>{const who=t.own==='he'?HE:t.own&&FOLK.find(x=>x.id===t.own),r=t.r,lock=t.go==='kiln'&&!S.kiln,
       sign=t.sign+(lock?' · 门还关着':'')+(t.own==='he'&&away?' · 在你的小院':''),
       lab=who?(t.own==='he'?`${sign}，花匠阿禾`:`${t.sign}，${folkLabel(who)}`):sign.replace(' · ','，');
@@ -3033,7 +3153,7 @@ function layoutTown(){const w=$('#tworld'),sc=$('#tscroll');if(!w||!sc)return;co
   const old=tz,[sx,sy,sw,sh]=TOWN.safe||[0,0,TOWN.w,TOWN.h];tz=townLimits(R);
   w.style.setProperty('--bl',sx/sw*100+'%');w.style.setProperty('--br',(TOWN.w-sx-sw)/sw*100+'%');
   w.style.setProperty('--bt',sy/sh*100+'%');w.style.setProperty('--bb',(TOWN.h-sy-sh)/sh*100+'%');
-  if(!tcam){const s=tz.s0,c=s>tz.fit*1.02&&townBusy()[0];seekLast=c?c.id:null;const q=c&&TOWN.folk[c.id],wx=q?sx+q[0]/100*sw:sx+sw/2,wy=q?sy+(q[1]-q[2]/2)/100*sh:sy+sh/2;
+  if(!tcam){const s=tz.s0,c=s>tz.fit*1.02&&townBusy()[0];const q=c&&TOWN.folk[c.id],wx=q?sx+q[0]/100*sw:sx+sw/2,wy=q?sy+(q[1]-q[2]/2)/100*sh:sy+sh/2;
     tcam={s,x:tz.W/2-wx*s,y:tz.top+tz.ah/2-wy*s}}
   else if(old.W&&(old.W!==tz.W||old.H!==tz.H)){const cx=(old.W/2-tcam.x)/tcam.s,cy=(old.H/2-tcam.y)/tcam.s;tcam.x=tz.W/2-cx*tcam.s;tcam.y=tz.H/2-cy*tcam.s}
   sc.scrollLeft=sc.scrollTop=0;townApply()}
@@ -3069,7 +3189,7 @@ function openHe(quiet){talkId='he';const t=$('#talk');if(!t)return;
   t.hidden=false;t.innerHTML=`<div class="tface">${chibi('he')}</div><div class="tbody"><div class="tname"><b>${HE.n}</b><small>${HE.role}</small></div><p class="say" id="tsay"></p><div class="treq"><span class="req">${away?'在你的小院照料花田':'雇一天：浇水、拔草、请走小蜗牛'}</span></div><div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button><button class="btn primary" data-hire="1">${away?'续一天':'雇我一天'} ${price(80)}</button></div></div>`;
   const say=away?'我正在你的小院照料花田。续约会从这次雇期结束时算起。':'花要有人看着才长得好。你忙的时候，我去小院替你照料。';if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town [data-own]').forEach(n=>n.classList.toggle('on',n.dataset.own==='he'))}
 function openTalk(id,quiet){if(id==='he')return openHe(quiet);talkId=id;const c=FOLK.find(x=>x.id===id),st=fstep(c),lv=S.folk[id]||0,nl=st?needList(st.need):[],ok=nl.length&&nl.every(x=>x.ok),work=st&&st.need.work,t=$('#talk');if(!t)return;
-  t.hidden=false;t.innerHTML=`<div class="tface">${chibi(id)}</div><div class="tbody"><div class="tname"><b>${c.n}</b><small>${c.role}</small><span class="hearts">${[0,1,2,3].map(i=>`<i class="${i<lv?'on':''}"></i>`).join('')}</span></div><p class="say" id="tsay"></p>${st?`<div class="treq">${nl.filter(x=>!st.need.give||ok||!x.ok).map(x=>`<span class="req${x.ok?' ok':''}">${x.ok?'✓ ':''}${x.t}</span>`).join('')}</div>`:'<div class="treq"><span class="req ok">♥ 知己 · 偶寄时令花笺</span></div>'}<div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button>${st?(work?'<button class="btn primary" data-go="studio">去花艺</button>':ok?`<button class="btn primary" data-folk="${id}">交给${c.n}</button>`:''):''}</div></div>`;
+  t.hidden=false;t.innerHTML=`<div class="tface">${chibi(id)}</div><div class="tbody"><div class="tname"><b>${c.n}</b><small>${c.role}</small><span class="hearts">${[0,1,2,3].map(i=>`<i class="${i<lv?'on':''}"></i>`).join('')}</span></div><p class="say" id="tsay"></p>${st?`<div class="treq">${nl.filter(x=>!st.need.give||ok||!x.ok).map(x=>`<span class="req${x.ok?' ok':''}">${x.ok?'✓ ':''}${x.t}</span>`).join('')}</div>`:'<div class="treq"><span class="req ok">♥ 知己 · 偶寄时令花笺</span></div>'}<div class="tact"><button class="btn talk-x" data-talkx="1" aria-label="关闭">✕</button>${st?(work?`<button class="btn primary" data-go="studio" data-story="${id}">去花艺</button>`:ok?`<button class="btn primary" data-folk="${id}">交给${c.n}</button>`:''):''}</div></div>`;
   const say=st?st.say:c.end;if(quiet)$('#tsay').textContent='「'+say+'」';else typeText($('#tsay'),say);$$('#town [data-own]').forEach(n=>n.classList.toggle('on',n.dataset.own===id))}
 
 /* ----- wishes & badges ----- */
@@ -3370,7 +3490,7 @@ const WMAPS={
     deco:[['lotus',.03],['lily',.09],['lotus',.2],['lily',.26],['lotus',.37],['lily',.44],['lotus',.62],['lily',.68],['lotus',.8],['lily',.88],['lotus',.97]],
     st:[[.2,'柳堤'],[.44,'荷风'],[.58,'曲桥'],[.86,'桃岸'],[2,'水亭']],water:.5,npc:.93,fl:['forget','forget','cosmos','jasmine','jasmine','waterlily','lotus'],cu:['pod','dfly','ling','snail']}};
 const WX_PAV=-2;
-const wxLeft=()=>walk?walk.spots.filter(s=>!s.done&&s.k!=='npc').length:0;
+const wxLeft=()=>walk?walk.spots.filter(s=>!s.done&&s.k!=='npc').length+(walk.rabbit?1:0):0;
 function wxLootList(g){const L=[];if(g.bfly)L.push(`蝴蝶 ×${g.bfly}`);if(g.dew)L.push(`露水 ×${g.dew}`);if(g.clay)L.push(`陶土 ×${g.clay}`);
   const cnt=a=>{const m={};(a||[]).forEach(i=>m[i]=(m[i]||0)+1);return m},sd=cnt(g.seeds),ct=cnt(g.cut);for(const i in ct)L.push(`${F[i].n} ×${ct[i]}`);for(const i in sd)L.push(`${F[i].n}花种 ×${sd[i]}`);(g.misc||[]).forEach(x=>L.push(x));return L}
 const wxFlavorLine=m=>({
@@ -3404,12 +3524,11 @@ const WQ={
   he:{who:'shen',n:'沈先生',seal:'书斋',img:'assets/n_shen.webp',idle:'风过荷塘，书都不用翻了。',steps:[
     {say:'荷塘边读书最好。想讨一枝荷花压在书页里，你帮我从塘里采一枝来？',need:{give:{lotus:1}},thx:'满页都是荷香。这一包睡莲种子，是从前一位故人送我的。',rw:{seeds:{waterlily:1},coins:120}},
     {say:'敢不敢打个赌？你在塘边打水漂，若能连漂五下，我输你一样好东西。',need:{flag:'skip5',t:'在荷塘打出 5 个漂'},thx:'五下！我服了。这粒莲子在书里夹了好多年，种下去看看吧。',rw:{seeds:{lotus:1},coins:150}}]}};
-const wxs=()=>{const d={map:'xi',q:{},pages:0,fl:{},cu:{},trips:0};S.wx=Object.assign(d,S.wx||{});return S.wx};
-const wxOpen=m=>m==='xi'||(m==='zhu'?(wxs().q.xi||0)>=1:m==='he'?(wxs().q.zhu||0)>=1||!!S.deep:false);
+const wxOpen=m=>m==='xi'||(m==='zhu'?(S.wx.q.xi||0)>=1:m==='he'?(S.wx.q.zhu||0)>=1||!!S.deep:false);
 const wxLockTxt=m=>m==='zhu'?'帮溪谷的阿野找回画稿后开放':'帮竹海的豆豆找回信后开放（或随阿野去过山野深处）';
-const wxStep=m=>WQ[m].steps[wxs().q[m]||0]||null;
+const wxStep=m=>WQ[m].steps[S.wx.q[m]||0]||null;
 const haveCut=k=>(VARS[k]||[k]).reduce((s,i)=>s+(S.cut[i]||0),0);
-function wxNeeds(m){const st=wxStep(m),X=wxs();if(!st)return[];const n=st.need,o=[];
+function wxNeeds(m){const st=wxStep(m),X=S.wx;if(!st)return[];const n=st.need,o=[];
   if(n.pages)o.push({t:`找回画稿 ${Math.min(X.pages,3)} / 3`,ok:X.pages>=3});
   if(n.give)for(const k in n.give){const h=haveCut(k);o.push({t:`${F[k].n} ${Math.min(h,n.give[k])} / ${n.give[k]}`,ok:h>=n.give[k]})}
   if(n.bfly)o.push({t:`蝴蝶 ${Math.min(S.bfly,n.bfly)} / ${n.bfly}`,ok:S.bfly>=n.bfly});
@@ -3419,8 +3538,8 @@ const wxStretch=(m,p)=>WMAPS[m].st.find(s=>p<s[0])[1];
 const cuImg=(c,cls='')=>`<img class="cu ${cls}" src="${A(WCU[c][2])}" alt="${WCU[c][0]}" draggable="false">`;
 
 /* ---------- 出发前：选地图 ---------- */
-function wxRender(){if(walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';const l=legs(),mx=S.legMax||3,M=WMAPS[X.map];
-  $('#wild').innerHTML=`${wxSceneHTML(X.map)}<div class="wild-rest"><div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">按住地面就走，手指按得离人远些就跑起来；看见喜欢的点一下就去拿。草丛、溪边、花丛里还藏着小游戏，路上会遇到熟人。</p>
+function wxRender(){if(walk)return;const X=S.wx;if(!wxOpen(X.map))X.map='xi';const l=legs(),mx=S.legMax||3,M=WMAPS[X.map];
+  $('#wild').innerHTML=`${wxSceneHTML(X.map)}<div class="wild-rest"><div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">按住地面走，按得远些就跑；花草、大树、草丛和水面都能直接互动。慢走好扑蝶，起风时跑着追花种。</p>
   <div class="wx-maps" role="radiogroup" aria-label="选一处去走走">${WMAP_IDS.map(m=>{const W=WMAPS[m],open=wxOpen(m),q=X.q[m]||0,Q=WQ[m],n=W.cu.filter(c=>X.cu[c]).length;
     return`<button class="wx-map${m===X.map?' on':''}" data-wxmap="${m}" role="radio" aria-checked="${m===X.map}"${open?'':lockAttr(wxLockTxt(m))}><b>${W.n}</b><small>${open?W.sub:wxLockTxt(m)}</small>${open?`<span class="wx-cus" aria-label="拾遗 ${n} / 4">${W.cu.map(c=>X.cu[c]?cuImg(c):cuImg(c,'unk')).join('')}</span><span class="wx-q">${Q.n} ${q>=Q.steps.length?'· 心事已了':`· ${q} / ${Q.steps.length}`}${wxReady(m)?' · 可以去找他了':''}</span>`:''}</button>`}).join('')}</div>
   <div class="bag">${bagHTML()}</div>
@@ -3432,17 +3551,20 @@ function wxFit(){const r=$('#wild .wild-rest');if(!r||walk)return;r.classList.re
 
 /* ---------- 场景 ---------- */
 function wxSceneHTML(m){const M=WMAPS[m],r=rng(M.seed),back=[],cross=[];
-  const prop=([key,t])=>{const d=WPROP[key],s=d[2]*(.92+r()*.16),flip=['gate','bridge','pavilion'].includes(key)?1:r()<.5?-1:1;return`<img class="wj-prop${key==='pavilion'?' wj-pav':''}" data-t="${t}" src="${A(d[3])}" width="${d[0]}" height="${d[1]}" alt="" draggable="false" style="--s:${s.toFixed(4)};--flip:${flip}">`};
-  M.plan.forEach(a=>(a[0]==='bridge'?cross:back).push(prop(a)));
+  const prop=([key,t],pi)=>{const d=WPROP[key],s=d[2]*(.92+r()*.16),flip=['gate','bridge','pavilion'].includes(key)?1:r()<.5?-1:1;return`<img class="wj-prop${key==='pavilion'?' wj-pav':''}" data-t="${t}" data-pi="${pi}" src="${A(d[3])}" width="${d[0]}" height="${d[1]}" alt="" draggable="false" style="--s:${s.toFixed(4)};--flip:${flip}">`};
+  M.plan.forEach((a,pi)=>(a[0]==='bridge'?cross:back).push(prop(a,pi)));
   return`<div class="pano wx" data-map="${m}"><div class="journey"><div class="wj-layer wj-sky" aria-hidden="true"><img src="${A('assets/mountains.webp')}" width="1600" height="528" alt="" draggable="false"></div><div class="wj-layer wj-hills" aria-hidden="true"><img src="${A('assets/w_hills.webp')}" width="1600" height="294" alt="" draggable="false"></div><div class="wj-layer wj-props" aria-hidden="true">${back.join('')}</div><div class="wj-layer wj-ground" aria-hidden="true" style="background-image:url('${A(M.ground)}')"></div><div class="wj-layer wj-crossing" aria-hidden="true">${cross.join('')}</div><div class="wj-layer wx-deco" aria-hidden="true">${(M.deco||[]).map(([k,t])=>{const d=WPROP[k];return`<img class="wj-prop wx-dec k-${k}" data-t="${t}" src="${A(d[3])}" width="${d[0]}" height="${d[1]}" alt="" draggable="false" style="--flip:${r()<.5?-1:1}">`}).join('')}</div><div class="wj-layer wx-spots" id="wxSpots"></div><div class="wj-walker" aria-hidden="true"><i class="wj-shadow"></i><i class="wk"></i></div><div class="wj-mist" aria-hidden="true"></div></div></div>`}
 let wxQ=null,wxRAF=0,wxRO=null;
-function wxStopScene(){cancelAnimationFrame(wxRAF);wxRAF=0;clearTimeout(wxSeqT);clearTimeout(walk?.tipT);if(wxRO)wxRO.disconnect();wxRO=null;wxQ=null}
+function wxStopScene(){cancelAnimationFrame(wxRAF);wxRAF=0;clearTimeout(wxSeqT);clearTimeout(walk?.tipT);if(wxGameStop){const f=wxGameStop;wxGameStop=null;f()}if(wxRO)wxRO.disconnect();wxRO=null;wxQ=null}
 function wxMount(){wxStopScene();const p=$('#wild .pano');if(!p||view!=='wild')return;
   wxQ={pano:p,sky:$('.wj-sky',p),hills:$('.wj-hills',p),props:$('.wj-props',p),ground:$('.wj-ground',p),cross:$('.wj-crossing',p),deco:$('.wx-deco',p),spots:$('.wx-spots',p),walker:$('.wj-walker',p),mist:$('.wj-mist',p),W:0,H:0,D:0};
-  wxMeasure();if(typeof ResizeObserver!=='undefined'){wxRO=new ResizeObserver(wxMeasure);wxRO.observe(p)}wxFrame(9);if(walk){walk.mv=null;walk.busy=walk.soft=false;walk.v=0;walk.wf=-1;wxLoop()}}
+  wxMeasure();wxSyncTreeProps();if(typeof ResizeObserver!=='undefined'){wxRO=new ResizeObserver(wxMeasure);wxRO.observe(p)}wxFrame(9);if(walk){walk.mv=null;walk.busy=walk.soft=false;walk.v=0;walk.wf=-1;wxLoop()}}
 function wxMeasure(){const q=wxQ;if(!q)return;const W=q.pano.clientWidth,H=q.pano.clientHeight;if(!W||!H)return;const D=Math.max(W*5,H*8);Object.assign(q,{W,H,D});
   q.sky.style.width=W*1.12+'px';q.hills.style.width=Math.max(W+D*.10,H*.38*1600/294)+'px';[q.props,q.ground,q.cross,q.deco,q.spots].forEach(el=>el.style.width=W+D+'px');
-  $$('.wj-prop',q.pano).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');$$('.xs',q.spots).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');if(walk)walk.near=-2;wxPaint(true)}
+  $$('.wj-prop',q.pano).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');$$('.xs',q.spots).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');
+  if(walk?.rabbit?.el)walk.rabbit.el.style.left=(W*.28+D*walk.rabbit.t)+'px';
+  if(walk?.drift?.el)walk.drift.el.style.left=(W*.28+D*walk.drift.t)+'px';
+  if(walk)walk.near=-2;wxPaint(true)}
 /* 镜头：人往哪边走，画面就往那边多让出一截（朝右时人站在左 36%，朝左时站在右 62%），好看清前面有什么；
    转身后镜头慢慢挪过去，不一转身就猛甩。人物转身是一张纸翻个面（scaleX 从 1 过渡到 -1），不是瞬间换向 */
 const wxRM=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -3462,50 +3584,71 @@ function wxPaint(force,dt){const q=wxQ;if(!q||!q.D)return;const p=walk?walk.p:0,
     if(walk.top&&!walk.cleared){if(p<.90&&walk.atEndTip){walk.atEndTip=0;$('#wxTip')?.classList.add('fade')}else if(p>=.96&&!walk.atEndTip){walk.atEndTip=1;wxTip(wxEndTipText(),true)}}}}
 
 /* ---------- 一趟出门 ---------- */
-function wxStart(){if(legs()<1||walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';S.legs--;X.trips++;
-  walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1,hold:null,busy:false,soft:false,mv:null,still:0,after:null,v:0,fv:1,ph:.34,lean:0,run:false,hrun:false,shift:false,wf:-1,tipT:0,top:0,atEndTip:0,cleared:0,clearedNotice:0,leaving:0};
+function wxStart(){if(legs()<1||walk)return;const X=S.wx;if(!wxOpen(X.map))X.map='xi';S.legs--;X.trips++;
+  walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1,hold:null,busy:false,soft:false,mv:null,still:0,after:null,v:0,fv:1,ph:.34,lean:0,run:false,hrun:false,shift:false,wf:-1,tipT:0,top:0,atEndTip:0,cleared:0,clearedNotice:0,leaving:0,combo:{n:0,t:0},windMarks:[.26+Math.random()*.16,.63+Math.random()*.16],windFired:[0,0],drift:null,rabbit:null,skyBfly:null,spookTipAt:0};
   const M=WMAPS[walk.map];
-  $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">按住地面就走，按得远些就跑；点东西就去拿</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn wx-act" id="wxAct" hidden></button><button class="btn" id="walkEnd">回家</button></div>`;
+  $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">慢走好扑蝶，跑起来能追风接花种；路边的树也能摇一摇</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn wx-act" id="wxAct" hidden></button><button class="btn" id="walkEnd">回家</button></div>`;
   $('#wbag').innerHTML=bagHTML();wxDrawSpots();wxMount();sfx('place');save();refreshDock();
   walk.tipT=setTimeout(()=>{const t=$('#wxTip');if(t)t.classList.add('fade')},6000)}
-function wxGen(m){const M=WMAPS[m],X=wxs(),r=rng((X.trips*977+dayNo()*131+m.charCodeAt(0)*7)>>>0),q=X.q[m]||0,st=wxStep(m),list=[],put=(k,o={})=>list.push({k,...o});
+function wxPickSeedId(r){const rare=r()<(S.deep?.3:.12);let pool=BASE.filter(i=>!F[i].wild&&(rare?F[i].r===1||F[i].r===2:F[i].r<=1)),nw=pool.filter(i=>!S.codex[i]);if(nw.length&&r()<.5)pool=nw;if(r()<.25)pool=WILD;let id=pool[Math.floor(r()*pool.length)];if(r()<.3&&VARS[id])id=VARS[id][Math.floor(r()*VARS[id].length)];return{id,rare}}
+function wxGen(m){const M=WMAPS[m],X=S.wx,r=rng((X.trips*977+dayNo()*131+m.charCodeAt(0)*7)>>>0),q=X.q[m]||0,st=wxStep(m),list=[],put=(k,o={})=>list.push({k,...o});
+  const treeCands=M.plan.map(([key,t],pi)=>({key,t,pi})).filter(x=>['peach','pine','bamboo','willow'].includes(x.key)&&x.t>=.08&&x.t<=.92&&Math.abs(x.t-M.npc)>=.05&&Math.abs(x.t-M.water)>=.05);
+  for(let i=treeCands.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[treeCands[i],treeCands[j]]=[treeCands[j],treeCands[i]]}
+  const trees=[];for(const c of treeCands){if(trees.length>=3)break;if(trees.every(u=>Math.abs(u.t-c.t)>=.15))trees.push(c)}
   const slots=[];for(let t=.07;t<.975;t+=.05)slots.push(clamp(t+(r()-.5)*.018,.06,.975));
-  const free=slots.filter(t=>Math.abs(t-M.npc)>.04);
+  const free=slots.filter(t=>Math.abs(t-M.npc)>.04&&trees.every(u=>Math.abs(t-u.t)>=.025));
   if(m==='xi'&&q===0)for(let i=X.pages;i<3;i++)put('page');
   if(m==='he'&&q===0)put('flower',{id:'lotus'});
   const left=M.cu.filter(c=>!X.cu[c]);
   if(st&&st.need.curio&&!X.cu[st.need.curio])put('curio',{id:st.need.curio});else if(left.length&&r()<.8)put('curio',{id:left[Math.floor(r()*left.length)]});
-  put('bfly');put('bush');put('seed');put('seed');if(S.kiln){put('clay');if(r()<.5)put('clay')}
-  for(let i=0;i<3;i++)put('dew');if(r()<.5)put('seed');
-  while(list.length<free.length-1)put(r()<.6?'flower':'dew');
+  put('bfly');put('bfly');put('bush');put('seed');put('seed');if(S.kiln){put('clay');if(r()<.5)put('clay')}
+  for(let i=0;i<2;i++)put('dew');if(r()<.5)put('seed');
+  while(list.length<free.length-1)put(r()<.58?'flower':'dew');
   for(let i=list.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[list[i],list[j]]=[list[j],list[i]]}
   // 打水漂只能在水边：拿最靠近水的空位
   const wi=free.reduce((b,t,i)=>Math.abs(t-M.water)<Math.abs(free[b]-M.water)?i:b,0);list.splice(wi,0,{k:'stone'});
   const out=list.slice(0,free.length).map((s,i)=>{s.t=free[i];s.b=12+r()*8;
     if(s.k==='flower'&&!s.id){let id=M.fl[Math.floor(r()*M.fl.length)];if(F[id].r>=2&&r()<.5)id=M.fl.find(f=>F[f].r<2);if(r()<.3&&VARS[id])id=VARS[id][Math.floor(r()*VARS[id].length)];s.id=id}
     if(s.k==='flower'&&['lotus','waterlily'].includes(F[s.id].base||s.id))s.b=(F[s.id].base||s.id)==='lotus'?r()*1.5:3+r()*3;
-    if(s.k==='seed'){const rare=r()<(S.deep?.3:.12);let pool=BASE.filter(i=>!F[i].wild&&(rare?F[i].r===1||F[i].r===2:F[i].r<=1)),nw=pool.filter(i=>!S.codex[i]);if(nw.length&&r()<.5)pool=nw;if(r()<.25)pool=WILD;let id=pool[Math.floor(r()*pool.length)];if(r()<.3&&VARS[id])id=VARS[id][Math.floor(r()*VARS[id].length)];s.id=id;s.rare=rare}
-    if(s.k==='bfly')s.b=34+r()*10;return s});
+    if(s.k==='seed')Object.assign(s,wxPickSeedId(r));
+    if(s.k==='bfly'){s.b=22+r()*7;s.state='calm';s.spookUntil=0}
+    return s});
+  trees.forEach(c=>{const drop=r()<.42?'dew':r()<.78?'seed':'flower';
+    let dropId=null,rare=false;
+    if(drop==='seed'){const sd=wxPickSeedId(r);dropId=sd.id;rare=sd.rare}
+    else if(drop==='flower'){const pool=M.fl.filter(f=>!['lotus','waterlily'].includes(F[f]?.base||f));dropId=c.key==='peach'&&r()<.55?'peach':pool[Math.floor(r()*pool.length)]||'wildmum';if(r()<.3&&VARS[dropId])dropId=VARS[dropId][Math.floor(r()*VARS[dropId].length)]}
+    out.push({k:'tree',propIdx:c.pi,propKey:c.key,t:c.t,b:22,drop,dropId,rare,bonusDew:r()<.25})});
   out.push({k:'npc',t:M.npc,b:17});return out}
 const WSPOT={flower:s=>s.id==='lotus'||F[s.id]?.base==='lotus'?`<img src="${A('assets/x_lotus.webp')}" alt="" draggable="false">`:s.id==='waterlily'||F[s.id]?.base==='waterlily'?`<img src="${A('assets/x_lily.webp')}" alt="" draggable="false">`:icon(s.id).repeat(3),
   dew:()=>`<img src="${A('assets/x_dew.webp')}" alt="" draggable="false">`,clay:()=>`<img src="${A('assets/x_clay.webp')}" alt="" draggable="false">`,seed:()=>`<img src="${A('assets/x_seed.webp')}" alt="" draggable="false">`,
   page:()=>`<img src="${A('assets/x_page.webp')}" alt="" draggable="false">`,stone:()=>`<img src="${A('assets/x_stones.webp')}" alt="" draggable="false">`,
   bush:()=>`<img src="${A('assets/w_bush.webp')}" alt="" draggable="false">`,curio:()=>`<i class="glint"></i><i class="glint g2"></i>`,
   bfly:()=>`<img src="${A('assets/x_wildfl.webp')}" alt="" draggable="false"><i class="bf b1">${BFLY}</i><i class="bf b2">${BFLY}</i><i class="bf b3">${BFLY}</i>`,
+  tree:()=>'',
   npc:()=>{const Q=WQ[walk.map],st=wxStep(walk.map);return`<img src="${A(Q.img)}" alt="" draggable="false">${st?`<i class="wx-mark${wxReady(walk.map)?' ready':''}">${wxReady(walk.map)?'！':'…'}</i>`:''}`}};
-const wxLabel=s=>({flower:`${F[s.id]?.base==='lotus'||s.id==='lotus'?'采':'摘'}${F[s.id]?.n||''}`,dew:'收露水',clay:'挖陶土',seed:'拾花种',page:'拾起画稿',stone:'打水漂',bush:'拨开草丛',curio:'看看是什么',bfly:'扑蝶',npc:`和${WQ[walk.map].n}说话`})[s.k];
-function wxDrawSpots(){const box=$('#wxSpots');if(!box||!walk)return;const pav=`<button class="xs wx-pav" data-t="1" data-pav="1" aria-label="在${WMAPS[walk.map].pav}歇脚、回家"></button>`;box.innerHTML=pav+walk.spots.map((s,i)=>s.done?'':`<button class="xs k-${s.k}${s.rare?' rare':''}${s.k==='flower'?' fl-'+(F[s.id].base||s.id):''}" data-i="${i}" data-t="${s.t}" style="--b:${s.b.toFixed(1)}%" aria-label="${wxLabel(s)}">${WSPOT[s.k](s)}</button>`).join('');walk.near=-2;if(wxQ)wxMeasure()}
+const TREE_ACT={peach:'摇一摇桃树',pine:'摇一摇松树',bamboo:'拂一拂竹枝',willow:'拂一拂柳枝'};
+const wxLabel=s=>({flower:`${F[s.id]?.base==='lotus'||s.id==='lotus'?'采':'摘'}${F[s.id]?.n||''}`,dew:'收露水',clay:'挖陶土',seed:'拾花种',page:'拾起画稿',stone:'打水漂',bush:'拨开草丛',curio:'看看是什么',tree:TREE_ACT[s.propKey]||'摇一摇',bfly:s.state==='spooked'?'先停步等它落回':s.state==='perched'?'轻手扑蝶':'扑蝶',npc:`和${WQ[walk.map].n}说话`})[s.k];
+function wxSyncTreeProps(){if(!wxQ||!walk)return;$$('.wj-props .wj-prop',wxQ.pano).forEach(el=>el.classList.remove('wx-live','near-prop'));
+  walk.spots.forEach(s=>{if(s.k==='tree'&&!s.done)wxQ.pano.querySelector(`.wj-props .wj-prop[data-pi="${s.propIdx}"]`)?.classList.add('wx-live')})}
+function wxDrawSpots(){const box=$('#wxSpots');if(!box||!walk)return;const pav=`<button class="xs wx-pav" data-t="1" data-pav="1" aria-label="在${WMAPS[walk.map].pav}歇脚、回家"></button>`;box.innerHTML=pav+walk.spots.map((s,i)=>s.done?'':`<button class="xs k-${s.k}${s.rare?' rare':''}${s.k==='flower'?' fl-'+(F[s.id].base||s.id):''}" data-i="${i}" data-t="${s.t}" style="--b:${s.b.toFixed(1)}%" aria-label="${wxLabel(s)}">${WSPOT[s.k](s)}</button>`).join('');walk.near=-2;if(wxQ)wxMeasure();wxSyncTreeProps()}
 const wxReach=()=>Math.max(56,wxQ.walker.offsetWidth*.62)+34;
 function wxNear(){if(!walk||!wxQ)return;const lim=wxReach()/wxQ.D;let best=-1,bd=lim;
   walk.spots.forEach((s,i)=>{if(s.done)return;const d=Math.abs(s.t-walk.p);if(d<bd){bd=d;best=i}});
-  if(best===walk.near)return;walk.near=best;$$('#wxSpots .xs.near').forEach(e=>e.classList.remove('near'));const b=$('#wxAct');
-  if(best<0){if(b)b.hidden=true;return}const el=$(`#wxSpots .xs[data-i="${best}"]`);el?.classList.add('near');if(b){b.hidden=false;b.textContent=wxLabel(walk.spots[best])}}
+  const b=$('#wxAct');
+  if(best===walk.near){if(best>=0&&b&&walk.spots[best]?.k==='bfly'){const lb=wxLabel(walk.spots[best]);if(b.textContent!==lb)b.textContent=lb}return}
+  walk.near=best;$$('#wxSpots .xs.near').forEach(e=>e.classList.remove('near'));$$('.wj-props .wj-prop.near-prop',wxQ.pano).forEach(e=>e.classList.remove('near-prop'));
+  if(best<0){if(b)b.hidden=true;return}
+  const s=walk.spots[best],el=$(`#wxSpots .xs[data-i="${best}"]`);el?.classList.add('near');
+  if(s.k==='tree')wxQ.pano.querySelector(`.wj-props .wj-prop[data-pi="${s.propIdx}"]`)?.classList.add('near-prop');
+  if(b){b.hidden=false;b.textContent=wxLabel(s)}}
 /* 走路的手感：有起步、有收脚。速度慢慢提上去，快到落点时按刹得住的速度收住，正好停在落点上；
    往回走要先刹住再转身（跑着急刹会往后一仰）。走路帧按走过的路程翻，不按时间翻：走得慢脚步就慢，脚底不打滑 */
 function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{wxRAF=0;if(!walk||view!=='wild'||!wxQ||!wxQ.pano.isConnected)return;
     const q=wxQ,dt=Math.min(.05,(now-walk.last)/1000),open=$('#modal').hidden,base=clamp(q.W*.75,240,420);walk.last=now;
     if(walk.hold)walk.to=wxPx2P(walk.hold.x);
     let to=walk.to;if(walk.keys)to=walk.keys<0?0:1;
+    // 扑蝶自动走过去时，临近花丛放慢脚步，免得一头冲过去把蝴蝶惊飞
+    if(walk.goal>=0&&walk.spots[walk.goal]?.k==='bfly'&&Math.abs(walk.spots[walk.goal].t-walk.p)*q.D<q.W*.3)walk.run=false;
     // 按住时手指就落在人身上（左右 20px 内）算站住，不在原地来回转身
     const dist=to==null?0:(to-walk.p)*q.D,dead=walk.hold?20:0,want=to!=null&&open&&Math.abs(dist)>dead+.5;
     if(want&&walk.soft)wxCut();
@@ -3524,6 +3667,7 @@ function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{w
     const moving=Math.abs(walk.v)>6;
     if(moving!==walk.mv){walk.mv=moving;if(!walk.busy&&!walk.soft)wxFrame(moving?-1:9)}
     q.pano.classList.toggle('go',moving);wxStride(dt,base,moving,(walk.v-pv)/(dt||1));wxPaint(false,dt);if(moving)wxBrush(now);
+    if(open){wxTickBfly(now,base);wxTickBushRustle(now);wxTickRabbit(dt,now);wxTickSkyBfly(dt);wxTickWind(dt,base)}
     // 走到路的尽头：先望一望山亭，再弹出「亭边小歇」收尾（若主动点了亭子走过来，直接弹）
     if(walk.p>=1&&!walk.top){walk.top=1;walk.atEndTip=1;walk.hold=null;walk.to=null;walk.run=walk.hrun=false;if(walk.keys>0)walk.keys=0;sfx('bloom');wxMarkEndBtn(true);wxTip(wxEndTipText(),true);
       if(walk.goal===WX_PAV){walk.goal=-1;wxArriveModal()}else walk.after='arrive'}
@@ -3542,15 +3686,18 @@ function wxStride(dt,base,moving,accel){const q=wxQ,w=q.walker,rm=wxRM(),sp=Math
   const tgt=rm||walk.busy?0:brake?-4:run?5:moving?1.2:0;walk.lean+=(tgt-walk.lean)*(1-Math.exp(-dt*(brake?18:10)));if(Math.abs(walk.lean)<.05&&!tgt)walk.lean=0;
   const bob=run&&!rm?-Math.abs(Math.sin(walk.ph*Math.PI*2))*w.offsetHeight*.022:0;
   const k=`${walk.lean.toFixed(2)}|${bob.toFixed(1)}`;if(k!==walk.lk){walk.lk=k;w.style.setProperty('--lean',walk.lean.toFixed(2)+'deg');w.style.setProperty('--bob',bob.toFixed(1)+'px')}}
-function wxDust(){const q=wxQ;if(!q||$$('.wx-dust',q.spots).length>6)return;const d=document.createElement('i');d.className='wx-dust';
-  d.style.left=(q.W*.28+q.D*walk.p-walk.face*q.walker.offsetWidth*.14)+'px';d.style.setProperty('--dx',(-walk.face*rint(10,22))+'px');q.spots.appendChild(d);setTimeout(()=>d.remove(),700)}
-/* 从花丛、草丛里走过，花枝被裙摆带得晃一晃；跑着冲过花丛，停着的蝴蝶会惊起来再落回去 */
+function wxDustAt(p,dir){const q=wxQ;if(!q||wxRM()||$$('.wx-dust',q.spots).length>8)return;const d=document.createElement('i');d.className='wx-dust';
+  d.style.left=(q.W*.28+q.D*p-dir*q.walker.offsetWidth*.14)+'px';d.style.setProperty('--dx',(-dir*rint(10,22))+'px');q.spots.appendChild(d);setTimeout(()=>d.remove(),700)}
+function wxDust(){wxDustAt(walk.p,walk.face)}
+/* 从花丛、草丛里走过，花枝被裙摆带得晃一晃；跑着过树，顺带带落几片花瓣竹叶 */
 function wxBrush(now){const q=wxQ,lim=q.walker.offsetWidth*.34,fast=Math.abs(walk.v)>clamp(q.W*.75,240,420)*1.25;
-  walk.spots.forEach((s,i)=>{if(s.done||!['flower','bush','bfly'].includes(s.k))return;if(s.k==='flower'&&['lotus','waterlily'].includes(F[s.id]?.base||s.id))return;
-    const d=Math.abs(s.t-walk.p)*q.D;if(d>(s.k==='bfly'&&fast?lim*2.2:lim)||now-(s.bt||0)<1500)return;
+  walk.spots.forEach((s,i)=>{if(s.done)return;
+    if(s.k==='tree'){if(fast&&Math.abs(s.t-walk.p)*q.D<lim*1.4&&now-(s.bt||0)>=2500){s.bt=now;wxLeafShower(s.t,s.propKey,3)}return}
+    if(!['flower','bush','bfly'].includes(s.k))return;if(s.k==='flower'&&['lotus','waterlily'].includes(F[s.id]?.base||s.id))return;
+    const d=Math.abs(s.t-walk.p)*q.D;if(d>lim||now-(s.bt||0)<1500)return;
     const el=q.spots.querySelector(`.xs[data-i="${i}"]`);if(!el)return;s.bt=now;el.style.setProperty('--bd',walk.face);
-    el.classList.remove('brush','stir');void el.offsetWidth;el.classList.add('brush');if(s.k==='bfly'&&fast)el.classList.add('stir');
-    clearTimeout(el._bt);el._bt=setTimeout(()=>el.classList.remove('brush','stir'),1500)})}
+    el.classList.remove('brush');void el.offsetWidth;el.classList.add('brush');
+    clearTimeout(el._bt);el._bt=setTimeout(()=>el.classList.remove('brush'),1500)})}
 function wxPx2P(clientX){const q=wxQ,r=q.pano.getBoundingClientRect();return clamp((clientX-r.left+wxCam()-q.W*.28)/q.D,0,1)}
 /* 点下去的地方，地上漾开一圈，告诉你她要往哪儿去 */
 function wxGoal(p){const q=wxQ;if(!q||wxRM())return;const g=document.createElement('i');g.className='wx-goal';g.style.left=(q.W*.28+q.D*p)+'px';q.spots.appendChild(g);setTimeout(()=>g.remove(),900)}
@@ -3570,35 +3717,42 @@ function wxKey(e,down){if(!walk||view!=='wild'||e.target.closest?.('input,textar
   if(k==='ArrowLeft'||k==='a'||k==='A'){walk.keys=down?-1:walk.keys<0?0:walk.keys;walk.to=null;walk.goal=-1;e.preventDefault()}
   else if(k==='ArrowRight'||k==='d'||k==='D'){walk.keys=down?1:walk.keys>0?0:walk.keys;walk.to=null;walk.goal=-1;e.preventDefault()}
   else if(down&&(k==='Enter'||k===' '||k==='e'||k==='E')&&!e.repeat&&!e.target.closest?.('button')){
-    if(walk.near>=0){e.preventDefault();wxGoUse(walk.near)}else if(walk.p>=.985){e.preventDefault();wxArriveModal()}}}
+    e.preventDefault();
+    if(walk.skyBfly){wxCatchSkyBfly();return}
+    if(walk.rabbit&&wxQ&&Math.abs(walk.rabbit.t-walk.p)*wxQ.D<=wxReach()*1.15){wxCatchRabbit(true);return}
+    if(walk.drift&&wxQ&&Math.abs(walk.drift.t-walk.p)*wxQ.D<=wxReach()*1.15){wxCatchDrift();return}
+    if(walk.near>=0)wxGoUse(walk.near);else if(walk.p>=.985)wxArriveModal()}}
 addEventListener('keydown',e=>wxKey(e,true));addEventListener('keyup',e=>wxKey(e,false));addEventListener('blur',()=>{if(walk){walk.keys=0;walk.shift=false}});
-$('#wild').addEventListener('pointerdown',e=>{if(e.target.closest('.pano.wx'))wxPoint(e)});
-$('#wild').addEventListener('click',e=>{const m=e.target.closest('[data-wxmap]');if(m){if(m.getAttribute('aria-disabled')==='true')return;wxs().map=m.dataset.wxmap;sfx('place');save();wxRender();return}
+$('#wild').addEventListener('pointerdown',e=>{if(e.button>0)return;if(e.target.closest('.wx-skybf')){e.preventDefault();wxCatchSkyBfly();return}if(e.target.closest('.pano.wx'))wxPoint(e)});
+$('#wild').addEventListener('click',e=>{const m=e.target.closest('[data-wxmap]');if(m){if(m.getAttribute('aria-disabled')==='true')return;S.wx.map=m.dataset.wxmap;sfx('place');save();wxRender();return}
+  if(e.target.closest('.wx-skybf'))return wxCatchSkyBfly();
+  if(e.target.closest('.wx-rab'))return wxClickRabbit();
+  if(e.target.closest('.wx-drift'))return wxClickDrift();
   if(e.target.closest('#wxAct')&&walk&&walk.near>=0)return wxGoUse(walk.near);
   const pv=e.target.closest('.wx-pav');if(pv&&walk&&wxQ&&!walk.busy){const d=(1-walk.p)*wxQ.D;if(Math.abs(d)<=Math.max(80,wxQ.walker.offsetWidth*.9))return wxArriveModal();walk.hold=null;walk.keys=0;walk.to=1;walk.goal=WX_PAV;walk.run=Math.abs(d)>wxQ.W*.45;return}
   const sp=e.target.closest('.xs');if(sp&&walk&&wxQ)wxGoUse(+sp.dataset.i)});
 
 /* 人物动作：wk_pose.webp 一排 12 帧，脚底、比例和走路帧对齐。
    0-2 弯腰/蹲下/举起小花，3-5 踮脚举团扇/跃起扑/捧手看，6-7 打水漂蓄力/出手，8 招手，9 站着，10 闻花篮，11 手搭凉棚 */
-const WXP={pick:[[0,130],[1,380],[2,620],[1,130],[0,110]],bush:[[0,130],[1,420]],bfly:[[3,300],[4,420]],caught:[[5,1300]],
+const WXP={pick:[[0,130],[1,380],[2,620],[1,130],[0,110]],pickFast:[[0,85],[1,150],[2,200]],shake:[[3,170],[8,240]],bush:[[0,110],[1,260]],bfly:[[3,210],[4,300]],caught:[[5,1100]],
   stone:[[6,420],[7,360]],cheer:[[8,1100]],wave:[[8,620]],smell:[[10,1700]],look:[[11,1900]],arrive:[[11,1350]]};
-const WXHIT={pick:2,wave:1};
+const WXHIT={pick:2,pickFast:1,shake:1,bfly:1,wave:1};
 let wxSeqT=0;
 function wxFrame(f){const w=wxQ&&wxQ.walker;if(!w)return;let ps=$('.ps',w);if(!ps){ps=document.createElement('i');ps.className='ps';w.appendChild(ps)}
   w.classList.toggle('pose',f>=0);w.classList.toggle('idle',f===9);w.dataset.f=f;if(f>=0)ps.style.backgroundPositionX=(f/11*100).toFixed(4)+'%'}
 function wxCut(){clearTimeout(wxSeqT);if(walk){walk.soft=false;walk.busy=false}wxQ&&wxQ.pano.classList.remove('acting')}
-/* 播一段动作。hit 在“手碰到”那一帧调用，done 在播完后调用；soft 的小动作一走路就打断 */
-function wxPlay(name,hit,done,soft){wxCut();const seq=WXP[name];if(!walk||!wxQ||!seq){hit&&hit();done&&done();return}
+/* 播一段动作。hit 在“手碰到”那一帧调用，done 在播完后调用；soft 的小动作一走路就打断；fastRelease 触发 hit 后立刻解除忙碌让脚步不断 */
+function wxPlay(name,hit,done,soft,fastRelease){wxCut();const seq=WXP[name];if(!walk||!wxQ||!seq){hit&&hit();done&&done();return}
   if(matchMedia('(prefers-reduced-motion:reduce)').matches){hit&&hit();done&&done();return}
   if(soft)walk.soft=true;else{walk.busy=true;wxQ.pano.classList.add('acting')}let k=0;const at=WXHIT[name]??seq.length;
-  const step=()=>{if(!walk||!wxQ)return;if(k===at&&hit){const h=hit;hit=null;h()}
+  const step=()=>{if(!walk||!wxQ)return;if(k===at&&hit){const h=hit;hit=null;h();if(fastRelease&&walk){walk.busy=false;walk.soft=true;wxQ.pano.classList.remove('acting')}}
     if(k>=seq.length){walk.busy=walk.soft=false;wxQ.pano.classList.remove('acting');wxFrame(walk.mv?-1:9);done&&done();return}
     wxFrame(seq[k][0]);wxSeqT=setTimeout(step,seq[k][1]);k++};
   step()}
 /* 走到东西旁边、正好伸手够得着的地方再动手；乡邻站远一点说话 */
-const wxStand=s=>wxQ.walker.offsetWidth*(s.k==='npc'?.95:s.k==='flower'||s.k==='bush'?.55:.45);
+const wxStand=s=>wxQ.walker.offsetWidth*(s.k==='npc'?.95:s.k==='flower'||s.k==='bush'?.55:s.k==='tree'?.48:.45);
 function wxGoUse(i){if(!walk||!wxQ||walk.busy)return;const s=walk.spots[i];if(!s||s.done)return;const d=(s.t-walk.p)*wxQ.D,want=wxStand(s);
-  walk.hold=null;walk.keys=0;if(Math.abs(d)<=want+16)return wxUse(i);walk.to=clamp(s.t-Math.sign(d)*want/wxQ.D,0,1);walk.goal=i;walk.run=Math.abs(d)>wxQ.W*.45}
+  walk.hold=null;walk.keys=0;if(Math.abs(d)<=want+16)return wxUse(i);walk.to=clamp(s.t-Math.sign(d)*want/wxQ.D,0,1);walk.goal=i;walk.run=s.k!=='bfly'&&Math.abs(d)>wxQ.W*.45}
 /* 拾起的东西画一道弧飞进左下角的背包 */
 function wxFly(el){const bag=$('#wbag');if(!bag||!el.animate||!$('#modal').hidden||matchMedia('(prefers-reduced-motion:reduce)').matches)return false;
   const r=el.getBoundingClientRect(),b=bag.getBoundingClientRect();if(!r.width)return false;const c=el.cloneNode(true),x=r.left+r.width/2,y=r.top+r.height;
@@ -3608,20 +3762,33 @@ function wxFly(el){const bag=$('#wbag');if(!bag||!el.animate||!$('#modal').hidde
   c.animate([{transform:T(0,0,1)},{transform:T(0,-14,.5),offset:.22},{transform:T(dx*.5,dy*.5-26,.4),offset:.6},{transform:T(dx,dy,.22),opacity:.5}],{duration:760,easing:'ease-in-out'}).onfinish=()=>{c.remove();bag.classList.remove('bump');void bag.offsetWidth;bag.classList.add('bump')};
   return true}
 
-/* 拿到东西：飘字、火花、背包刷新 */
-function wxFx(i,txt,rare){const el=$(`#wxSpots .xs[data-i="${i}"]`),pano=wxQ&&wxQ.pano;if(!el||!pano)return;const pr=pano.getBoundingClientRect(),r=el.getBoundingClientRect(),x=r.left-pr.left+r.width/2,y=r.top-pr.top+r.height*.35;
+/* 拿到东西：飘字、火花、五声递增音阶、背包刷新 */
+function wxPopAt(p,bottomPct,txt,warm=false){const q=wxQ;if(!q)return;const x=q.W*.28+q.D*p-wxCam(),y=q.H*(1-bottomPct/100);
+  const t=document.createElement('span');t.className='pop';t.style.cssText=`left:${x}px;top:${y}px;z-index:11${warm?';color:#8b3028':''}`;t.textContent=txt;q.pano.appendChild(t);setTimeout(()=>t.remove(),1300)}
+function wxFx(i,txt,rare,xy){const pano=wxQ&&wxQ.pano;if(!pano)return;const pr=pano.getBoundingClientRect();let x,y;
+  if(xy&&xy.nodeType){const r=xy.getBoundingClientRect();x=r.left-pr.left+r.width/2;y=r.top-pr.top+r.height*.35}
+  else if(xy&&xy.x!=null){x=xy.x;y=xy.y}
+  else{const el=$(`#wxSpots .xs[data-i="${i}"]`);if(!el)return;const r=el.getBoundingClientRect();x=r.left-pr.left+r.width/2;y=r.top-pr.top+r.height*.35}
   for(let k=0;k<6;k++){const s=document.createElement('span');s.className='spark';s.style.cssText=`left:${x}px;top:${y}px;--dx:${rint(-40,40)}px;--dy:${rint(-50,20)}px;z-index:11`;pano.appendChild(s);setTimeout(()=>s.remove(),1000)}
-  if(txt){const t=document.createElement('span');t.className='pop';t.style.cssText=`left:${x}px;top:${y}px;z-index:11`;t.textContent=txt;pano.appendChild(t);setTimeout(()=>t.remove(),1300)}
-  sfx(rare?'rare':'coin');buzz(10)}
-function wxTake(i){const el=$(`#wxSpots .xs[data-i="${i}"]`);walk.spots[i].done=true;walk.near=-2;if(el){if(wxFly(el))el.remove();else{el.classList.add('taken');setTimeout(()=>el.remove(),450)}}wxNear();$('#wbag').innerHTML=bagHTML();hud();save();wxCheckDone()}
+  const now=Date.now(),cb=walk?.combo;let comboTxt='';
+  if(cb){cb.n=now-cb.t<4500?cb.n+1:1;cb.t=now;if(!rare&&cb.n>=3)comboTxt=` · 连采×${cb.n}`}
+  if(txt){const t=document.createElement('span');t.className='pop';t.style.cssText=`left:${x}px;top:${y}px;z-index:11`;t.textContent=txt+comboTxt;pano.appendChild(t);setTimeout(()=>t.remove(),1300)}
+  if(rare)sfx('rare');else if(cb&&cb.n>1)chime(Math.min(cb.n,SC.length-1));else sfx('coin');
+  buzz(10)}
+function wxTake(i,flyEl){const el=flyEl||$(`#wxSpots .xs[data-i="${i}"]`);walk.spots[i].done=true;walk.near=-2;
+  if(el){if(wxFly(el)){if(!flyEl)el.remove()}else if(!flyEl){el.classList.add('taken');setTimeout(()=>el.remove(),450)}}
+  if(flyEl){flyEl.remove();$(`#wxSpots .xs[data-i="${i}"]`)?.remove()}
+  wxSyncTreeProps();wxNear();$('#wbag').innerHTML=bagHTML();hud();save();wxCheckDone()}
 function wxUse(i){if(!walk||!$('#modal').hidden||walk.busy)return;const s=walk.spots[i];if(!s||s.done)return;walk.to=null;walk.goal=-1;walk.keys=0;walk.hold=null;
   if(Math.abs(s.t-walk.p)*(wxQ?wxQ.D:1)>2){walk.face=s.t>walk.p?1:-1;wxPaint(true)}
   if(s.k==='npc')return wxPlay('wave',wxTalk);
-  if(s.k==='bfly'){$(`#wxSpots .xs[data-i="${i}"]`)?.classList.add('flee');return wxPlay('bfly',null,()=>wxGameBfly(i))}
+  if(s.k==='tree')return wxShakeTree(i);
+  if(s.k==='bfly')return wxCatchBfly(i);
   if(s.k==='stone')return wxPlay('stone',null,()=>wxGameStone(i));
-  if(s.k==='bush')return wxPlay('bush',null,()=>wxGameBush(i));
-  wxPlay('pick',()=>{if(walk&&!s.done)s.k==='curio'?wxCurio(i):wxGive(i)})}
-function wxGive(i){const s=walk.spots[i],g=walk.got,X=wxs();
+  if(s.k==='bush')return wxStartBush(i);
+  if(s.k==='curio')return wxPlay('pick',()=>{if(walk&&!s.done)wxCurio(i)});
+  wxPlay('pickFast',()=>{if(walk&&!s.done)wxGive(i)},null,false,true)}
+function wxGive(i){const s=walk.spots[i],g=walk.got,X=S.wx;
   let txt,rare=false;
   if(s.k==='dew'){S.dew++;g.dew=(g.dew||0)+1;bump('dewc');txt='露水 +1'}
   else if(s.k==='clay'){S.clay++;g.clay=(g.clay||0)+1;txt='陶土 +1'}
@@ -3632,7 +3799,7 @@ function wxGive(i){const s=walk.spots[i],g=walk.got,X=wxs();
 function wxRedrawNpc(){const i=walk.spots.findIndex(s=>s.k==='npc'),el=$(`#wxSpots .xs[data-i="${i}"]`);if(el)el.innerHTML=WSPOT.npc()}
 
 /* ---------- 拾遗 ---------- */
-function wxCurio(i){const s=walk.spots[i],X=wxs(),c=s.id,M=WMAPS[walk.map];X.cu[c]=1;(walk.got.misc=walk.got.misc||[]).push(WCU[c][0]);wxFx(i,'',true);wxTake(i);addExp(5);
+function wxCurio(i){const s=walk.spots[i],X=S.wx,c=s.id,M=WMAPS[walk.map];X.cu[c]=1;(walk.got.misc=walk.got.misc||[]).push(WCU[c][0]);wxFx(i,'',true);wxTake(i);addExp(5);
   const n=M.cu.filter(k=>X.cu[k]).length,all=n===M.cu.length&&!X.fl['cu_'+walk.map];let bonus=[];if(all){X.fl['cu_'+walk.map]=1;bonus=giveRw({coins:120,dew:2});addExp(30)}
   wxRedrawNpc();save();
   modal(`<div class="center"><div class="reveal"><i class="rays"></i>${cuImg(c,'big')}</div><p class="muted" style="letter-spacing:.3em;margin:0">${M.n}拾遗</p><h2 class="h-title" style="justify-content:center">${WCU[c][0]}</h2><p class="muted" style="margin:0">已拾 ${n} / ${M.cu.length}</p><p class="say">${WCU[c][1]}</p>${all?`<p class="muted">${M.n}的拾遗都找齐了，乡邻听说了，送来贺礼：</p><div class="rwl">${bonus.map(x=>`<span class="req ok">${x}</span>`).join('')}</div>`:''}<button class="btn primary" data-act="close">收下</button></div>`);if(all)confetti(['#fff','#e9c46a','#8fb9a8'])}
@@ -3641,68 +3808,191 @@ function wxCurio(i){const s=walk.spots[i],X=wxs(),c=s.id,M=WMAPS[walk.map];X.cu[
 function wxTalk(){const m=walk.map,Q=WQ[m],st=wxStep(m),nd=wxNeeds(m),ok=wxReady(m);sfx('place');
   modal(`<div class="center wx-talk"><img class="wx-ava" src="${A(Q.img)}" alt="" draggable="false"><h2 class="h-title" style="justify-content:center">${Q.n}<i class="seal">${Q.seal}</i></h2><p class="say">「${st?st.say:Q.idle}」</p>${st?`<div class="rwl">${nd.map(x=>`<span class="req${x.ok?' ok':''}">${x.t}</span>`).join('')}</div>`:''}<button class="btn" data-act="close">${ok?'再走走':'好的'}</button>${ok?`<button class="btn primary" data-act="wxq">交给${Q.n}</button>`:''}</div>`);
   const b=$('#modal [data-act="wxq"]');if(b)b.onclick=()=>wxQuestDone(m)}
-function wxQuestDone(m){const Q=WQ[m],st=wxStep(m),X=wxs();if(!st||!wxReady(m))return;const n=st.need;
+function wxQuestDone(m){const Q=WQ[m],st=wxStep(m),X=S.wx;if(!st||!wxReady(m))return;const n=st.need;
   if(n.give)for(const k in n.give)takeCut(k,n.give[k]);if(n.bfly&&!st.keepBfly)S.bfly-=n.bfly;
   const got=giveRw(st.rw);if(st.open)got.push(`新地方「${WMAPS[st.open].n}」`);X.q[m]=(X.q[m]||0)+1;addExp(20);if(walk)(walk.got.misc=walk.got.misc||[]).push(`${Q.n}的心事`);
   checkBadges();hud();save();if(walk){$('#wbag').innerHTML=bagHTML();wxRedrawNpc();wxCheckDone()}
   modal(`<div class="center wx-talk"><img class="wx-ava" src="${A(Q.img)}" alt="" draggable="false"><h2 class="h-title" style="justify-content:center">${Q.n}<i class="seal">${Q.seal}</i></h2><p class="say">「${st.thx}」</p><div class="rwl">${got.map(g=>`<span class="req ok">${g}</span>`).join('')}</div>${!wxStep(m)?`<p class="muted">${Q.n}的心事都了了。</p>`:''}<button class="btn primary" data-act="close">收下</button></div>`);sfx('rare');confetti(['#fff','#e9c46a','#f2a7b5'])}
 
-/* ---------- 小游戏 ---------- */
+/* ---------- 景内互动：摇树、轻步扑蝶、拨草追兔、溪边打水漂、追风花种 ---------- */
+function rwSeed(rare){let pool=BASE.filter(i=>!F[i].wild&&(rare?F[i].r===1||F[i].r===2:F[i].r<=1));const nw=pool.filter(i=>!S.codex[i]);if(nw.length&&Math.random()<.6)pool=nw;const id=pick(pool);gotSeed(id);(walk.got.seeds=walk.got.seeds||[]).push(id);return id}
+
+/* 1. 摇树 / 拂枝：晃动树木，花瓣竹叶簌簌飘落，地上掉下露水/花种/花枝 */
+function wxLeafShower(p,key,cnt=8){const q=wxQ;if(!q||wxRM())return;const cls='leaf-'+(key||'willow');
+  for(let k=0;k<cnt;k++){const lf=document.createElement('i');lf.className=`wx-leaf ${cls}`;
+    lf.style.left=(q.W*.28+q.D*p+rint(-32,32))+'px';lf.style.setProperty('--b',rint(44,64)+'%');
+    lf.style.setProperty('--dx',rint(-34,42)+'px');lf.style.setProperty('--dy',rint(68,125)+'px');
+    lf.style.setProperty('--rot',rint(120,340)+'deg');lf.style.animationDelay=(k*45)+'ms';
+    q.spots.appendChild(lf);setTimeout(()=>lf.remove(),1600)}}
+function wxShakeTree(i){const s=walk.spots[i],q=wxQ;if(!s||s.done||s._shaking||!q)return;s._shaking=true;
+  const prop=q.pano.querySelector(`.wj-props .wj-prop[data-pi="${s.propIdx}"]`);
+  wxPlay('shake',()=>{if(!walk||!wxQ||s.done)return;
+    if(prop){prop.classList.remove('shake');void prop.offsetWidth;prop.classList.add('shake');setTimeout(()=>prop.classList.remove('shake'),820)}
+    tone(330,.18,.04,'triangle');tone(523,.24,.04,'sine',.07);
+    wxLeafShower(s.t,s.propKey,9);
+    const drop=document.createElement('i');drop.className='wx-drop';drop.style.left=(wxQ.W*.28+wxQ.D*s.t)+'px';
+    drop.innerHTML=s.drop==='dew'?`<img src="${A('assets/x_dew.webp')}" alt="">`:s.drop==='seed'?`<img src="${A('assets/x_seed.webp')}" alt="">`:icon(s.dropId);
+    wxQ.spots.appendChild(drop);
+    setTimeout(()=>{if(!walk||!wxQ||s.done){drop.remove();return}
+      const g=walk.got;let txt='',rare=false;
+      if(s.drop==='dew'){S.dew++;g.dew=(g.dew||0)+1;bump('dewc');txt='露水 +1'}
+      else if(s.drop==='seed'){gotSeed(s.dropId);(g.seeds=g.seeds||[]).push(s.dropId);txt=`${F[s.dropId].n}花种`;rare=F[s.dropId].r>0}
+      else{S.cut[s.dropId]=(S.cut[s.dropId]||0)+1;if(!S.codex[s.dropId])S.codex[s.dropId]=1;(g.cut=g.cut||[]).push(s.dropId);txt=`${F[s.dropId].n} +1`;rare=F[s.dropId].r>1;wxRedrawNpc()}
+      if(s.bonusDew){S.dew++;g.dew=(g.dew||0)+1;bump('dewc');txt+=' · 露水 +1'}
+      wxFx(i,txt,rare,drop);wxTake(i,drop)},wxRM()?40:440)},null,false,true)}
+
+/* 2. 景内轻步扑蝶：跑近会惊飞，慢走靠近蝴蝶落低泛金光；扑完偶有彩蝶掠空 */
+function wxTickBfly(now,base){if(!walk||!wxQ)return;const q=wxQ,sp=Math.abs(walk.v);
+  walk.spots.forEach((s,i)=>{if(s.done||s.k!=='bfly')return;const el=q.spots.querySelector(`.xs[data-i="${i}"]`);if(!el)return;
+    const d=Math.abs(s.t-walk.p)*q.D;let nxt=s.state||'calm';
+    if(s.spookUntil&&now<s.spookUntil)nxt='spooked';
+    else{if(d<q.W*.24&&sp>base*1.25){nxt='spooked';s.spookUntil=now+2600;tone(660,.1,.035);tone(880,.12,.03,'sine',.06);
+        if(now-walk.spookTipAt>4200){walk.spookTipAt=now;wxPopAt(s.t,38,'跑太快，蝴蝶惊飞了…')}}
+      else if(d<wxReach()*1.65&&sp<=base*1.08)nxt='perched';else nxt='calm'}
+    if(nxt!==s.state){s.state=nxt;el.classList.toggle('perched',nxt==='perched');el.classList.toggle('spooked',nxt==='spooked');if(walk.near===i){const b=$('#wxAct');if(b)b.textContent=wxLabel(s)}}})}
+function wxCatchBfly(i){const s=walk.spots[i];if(!s||s.done)return;
+  if(s.state==='spooked'){wxPopAt(s.t,38,'慢下来，等它落回花上…');sfx('nope');return}
+  const el=$(`#wxSpots .xs[data-i="${i}"]`),perched=s.state==='perched';
+  wxPlay('bfly',()=>{if(!walk||s.done)return;const n=perched?2:1;S.bfly+=n;walk.got.bfly=(walk.got.bfly||0)+n;bump('bfly',n);
+    let txt=perched?'轻步扑蝶 ×2':'蝴蝶 +1';
+    if(perched&&Math.random()<.35){S.dew++;walk.got.dew=(walk.got.dew||0)+1;bump('dewc');txt+=' · 露水 +1'}
+    addExp(perched?6:4);walk.after='caught';wxFx(i,txt,perched);wxTake(i);
+    if(Math.random()<.6)wxSpawnSkyBfly()},null,false,true)}
+function wxSpawnSkyBfly(x0){if(!walk||!wxQ||walk.skyBfly)return;
+  const b=document.createElement('button');b.type='button';b.className='wx-skybf';b.setAttribute('aria-label','凌空接住彩蝶');b.innerHTML=BFLY;
+  const x=x0??clamp((wxQ.W*.28+wxQ.D*walk.p-wxCam())/wxQ.W,.2,.8),y=.42;
+  b.style.left=(x*100)+'%';b.style.top=(y*100)+'%';wxQ.pano.appendChild(b);
+  walk.skyBfly={el:b,x,y,vx:(walk.face||1)*.12,vy:-.06,ph:0,age:0,max:wxRM()?6:3.6}}
+function wxTickSkyBfly(dt){const sb=walk?.skyBfly;if(!sb||!wxQ)return;sb.age+=dt;sb.ph+=dt*6;
+  if(sb.age>=sb.max){sb.el.remove();walk.skyBfly=null;return}
+  sb.x+=sb.vx*dt+Math.sin(sb.ph*.7)*.08*dt;sb.y+=sb.vy*dt+Math.cos(sb.ph)*.07*dt;
+  if(sb.x<.12||sb.x>.88)sb.vx=-sb.vx;if(sb.y<.16||sb.y>.56)sb.vy=-sb.vy;
+  sb.x=clamp(sb.x,.1,.9);sb.y=clamp(sb.y,.15,.58);
+  sb.el.style.left=(sb.x*100)+'%';sb.el.style.top=(sb.y*100)+'%';sb.el.style.setProperty('--f',sb.vx<0?-1:1);
+  if(sb.age>sb.max-.6)sb.el.style.opacity=((sb.max-sb.age)/.6).toFixed(2)}
+function wxCatchSkyBfly(){const sb=walk?.skyBfly;if(!sb||!wxQ)return;const el=sb.el;walk.skyBfly=null;
+  S.bfly++;walk.got.bfly=(walk.got.bfly||0)+1;bump('bfly',1);S.dew++;walk.got.dew=(walk.got.dew||0)+1;bump('dewc');addExp(4);
+  wxFx(-1,'彩蝶 +1 · 露水 +1',true,el);if(!wxFly(el))el.remove();else el.remove();$('#wbag').innerHTML=bagHTML();hud();save()}
+
+/* 3. 景内拨草追兔：草丛沙沙响，拨开兔子窜出来沿路蹦跳，追上或点中得稀有花种与豆豆的信 */
+function wxTickBushRustle(now){if(!walk||!wxQ||wxRM())return;const q=wxQ;
+  walk.spots.forEach((s,i)=>{if(s.done||s.k!=='bush')return;if(Math.abs(s.t-walk.p)*q.D>q.W*.45||now-(s.rt||0)<2400)return;
+    s.rt=now;const el=q.spots.querySelector(`.xs[data-i="${i}"]`);if(!el)return;el.classList.remove('rustle');void el.offsetWidth;el.classList.add('rustle')})}
+function wxStartBush(i){const s=walk.spots[i],m=walk.map,st=wxStep(m),wantLetter=m==='zhu'&&st&&st.need.flag==='letter'&&!S.wx.fl.letter;
+  wxPlay('bush',()=>{if(!walk||!wxQ||s.done)return;
+    s.done=true;walk.near=-2;const el=$(`#wxSpots .xs[data-i="${i}"]`);if(el){el.classList.add('taken');setTimeout(()=>el.remove(),420)}wxNear();
+    const dir=s.t<.72?1:-1,rab=document.createElement('button');rab.type='button';rab.className='wx-rab';
+    rab.setAttribute('aria-label',wantLetter?'追上叼着信的小白兔':'追上小白兔');
+    rab.innerHTML=`<img src="${A('assets/x_rabbit.webp')}" alt="" draggable="false">`;
+    rab.style.left=(wxQ.W*.28+wxQ.D*s.t)+'px';rab.style.setProperty('--rf',dir);
+    wxQ.spots.appendChild(rab);
+    walk.rabbit={el:rab,t:s.t,dir,age:0,hopsLeft:2,phase:'hop',hopT:0,hopDur:.72,hopFrom:s.t,hopTo:clamp(s.t+dir*(.085+Math.random()*.03),.06,.95),pauseLeft:0,wantLetter};
+    tone(523,.14,.045);tone(659,.16,.04,'sine',.07);
+    wxPopAt(s.t,28,wantLetter?'叼着信的小白兔窜出来了，快追！':'一只小白兔窜出来了！',true)},null,false,true)}
+function wxTickRabbit(dt){const rb=walk?.rabbit;if(!rb||!wxQ)return;const q=wxQ;rb.age+=dt;
+  if(rb.phase==='hop'){rb.hopT+=dt;const u=clamp(rb.hopT/rb.hopDur,0,1);rb.t=lerp(rb.hopFrom,rb.hopTo,u);
+    const ry=-Math.abs(Math.sin(u*Math.PI*3))*q.H*.06;rb.el.style.left=(q.W*.28+q.D*rb.t)+'px';rb.el.style.setProperty('--ry',ry.toFixed(1)+'px');
+    if(u>=1){rb.el.style.setProperty('--ry','0px');wxDustAt(rb.t,rb.dir);rb.phase='pause';rb.pauseLeft=wxRM()?4.5:2.3}}
+  else{rb.pauseLeft-=dt;if(rb.pauseLeft<=0){rb.hopsLeft--;
+      if(rb.hopsLeft>0){rb.dir=rb.t<.78?1:-1;rb.el.style.setProperty('--rf',rb.dir);rb.phase='hop';rb.hopT=0;rb.hopFrom=rb.t;rb.hopTo=clamp(rb.t+rb.dir*(.075+Math.random()*.025),.06,.95)}
+      else{wxRabbitEscape();return}}}
+  if(rb.age>=.55&&Math.abs(rb.t-walk.p)*q.D<=wxReach()*.95)wxCatchRabbit(true)}
+function wxClickRabbit(){const rb=walk?.rabbit;if(!rb||!wxQ)return;const d=(rb.t-walk.p)*wxQ.D;
+  if(Math.abs(d)<=wxReach()*1.15)return wxCatchRabbit(true);
+  walk.hold=null;walk.keys=0;walk.goal=-1;walk.to=rb.t;walk.run=true}
+function wxGrantLetter(el){S.wx.fl.letter=1;(walk.got.misc=walk.got.misc||[]).push('豆豆的信');wxRedrawNpc();
+  const img=document.createElement('img');img.src=A('assets/x_letter.webp');const r=el.getBoundingClientRect();
+  img.style.cssText=`position:fixed;left:${r.left+r.width/2}px;top:${r.top+r.height/2}px;height:44px;width:auto;z-index:30;pointer-events:none`;
+  document.body.appendChild(img);wxFly(img);img.remove()}
+function wxCatchRabbit(){const rb=walk?.rabbit;if(!rb)return;const el=rb.el;walk.rabbit=null;
+  const sid=rwSeed(true);let txt=`追到了！${F[sid].n}花种`;addExp(8);
+  if(rb.wantLetter&&!S.wx.fl.letter){wxGrantLetter(el);txt='豆豆的信 · '+F[sid].n+'花种';setTimeout(()=>toast('追回了豆豆的信！回去交给豆豆吧'),700)}
+  wxFx(-1,txt,true,el);el.style.opacity='0';el.style.setProperty('--ry','-24px');setTimeout(()=>el.remove(),320);
+  $('#wbag').innerHTML=bagHTML();hud();save();wxCheckDone()}
+function wxRabbitEscape(){const rb=walk?.rabbit;if(!rb)return;const el=rb.el;walk.rabbit=null;
+  S.dew++;walk.got.dew=(walk.got.dew||0)+1;bump('dewc');addExp(3);
+  let txt='兔子溜了 · 露水 +1';
+  if(rb.wantLetter&&!S.wx.fl.letter){wxGrantLetter(el);txt='兔子丢下豆豆的信 · 露水 +1';setTimeout(()=>toast('兔子跑远了，信落在草里，回去交给豆豆吧'),700)}
+  wxFx(-1,txt,rb.wantLetter,el);el.style.opacity='0';setTimeout(()=>el.remove(),320);
+  $('#wbag').innerHTML=bagHTML();hud();save();wxCheckDone()}
+
+/* 4. 景内起风追花种：路过山谷或竹林时一阵山风吹来，花种随风飘过，跑过去迎风接住 */
+function wxStartWind(){if(!walk||!wxQ||walk.drift)return;const q=wxQ,dir=walk.p<.76?1:-1,t0=clamp(walk.p+dir*.055,.06,.94);
+  if(!wxRM()){for(let k=0;k<3;k++){const g=document.createElement('i');g.className='wx-gust';g.style.top=(26+k*11)+'%';g.style.animationDelay=(k*180)+'ms';q.pano.appendChild(g);setTimeout(()=>g.remove(),2100)}}
+  tone(659,.22,.035);tone(784,.26,.035,'sine',.1);tone(1047,.32,.03,'sine',.2);
+  const dr=document.createElement('button');dr.type='button';dr.className='wx-drift';dr.setAttribute('aria-label','接住随风飘来的花种');
+  dr.innerHTML=`<img src="${A('assets/x_seed.webp')}" alt="" draggable="false">`;
+  dr.style.left=(q.W*.28+q.D*t0)+'px';dr.style.setProperty('--b','34%');q.spots.appendChild(dr);
+  walk.drift={el:dr,t:t0,dir,age:0,max:wxRM()?10:6.8,baseB:34};
+  wxTip('山风起了，跑着接住飘落的花种！')}
+function wxTickWind(dt,base){if(!walk||!wxQ)return;
+  if(!walk.drift){for(let k=0;k<2;k++)if(!walk.windFired[k]&&walk.p>=walk.windMarks[k]){walk.windFired[k]=1;wxStartWind();break}}
+  const df=walk.drift;if(!df)return;df.age+=dt;
+  if(df.age>=df.max){df.el.remove();walk.drift=null;return}
+  df.t=clamp(df.t+df.dir*base*.68*dt/wxQ.D,.03,.97);
+  const b=df.baseB+Math.sin(df.age*4)*5;
+  df.el.style.left=(wxQ.W*.28+wxQ.D*df.t)+'px';df.el.style.setProperty('--b',b.toFixed(1)+'%');
+  if(df.age>df.max-.7)df.el.style.opacity=((df.max-df.age)/.7).toFixed(2);
+  if(Math.abs(df.t-walk.p)*wxQ.D<=wxReach()*.95)wxCatchDrift()}
+function wxClickDrift(){const df=walk?.drift;if(!df||!wxQ)return;const d=(df.t-walk.p)*wxQ.D;
+  if(Math.abs(d)<=wxReach()*1.15)return wxCatchDrift();
+  walk.hold=null;walk.keys=0;walk.goal=-1;walk.to=df.t;walk.run=true}
+function wxCatchDrift(){const df=walk?.drift;if(!df)return;const el=df.el;walk.drift=null;
+  const sid=rwSeed(true);S.dew++;walk.got.dew=(walk.got.dew||0)+1;bump('dewc');addExp(6);
+  wxFx(-1,`迎风接住 · ${F[sid].n}花种 · 露水 +1`,true,el);
+  if(!wxFly(el))el.remove();else el.remove();$('#wbag').innerHTML=bagHTML();hud();save()}
+
+/* 5. 溪边 / 荷塘打水漂：点石子后打开水面小景，看扁石贴水连跳、水花与涟漪 */
 let wxGameStop=null;
-function wxGameOpen(seal,title,tip,body,setup){modal(`<div class="center wx-g"><h2 class="ink-t">${title}<i class="seal">${seal}</i></h2><p class="say" id="gTip">${tip}</p>${body}<div id="gEnd"></div></div>`,true);wxGameStop=setup($('#modal .wx-g'))||null}
-function wxGameEnd(i,head,lines,extra=''){wxGameStop&&wxGameStop();wxGameStop=null;if(walk&&walk.spots[i]&&!walk.spots[i].done)wxTake(i);const e=$('#gEnd');if(!e)return;
-  $('#gTip').textContent=head;e.innerHTML=`<div class="rwl">${lines.map(x=>`<span class="req ok">${x}</span>`).join('')}</div>${extra}<div class="dlg-actions"><button class="btn primary" data-act="close">收下</button></div>`;sfx('harvest')}
-function rwSeed(rare){let pool=BASE.filter(i=>!F[i].wild&&(rare?F[i].r===1||F[i].r===2:F[i].r<=1));const nw=pool.filter(i=>!S.codex[i]);if(nw.length&&Math.random()<.6)pool=nw;const id=pick(pool);gotSeed(id);(walk.got.seeds=walk.got.seeds||[]).push(id);return`${F[id].n}花种`}
-
-/* 扑蝶：十二秒里点花丛上的蝴蝶 */
-function wxGameBfly(i){const N=5,T=12000;
-  wxGameOpen('花丛','扑蝶','轻点蝴蝶，把它们请进花篮。',`<div class="wx-box g-bfly" style="background-image:url('${A('assets/meadow.webp')}')"><img class="g-fl" src="${A('assets/x_wildfl.webp')}" alt="" draggable="false"><div class="g-time"><i id="gTime"></i></div><b class="g-cnt" id="gCnt">0 / ${N}</b></div>`,root=>{
-    const box=$('.wx-box',root),bs=[];let got=0,raf=0,t0=performance.now(),over=false;
-    for(let k=0;k<N;k++){const b=document.createElement('button');b.className='g-b';b.setAttribute('aria-label','蝴蝶');b.innerHTML=BFLY;box.appendChild(b);bs.push({el:b,x:.15+Math.random()*.7,y:.2+Math.random()*.55,a:Math.random()*6.28,v:.12+Math.random()*.08,ph:Math.random()*6.28,on:true});
-      b.addEventListener('pointerdown',e=>{e.preventDefault();const q=bs[k];if(!q.on||over)return;q.on=false;got++;b.classList.add('caught');buzz(12);sfx('coin');$('#gCnt').textContent=`${got} / ${N}`;bs.forEach(o=>o.v*=1.12);if(got===N)finish()})}
-    const finish=()=>{if(over)return;over=true;cancelAnimationFrame(raf);const n=Math.max(1,got);if(got&&walk)walk.after='caught';S.bfly+=n;walk.got.bfly=(walk.got.bfly||0)+n;bump('bfly',n);const L=[`蝴蝶 ×${n}`];
-      if(got===N){S.dew++;walk.got.dew=(walk.got.dew||0)+1;L.push('露水 ×1');addExp(8)}else addExp(4);
-      wxGameEnd(i,got===N?'一只不落，全请来了！':got?`请来了 ${got} 只。`:'它们飞得太快了……临走一只落在你肩上。',L)};
-    const fr=now=>{const k=(now-t0)/T;$('#gTime').style.transform=`scaleX(${Math.max(0,1-k)})`;if(k>=1)return finish();const dt=1/60;
-      bs.forEach(q=>{if(!q.on)return;q.ph+=dt*5;q.a+=(Math.sin(q.ph*.37)+Math.sin(q.ph*.13))*dt*2.2;q.x+=Math.cos(q.a)*q.v*dt;q.y+=Math.sin(q.a)*q.v*dt*.8;
-        if(q.x<.08||q.x>.92){q.a=Math.PI-q.a;q.x=clamp(q.x,.08,.92)}if(q.y<.14||q.y>.82){q.a=-q.a;q.y=clamp(q.y,.14,.82)}
-        q.el.style.left=(q.x*100)+'%';q.el.style.top=(q.y*100)+'%';q.el.style.setProperty('--f',Math.cos(q.a)<0?-1:1)});raf=requestAnimationFrame(fr)};
-    raf=requestAnimationFrame(fr);return()=>{over=true;cancelAnimationFrame(raf)}})}
-
-/* 打水漂：指针来回摆，停在金色那段扔出去，漂得越多越好，三次取最好 */
-function wxGameStone(i){const m=walk.map;
-  wxGameOpen(m==='he'?'荷塘':'溪边','打水漂','指针摆到金色那段时，点水面或「扔」。三颗石子，算最好的一次。',`<div class="wx-box g-stone" style="background-image:url('${A('assets/x_stream.webp')}')"><i class="g-rock" id="gRock"></i><b class="g-cnt" id="gCnt">石子 3</b><b class="g-big" id="gBig"></b></div><div class="g-meter" aria-hidden="true"><i class="g-sweet"></i><i class="g-needle" id="gNeedle"></i></div><div class="dlg-actions" id="gRow"><button class="btn primary lg" id="gThrow">扔</button></div>`,root=>{
-    let raf=0,t0=performance.now(),left=3,best=0,busy=false,over=false,v=0;const box=$('.wx-box',root),needle=$('#gNeedle'),btn=$('#gThrow');
-    const fr=now=>{v=.5-.5*Math.cos((now-t0)/1000*Math.PI*1.25);needle.style.left=(v*100)+'%';raf=requestAnimationFrame(fr)};raf=requestAnimationFrame(fr);
-    const throwIt=()=>{if(busy||over||left<1)return;busy=true;left--;const d=Math.abs(v-.74),n=d<.035?rint(7,8):d<.08?rint(5,6):d<.16?rint(3,4):d<.3?2:1;best=Math.max(best,n);$('#gCnt').textContent=`石子 ${left}`;sfx('place');
-      const rock=$('#gRock');const pts=[[8,92]];for(let k=1;k<=n;k++)pts.push([8+k*(84/9)*(1+.2*Math.sin(k)),88-k*(42/9)]);
-      const kf=[];pts.forEach((p,k)=>{kf.push({left:p[0]+'%',top:p[1]+'%',offset:k/n*.92});if(k<n){const q=pts[k+1];kf.push({left:(p[0]+q[0])/2+'%',top:((p[1]+q[1])/2-6/(k+1))+'%',offset:(k+.5)/n*.92})}});kf.push({left:pts[n][0]+3+'%',top:pts[n][1]+2+'%',opacity:0,offset:1});
-      const dur=380+n*300;if(rock.animate)rock.animate(kf,{duration:dur,easing:'linear',fill:'forwards'});
-      pts.slice(1).forEach((p,k)=>setTimeout(()=>{if(over)return;const r=document.createElement('i');r.className='g-ripple';r.style.left=p[0]+'%';r.style.top=p[1]+'%';box.appendChild(r);setTimeout(()=>r.remove(),1200);tone(700+k*90,.15,.04)},dur*((k+1)/n*.92)));
-      setTimeout(()=>{if(over)return;const big=$('#gBig');big.textContent=n>1?`${n} 个漂！`:'咕咚……';big.classList.remove('on');void big.offsetWidth;big.classList.add('on');busy=false;if(!left)setTimeout(finish,800)},dur+80)};
-    btn.addEventListener('click',throwIt);box.addEventListener('pointerdown',e=>{e.preventDefault();throwIt()});
-    const finish=()=>{if(over)return;over=true;cancelAnimationFrame(raf);$('#gRow')?.remove();const L=[];
-      if(best>=6){L.push(rwSeed(true));S.dew++;walk.got.dew=(walk.got.dew||0)+1;L.push('露水 ×1');addExp(10)}else if(best>=4){S.dew+=2;walk.got.dew=(walk.got.dew||0)+2;L.push('露水 ×2');L.push(rwSeed(false));addExp(6)}else{S.dew++;walk.got.dew=(walk.got.dew||0)+1;L.push('露水 ×1');addExp(3)}
-      if(best>=5&&walk)walk.after='cheer';const st=wxStep(m);let ex='';if(m==='he'&&st&&st.need.flag==='skip5'&&best>=5&&!wxs().fl.skip5){wxs().fl.skip5=1;ex='<p class="muted">沈先生在亭子里看见了，正冲你招手。</p>';wxRedrawNpc()}
+function wxGameOpen(seal,title,tip,body,setup){if(wxGameStop){const f=wxGameStop;wxGameStop=null;f()}
+  modal(`<div class="center wx-g"><h2 class="ink-t">${title}<i class="seal">${seal}</i></h2><p class="say" id="gTip">${tip}</p>${body}<div id="gEnd"></div></div>`,true);
+  wxGameStop=setup($('#modal .wx-g'))||null}
+function wxGameEnd(i,head,lines,extra=''){wxGameStop&&wxGameStop();wxGameStop=null;if(walk&&walk.spots[i]&&!walk.spots[i].done)wxTake(i);
+  const e=$('#gEnd');if(!e)return;$('#gTip').textContent=head;
+  e.innerHTML=`<div class="rwl">${lines.map(x=>`<span class="req ok">${x}</span>`).join('')}</div>${extra}<div class="dlg-actions"><button class="btn primary" data-act="close">收下</button></div>`;sfx('harvest')}
+function wxGameStone(i){if(!walk||!walk.spots[i]||walk.spots[i].done)return;const m=walk.map;
+  wxGameOpen(m==='he'?'荷塘':'溪边','打水漂','指针摆到金色那段时，点水面或「扔」。三颗石子，算最好的一次。',`<div class="wx-box g-stone" style="background-image:url('${A('assets/x_stream.webp')}')"><i class="g-rock-sh" id="gRockSh"></i><i class="g-rock" id="gRock"></i><b class="g-cnt" id="gCnt">石子 3</b><b class="g-big" id="gBig"></b></div><div class="g-meter" id="gMeter" aria-hidden="true"><i class="g-sweet"></i><i class="g-needle" id="gNeedle"></i></div><div class="dlg-actions" id="gRow"><button class="btn primary lg" id="gThrow">扔</button></div>`,root=>{
+    const box=$('.wx-box',root),rock=$('#gRock',root),rockSh=$('#gRockSh',root),needle=$('#gNeedle',root),btn=$('#gThrow',root);
+    let raf=0,ph=0,last=performance.now(),left=3,best=0,busy=false,over=false,v=0,rockAnim=null,shAnim=null;const timers=[];
+    const later=(fn,ms)=>{const id=setTimeout(()=>{if(!over)fn()},ms);timers.push(id);return id};
+    const fr=now=>{if(over)return;const dt=Math.min(.05,(now-last)/1000);last=now;
+      if(!busy&&left>0){ph+=dt*Math.PI*1.25;v=.5-.5*Math.cos(ph);needle.style.left=(v*100)+'%'}
+      raf=requestAnimationFrame(fr)};
+    raf=requestAnimationFrame(fr);
+    const throwIt=()=>{if(busy||over||left<1)return;busy=true;left--;btn.disabled=true;
+      const d=Math.abs(v-.74),n=d<.035?rint(7,8):d<.08?rint(5,6):d<.16?rint(3,4):d<.3?2:1;
+      best=Math.max(best,n);$('#gCnt').textContent=`石子 ${left} · 最高 ${best} 漂`;sfx('place');
+      const pts=[[8,90]];for(let k=1;k<=n;k++)pts.push([8+k*(84/9)*(1+.15*Math.sin(k)),85-k*(36/9)]);
+      const kf=[],skf=[];
+      pts.forEach((p,k)=>{const t=k/n*.92,sc=(1-k/9*.44).toFixed(2);
+        kf.push({left:p[0]+'%',top:p[1]+'%',transform:`translate(-50%,-50%) scale(${sc})`,offset:t});
+        skf.push({left:p[0]+'%',top:(p[1]+1.5)+'%',transform:`translate(-50%,-50%) scale(${sc})`,opacity:.38,offset:t});
+        if(k<n){const p2=pts[k+1],mt=(k+.5)/n*.92,arc=k===0?11:8/(k+.4),msc=(1-(k+.5)/9*.44).toFixed(2);
+          kf.push({left:(p[0]+p2[0])/2+'%',top:((p[1]+p2[1])/2-arc)+'%',transform:`translate(-50%,-50%) scale(${msc})`,offset:mt});
+          skf.push({left:(p[0]+p2[0])/2+'%',top:((p[1]+p2[1])/2+1.5)+'%',transform:`translate(-50%,-50%) scale(${(msc*.72).toFixed(2)})`,opacity:.2,offset:mt})}});
+      const endSc=(1-n/9*.44).toFixed(2);
+      kf.push({left:Math.min(97,pts[n][0]+2.5)+'%',top:(pts[n][1]+2)+'%',transform:`translate(-50%,-50%) scale(${endSc})`,opacity:0,offset:1});
+      skf.push({left:Math.min(97,pts[n][0]+2.5)+'%',top:(pts[n][1]+2.5)+'%',transform:`translate(-50%,-50%) scale(${endSc})`,opacity:0,offset:1});
+      const dur=420+n*310;rockAnim?.cancel();shAnim?.cancel();
+      if(rock.animate){rockAnim=rock.animate(kf,{duration:dur,easing:'linear',fill:'forwards'});shAnim=rockSh.animate(skf,{duration:dur,easing:'linear',fill:'forwards'})}
+      pts.slice(1).forEach((p,k)=>later(()=>{const rs=(1-(k+1)*.06).toFixed(2);
+        for(let j=0;j<2;j++){const r=document.createElement('i');r.className=j?'g-ripple r2':'g-ripple';r.style.left=p[0]+'%';r.style.top=p[1]+'%';r.style.setProperty('--rs',rs);box.appendChild(r);later(()=>r.remove(),1300)}
+        for(let j=0;j<3;j++){const sp=document.createElement('i');sp.className='g-splash';sp.style.left=p[0]+'%';sp.style.top=p[1]+'%';sp.style.setProperty('--sx',rint(-10,10)+'px');sp.style.setProperty('--sy',rint(-14,-5)+'px');box.appendChild(sp);later(()=>sp.remove(),450)}
+        if(n===1)tone(260,.2,.05);else tone(700+k*90,.15,.04)},dur*((k+1)/n*.92)));
+      later(()=>{const big=$('#gBig');big.textContent=n>1?`${n} 个漂！`:'咕咚……';big.classList.remove('on');void big.offsetWidth;big.classList.add('on');
+        if(left>0){rockAnim?.cancel();shAnim?.cancel();rockAnim=shAnim=null;btn.disabled=false;busy=false}
+        else later(finish,800)},dur+60)};
+    const finish=()=>{if(over)return;over=true;cancelAnimationFrame(raf);removeEventListener('keydown',onKey);timers.forEach(clearTimeout);timers.length=0;rockAnim?.cancel();shAnim?.cancel();
+      $('#gRow')?.remove();$('#gMeter')?.remove();const L=[];
+      if(best>=6){const sid=rwSeed(true);L.push(`${F[sid].n}花种`);S.dew++;walk.got.dew=(walk.got.dew||0)+1;bump('dewc');L.push('露水 ×1');addExp(10)}
+      else if(best>=4){S.dew+=2;walk.got.dew=(walk.got.dew||0)+2;bump('dewc');L.push('露水 ×2');const sid=rwSeed(false);L.push(`${F[sid].n}花种`);addExp(6)}
+      else{S.dew++;walk.got.dew=(walk.got.dew||0)+1;bump('dewc');L.push('露水 ×1');addExp(3)}
+      if(best>=5&&walk)walk.after='cheer';const st=wxStep(m);let ex='';
+      if(m==='he'&&st&&st.need.flag==='skip5'&&best>=5&&!S.wx.fl.skip5){S.wx.fl.skip5=1;ex='<p class="muted">沈先生在亭子里看见了，正冲你招手。</p>';wxRedrawNpc()}
       wxGameEnd(i,`最好的一次漂了 ${best} 下。`,L,ex)};
-    return()=>{over=true;cancelAnimationFrame(raf)}})}
-
-/* 拨草寻踪：兔子钻进一丛草，草丛换几次位置，猜它在哪 */
-function wxGameBush(i){const m=walk.map,st=wxStep(m),wantLetter=m==='zhu'&&st&&st.need.flag==='letter'&&!wxs().fl.letter;
-  wxGameOpen(wantLetter?'寻信':'草丛','拨草寻踪',wantLetter?'兔子叼着信钻进了草丛。盯紧它！':'一只小白兔钻进了草丛。盯紧它！',`<div class="wx-box g-bush" style="background-image:url('${A('assets/meadow.webp')}')">${[0,1,2].map(k=>`<button class="g-bu" data-k="${k}" style="left:${20+k*30}%" aria-label="第 ${k+1} 丛草"><img src="${A('assets/w_bush.webp')}" alt="" draggable="false"></button>`).join('')}<img class="g-rab" id="gRab" src="${A('assets/x_rabbit.webp')}" alt="" draggable="false"></div>`,root=>{
-    const bus=$$('.g-bu',root),rab=$('#gRab'),pos=[0,1,2];let hide=rint(0,2),ready=false,over=false,tries=0;const T=[];const later=(f,ms)=>T.push(setTimeout(()=>{if(!over)f()},ms));
-    const place=()=>bus.forEach((b,k)=>b.style.left=(20+pos[k]*30)+'%');
-    rab.style.left=(20+pos[hide]*30)+'%';rab.classList.add('show');
-    later(()=>{rab.classList.remove('show');bus[hide].classList.add('rustle')},1100);
-    const swaps=rint(4,6);for(let s=0;s<swaps;s++)later(()=>{bus.forEach(b=>b.classList.remove('rustle'));const a=rint(0,2),b=(a+rint(1,2))%3;[pos[a],pos[b]]=[pos[b],pos[a]];place()},1700+s*560);
-    later(()=>{ready=true;$('#gTip').textContent='兔子在哪一丛里？点一下。'},1700+swaps*560+300);
-    bus.forEach((b,k)=>b.addEventListener('click',()=>{if(!ready||over)return;ready=false;tries++;rab.style.left=(20+pos[hide]*30)+'%';rab.classList.add('show');
-      if(k===hide){b.classList.add('rustle');const L=[];let ex='';
-        if(wantLetter){wxs().fl.letter=1;(walk.got.misc=walk.got.misc||[]).push('豆豆的信');L.push('豆豆的信');ex=`<img class="cu big" src="${A('assets/x_letter.webp')}" alt="" draggable="false"><p class="muted">信封有点皱，还好没湿。回去交给豆豆吧。</p>`;wxRedrawNpc()}
-        L.push(rwSeed(true));addExp(8);setTimeout(()=>{if(!over)wxGameEnd(i,'找到了！兔子蹦出来，丢下一样东西就跑了。',L,ex)},500)}
-      else if(tries<2){$('#gTip').textContent='不在这儿……兔子又钻回去了，再找一次。';later(()=>{rab.classList.remove('show');hide=rint(0,2);rab.style.left=(20+pos[hide]*30)+'%';rab.classList.add('show');later(()=>{rab.classList.remove('show');ready=true;$('#gTip').textContent='这次看准了，它在哪一丛？'},900)},1000)}
-      else{const L=['露水 ×1'];S.dew++;walk.got.dew=(walk.got.dew||0)+1;let ex='';if(wantLetter){wxs().fl.letter=1;(walk.got.misc=walk.got.misc||[]).push('豆豆的信');L.push('豆豆的信');ex=`<img class="cu big" src="${A('assets/x_letter.webp')}" alt="" draggable="false"><p class="muted">兔子跑远了，信落在草里。回去交给豆豆吧。</p>`;wxRedrawNpc()}addExp(3);setTimeout(()=>{if(!over)wxGameEnd(i,'兔子一溜烟跑了，草叶上的露水倒是沾了一身。',L,ex)},600)}}));
-    return()=>{over=true;T.forEach(clearTimeout)}})}
+    const onKey=e=>{if(over||$('#modal').hidden)return;if((e.key===' '||e.key==='Enter')&&!e.repeat&&!e.target.closest?.('button')){e.preventDefault();throwIt()}};
+    addEventListener('keydown',onKey);btn.addEventListener('click',throwIt);box.addEventListener('pointerdown',e=>{e.preventDefault();throwIt()});
+    return()=>{over=true;cancelAnimationFrame(raf);timers.forEach(clearTimeout);timers.length=0;rockAnim?.cancel();shAnim?.cancel();removeEventListener('keydown',onKey)}})}
 
 /* ---------- 回家 ---------- */
 function wxArriveModal(){if(!walk||!$('#modal').hidden)return;
@@ -3715,7 +4005,7 @@ function wxArriveModal(){if(!walk||!$('#modal').hidden)return;
   modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">${seal}</p><h2 class="h-title" style="justify-content:center">${allDone?'满篮归来':'亭边小歇'}</h2><p class="say">${msg}</p><div class="rwl">${L.map(x=>`<span class="req ok">${x}</span>`).join('')||'<span class="muted">风很好，云走得很慢。</span>'}</div><p class="muted">${pick(wxFlavorLine(walk.map))}</p><button class="btn" data-act="wxstay">${allDone?'再看会儿风景':'回头再逛逛'}</button><button class="btn primary" data-act="wxhome">${L.length?'带着收获回家':'回家'}</button></div>`);
   $('#modal [data-act="wxstay"]')?.addEventListener('click',()=>closeModal());
   $('#modal [data-act="wxhome"]')?.addEventListener('click',()=>{if(!walk)return;const nm=M.n;walk.leaving=1;closeModal();sfx('harvest');wxEnd(true);toast(`从${nm}回到了小院`)})}
-function wxEnd(quiet){if(!walk)return;const g=walk.got,m=walk.map,M=WMAPS[m];walk=null;wxStopScene();bump('walk');
+function wxEnd(quiet){if(!walk)return;if(wxGameStop){const f=wxGameStop;wxGameStop=null;f()}const g=walk.got,m=walk.map,M=WMAPS[m];walk=null;wxStopScene();bump('walk');
   const L=wxLootList(g);
   save();hud();if(view==='wild')wxRender();refreshDock();if(quiet)return;
   modal(`<div class="center"><p class="muted" style="letter-spacing:.3em;margin:0">${M.n}归来</p><h2 class="h-title" style="justify-content:center">${L.length?'这一趟的收获':'空着手，也很好'}</h2><div class="rwl">${L.map(x=>`<span class="req ok">${x}</span>`).join('')||'<span class="muted">风很好，云走得很慢。</span>'}</div><p class="muted">${pick(wxFlavorLine(m))}</p><button class="btn primary" data-act="close">收下</button></div>`)}

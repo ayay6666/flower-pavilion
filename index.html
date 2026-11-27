@@ -3437,7 +3437,7 @@ function wxFly(el){const bag=$('#wbag');if(!bag||!el.animate||!$('#modal').hidde
 function wxFx(i,txt,rare){const el=$(`#wxSpots .xs[data-i="${i}"]`),pano=wxQ&&wxQ.pano;if(!el||!pano)return;const pr=pano.getBoundingClientRect(),r=el.getBoundingClientRect(),x=r.left-pr.left+r.width/2,y=r.top-pr.top+r.height*.35;
   for(let k=0;k<6;k++){const s=document.createElement('span');s.className='spark';s.style.cssText=`left:${x}px;top:${y}px;--dx:${rint(-40,40)}px;--dy:${rint(-50,20)}px;z-index:11`;pano.appendChild(s);setTimeout(()=>s.remove(),1000)}
   if(txt){const t=document.createElement('span');t.className='pop';t.style.cssText=`left:${x}px;top:${y}px;z-index:11`;t.textContent=txt;pano.appendChild(t);setTimeout(()=>t.remove(),1300)}
-  sfx(rare?'rare':'coin')}
+  sfx(rare?'rare':'coin');buzz(10)}
 function wxTake(i){const el=$(`#wxSpots .xs[data-i="${i}"]`);walk.spots[i].done=true;walk.near=-2;if(el){if(wxFly(el))el.remove();else{el.classList.add('taken');setTimeout(()=>el.remove(),450)}}wxNear();$('#wbag').innerHTML=bagHTML();hud();save()}
 function wxUse(i){if(!walk||!$('#modal').hidden||walk.busy)return;const s=walk.spots[i];if(!s||s.done)return;walk.to=null;walk.goal=-1;walk.keys=0;walk.hold=null;
   if(Math.abs(s.t-walk.p)*(wxQ?wxQ.D:1)>2){walk.face=s.t>walk.p?1:-1;wxPaint(true)}

@@ -1242,10 +1242,22 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #wbag.bump{animation:bagbump .36s ease}
 @keyframes bagbump{40%{transform:scale(1.06)}}
 @media (prefers-reduced-motion:reduce){.xs.k-bfly.flee .bf,#wbag.bump{animation:none}}
+/* 走路帧由脚本按走过的路程来翻（走得慢脚步也慢），这里关掉按时间翻的旧动画。
+   --lean 前倾/后仰、--bob 跑步起伏都绕脚底转，影子不跟着歪 */
+.pano.wx.go .wj-walker .wk{animation:none}
+.pano.wx .wj-walker .wk,.pano.wx .wj-walker .ps{transform:translateY(var(--bob,0px)) rotate(var(--lean,0deg));transform-origin:50% 100%}
+/* 影子跟着动作变：跃起扑蝶时人离了地，影子缩小变淡；蹲下时铺开一点 */
+.pano.wx .wj-shadow{transition:transform .18s,opacity .18s}
+.pano.wx .wj-walker[data-f="4"] .wj-shadow{transform:scale(.62);opacity:.5}
+.pano.wx .wj-walker[data-f="3"] .wj-shadow{transform:scale(.88)}
+.pano.wx .wj-walker[data-f="1"] .wj-shadow,.pano.wx .wj-walker[data-f="6"] .wj-shadow{transform:scaleX(1.12)}
+/* 跑起来落脚扬起的一小团土 */
+.wx-dust{position:absolute;bottom:18%;width:4cqh;height:1.8cqh;border-radius:50%;translate:-50% 30%;background:radial-gradient(closest-side,rgba(190,164,118,.55),rgba(190,164,118,0));pointer-events:none;animation:wxdust .7s ease-out forwards}
+@keyframes wxdust{from{transform:scale(.35);opacity:.95}to{transform:translate(var(--dx),-70%) scale(1.5);opacity:0}}
 /* 走进新的一段路，地名轻轻浮上来 */
 .wx-place.flash b{animation:wxplace .7s ease-out}
 @keyframes wxplace{from{opacity:0;translate:0 6px}}
-@media (prefers-reduced-motion:reduce){.wx-place.flash b{animation:none}}
+@media (prefers-reduced-motion:reduce){.wx-place.flash b{animation:none}.pano.wx .wj-shadow{transition:none}}
 /* 选地图：小卡皮肤，选中的一张同 .pkc.on */
 .wild-rest{overflow-x:hidden}.wild-rest .legs{flex-wrap:wrap;min-width:0}
 .wx-maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:6px}
@@ -3232,7 +3244,7 @@ const cuImg=(c,cls='')=>`<img class="cu ${cls}" src="${A(WCU[c][2])}" alt="${WCU
 
 /* ---------- 出发前：选地图 ---------- */
 function wxRender(){if(walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';const l=legs(),mx=S.legMax||3,M=WMAPS[X.map];
-  $('#wild').innerHTML=`${wxSceneHTML(X.map)}<div class="wild-rest"><div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">按住地面就一直走，看见喜欢的点一下就去拿。草丛、溪边、花丛里还藏着小游戏，路上会遇到熟人。</p>
+  $('#wild').innerHTML=`${wxSceneHTML(X.map)}<div class="wild-rest"><div class="wstart"><h2 class="h-title">山野</h2><p class="h-sub">按住地面就走，手指按得离人远些就跑起来；看见喜欢的点一下就去拿。草丛、溪边、花丛里还藏着小游戏，路上会遇到熟人。</p>
   <div class="wx-maps" role="radiogroup" aria-label="选一处去走走">${WMAP_IDS.map(m=>{const W=WMAPS[m],open=wxOpen(m),q=X.q[m]||0,Q=WQ[m],n=W.cu.filter(c=>X.cu[c]).length;
     return`<button class="wx-map${m===X.map?' on':''}" data-wxmap="${m}" role="radio" aria-checked="${m===X.map}"${open?'':lockAttr(wxLockTxt(m))}><b>${W.n}</b><small>${open?W.sub:wxLockTxt(m)}</small>${open?`<span class="wx-cus" aria-label="拾遗 ${n} / 4">${W.cu.map(c=>X.cu[c]?cuImg(c):cuImg(c,'unk')).join('')}</span><span class="wx-q">${Q.n} ${q>=Q.steps.length?'· 心事已了':`· ${q} / ${Q.steps.length}`}${wxReady(m)?' · 可以去找他了':''}</span>`:''}</button>`}).join('')}</div>
   <div class="bag">${bagHTML()}</div>
@@ -3248,7 +3260,7 @@ let wxQ=null,wxRAF=0,wxRO=null;
 function wxStopScene(){cancelAnimationFrame(wxRAF);wxRAF=0;clearTimeout(wxSeqT);if(wxRO)wxRO.disconnect();wxRO=null;wxQ=null}
 function wxMount(){wxStopScene();const p=$('#wild .pano');if(!p||view!=='wild')return;
   wxQ={pano:p,sky:$('.wj-sky',p),hills:$('.wj-hills',p),props:$('.wj-props',p),ground:$('.wj-ground',p),cross:$('.wj-crossing',p),deco:$('.wx-deco',p),spots:$('.wx-spots',p),walker:$('.wj-walker',p),mist:$('.wj-mist',p),W:0,H:0,D:0};
-  wxMeasure();if(typeof ResizeObserver!=='undefined'){wxRO=new ResizeObserver(wxMeasure);wxRO.observe(p)}wxFrame(9);if(walk){walk.mv=null;walk.busy=walk.soft=false;wxLoop()}}
+  wxMeasure();if(typeof ResizeObserver!=='undefined'){wxRO=new ResizeObserver(wxMeasure);wxRO.observe(p)}wxFrame(9);if(walk){walk.mv=null;walk.busy=walk.soft=false;walk.v=0;walk.wf=-1;wxLoop()}}
 function wxMeasure(){const q=wxQ;if(!q)return;const W=q.pano.clientWidth,H=q.pano.clientHeight;if(!W||!H)return;const D=Math.max(W*5,H*8);Object.assign(q,{W,H,D});
   q.sky.style.width=W*1.12+'px';q.hills.style.width=Math.max(W+D*.10,H*.38*1600/294)+'px';[q.props,q.ground,q.cross,q.deco,q.spots].forEach(el=>el.style.width=W+D+'px');
   $$('.wj-prop',q.pano).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');$$('.xs',q.spots).forEach(el=>el.style.left=(W*.28+D*Number(el.dataset.t))+'px');if(walk)walk.near=-2;wxPaint(true)}
@@ -3269,9 +3281,9 @@ function wxPaint(force,dt){const q=wxQ;if(!q||!q.D)return;const p=walk?walk.p:0,
 
 /* ---------- 一趟出门 ---------- */
 function wxStart(){if(legs()<1||walk)return;const X=wxs();if(!wxOpen(X.map))X.map='xi';S.legs--;X.trips++;
-  walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1,hold:null,busy:false,soft:false,mv:null,still:0,after:null};
+  walk={map:X.map,p:0,to:null,face:1,goal:-1,got:{},keys:0,spots:wxGen(X.map),last:0,near:-1,hold:null,busy:false,soft:false,mv:null,still:0,after:null,v:0,fv:1,ph:.34,lean:0,run:false,hrun:false,shift:false,wf:-1};
   const M=WMAPS[walk.map];
-  $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">按住地面一直走，点东西就去拿</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn" id="walkEnd">回家</button></div>`;
+  $('#wild').innerHTML=`${wxSceneHTML(walk.map)}<div class="walk-top"><span class="ink-t wx-place"><b id="wstretch">${M.st[0][1]}</b><i class="seal">${M.n}</i></span><div class="wpath" aria-label="${M.n}里走到了哪儿"><i id="wdot"></i></div></div><p class="walk-tip" id="wxTip">按住地面就走，按得远些就跑；点东西就去拿</p><div class="walk-bot"><div class="bag" id="wbag"></div><button class="btn" id="walkEnd">回家</button></div>`;
   $('#wbag').innerHTML=bagHTML();wxDrawSpots();wxMount();sfx('place');save();refreshDock();
   setTimeout(()=>{const t=$('#wxTip');if(t)t.classList.add('fade')},6000)}
 function wxGen(m){const M=WMAPS[m],X=wxs(),r=rng((X.trips*977+dayNo()*131+m.charCodeAt(0)*7)>>>0),q=X.q[m]||0,st=wxStep(m),list=[],put=(k,o={})=>list.push({k,...o});
@@ -3306,32 +3318,58 @@ function wxNear(){if(!walk||!wxQ)return;const lim=wxReach()/wxQ.D;let best=-1,bd
   walk.spots.forEach((s,i)=>{if(s.done)return;const d=Math.abs(s.t-walk.p);if(d<bd){bd=d;best=i}});
   if(best===walk.near)return;walk.near=best;$$('#wxSpots .xs.near').forEach(e=>e.classList.remove('near'));const b=$('#wxAct');
   if(best<0){if(b)b.hidden=true;return}const el=$(`#wxSpots .xs[data-i="${best}"]`);el?.classList.add('near');if(b&&el){b.hidden=false;b.textContent=wxLabel(walk.spots[best]);b.style.left=el.style.left;b.style.top=Math.max(wxQ.H*.16,el.offsetTop-b.offsetHeight-6)+'px'}}
+/* 走路的手感：有起步、有收脚。速度慢慢提上去，快到落点时按刹得住的速度收住，正好停在落点上；
+   往回走要先刹住再转身（跑着急刹会往后一仰）。走路帧按走过的路程翻，不按时间翻：走得慢脚步就慢，脚底不打滑 */
 function wxLoop(){if(wxRAF)return;walk.last=performance.now();const step=now=>{wxRAF=0;if(!walk||view!=='wild'||!wxQ||!wxQ.pano.isConnected)return;
-    const dt=Math.min(.05,(now-walk.last)/1000);walk.last=now;
+    const q=wxQ,dt=Math.min(.05,(now-walk.last)/1000),open=$('#modal').hidden,base=clamp(q.W*.75,240,420);walk.last=now;
     if(walk.hold)walk.to=wxPx2P(walk.hold.x);
     let to=walk.to;if(walk.keys)to=walk.keys<0?0:1;
-    const open=$('#modal').hidden,want=to!=null&&Math.abs(to-walk.p)>1e-4&&open;
+    // 按住时手指就落在人身上（左右 20px 内）算站住，不在原地来回转身
+    const dist=to==null?0:(to-walk.p)*q.D,dead=walk.hold?20:0,want=to!=null&&open&&Math.abs(dist)>dead+.5;
     if(want&&walk.soft)wxCut();
-    const moving=want&&!walk.busy;
-    if(moving){const sp=clamp(wxQ.W*.75,240,420)/wxQ.D*dt,d=to-walk.p;walk.face=d<0?-1:1;walk.p=Math.abs(d)<=sp?to:walk.p+Math.sign(d)*sp}
-    // 到了：差不到一个像素也算到（帧间隔很短时会停在离目标一丝丝的地方）
-    if(walk.to!=null&&!walk.keys&&!walk.hold&&!walk.busy&&open&&Math.abs(walk.to-walk.p)<=1e-4){walk.p=walk.to;walk.to=null;if(walk.goal>=0){const g=walk.goal;walk.goal=-1;wxUse(g)}}
+    // 跑：按住时手指离人远（超过画面宽的 28%，回到 22% 以内又改成走）、一下点到很远的地方、或按着 Shift
+    if(walk.hold){const a=Math.abs(dist);walk.hrun=a>q.W*.28||(walk.hrun&&a>q.W*.22)}
+    const run=want&&(walk.shift||(walk.hold?walk.hrun:walk.run));
+    let vd=0;if(want&&!walk.busy){const vmax=base*(run?1.85:1);vd=Math.sign(dist)*(walk.keys?vmax:Math.min(vmax,Math.sqrt(2*base*6*(Math.abs(dist)-dead))+8))}
+    const pv=walk.v;
+    if(walk.busy)walk.v=0;
+    else{const up=Math.sign(vd)===Math.sign(walk.v)&&Math.abs(vd)>Math.abs(walk.v),acc=base*(up?(run?3.4:5):7.5)*dt;walk.v+=clamp(vd-walk.v,-acc,acc)}
+    if(walk.v){let np=walk.p+walk.v*dt/q.D;
+      if(to!=null&&!walk.keys&&!walk.hold&&(to-walk.p)*(to-np)<=0){np=to;walk.v=0}
+      if(np<=0||np>=1){np=clamp(np,0,1);walk.v=0}walk.p=np}
+    if(Math.abs(walk.v)>4)walk.face=walk.v<0?-1:1;else if(vd)walk.face=vd<0?-1:1;
+    if(walk.to!=null&&!walk.keys&&!walk.hold&&!walk.busy&&open&&Math.abs(walk.to-walk.p)*q.D<=.5){walk.p=walk.to;walk.to=null;walk.v=0;walk.run=false;if(walk.goal>=0){const g=walk.goal;walk.goal=-1;wxUse(g)}}
+    const moving=Math.abs(walk.v)>6;
     if(moving!==walk.mv){walk.mv=moving;if(!walk.busy&&!walk.soft)wxFrame(moving?-1:9)}
-    wxQ.pano.classList.toggle('go',!!moving);wxPaint();
+    q.pano.classList.toggle('go',moving);wxStride(dt,base,moving,(walk.v-pv)/(dt||1));wxPaint(false,dt);
     if(!moving&&!walk.busy&&open){walk.still+=dt;
       if(walk.after){const a=walk.after;walk.after=null;walk.still=0;wxPlay(a)}
       else if(walk.still>7&&!walk.soft){walk.still=-3*Math.random();wxPlay(pick(['smell','look']),null,null,true)}}else walk.still=0;
     wxRAF=requestAnimationFrame(step)};
   wxRAF=requestAnimationFrame(step)}
+/* 一步一步：走路帧、跑起来的前倾和起伏、急刹后仰、落脚扬起的尘土 */
+function wxStride(dt,base,moving,accel){const q=wxQ,w=q.walker,rm=wxRM(),sp=Math.abs(walk.v),run=sp>base*1.25;let f=2;
+  if(moving&&!rm){const prev=walk.ph;walk.ph=(walk.ph+sp*dt/(base*.78))%1;f=Math.floor(walk.ph*6)%6;if(run&&Math.floor(prev*2)!==Math.floor(walk.ph*2))wxDust()}
+  else if(!moving)walk.ph=.34;
+  if(f!==walk.wf){walk.wf=f;const wk=$('.wk',w);if(wk)wk.style.backgroundPositionX=f*20+'%'}
+  const brake=walk.v&&Math.sign(accel)!==Math.sign(walk.v)&&Math.abs(accel)>base*4&&sp>base*1.1;
+  const tgt=rm||walk.busy?0:brake?-4:run?5:moving?1.2:0;walk.lean+=(tgt-walk.lean)*(1-Math.exp(-dt*(brake?18:10)));if(Math.abs(walk.lean)<.05&&!tgt)walk.lean=0;
+  const bob=run&&!rm?-Math.abs(Math.sin(walk.ph*Math.PI*2))*w.offsetHeight*.022:0;
+  const k=`${walk.lean.toFixed(2)}|${bob.toFixed(1)}`;if(k!==walk.lk){walk.lk=k;w.style.setProperty('--lean',walk.lean.toFixed(2)+'deg');w.style.setProperty('--bob',bob.toFixed(1)+'px')}}
+function wxDust(){const q=wxQ;if(!q||$$('.wx-dust',q.spots).length>6)return;const d=document.createElement('i');d.className='wx-dust';
+  d.style.left=(q.W*.28+q.D*walk.p-walk.face*q.walker.offsetWidth*.14)+'px';d.style.setProperty('--dx',(-walk.face*rint(10,22))+'px');q.spots.appendChild(d);setTimeout(()=>d.remove(),700)}
 function wxPx2P(clientX){const q=wxQ,r=q.pano.getBoundingClientRect();return clamp((clientX-r.left+wxCam()-q.W*.28)/q.D,0,1)}
 function wxPoint(e){if(!walk||!wxQ||e.button>0)return;
-  if(e.target.closest('.xs,button,.walk-top,.walk-bot'))return;const pid=e.pointerId;walk.goal=-1;walk.hold={x:e.clientX,t:performance.now()};walk.to=wxPx2P(e.clientX);
+  if(e.target.closest('.xs,button,.walk-top,.walk-bot'))return;const pid=e.pointerId;walk.goal=-1;walk.run=false;walk.hold={x:e.clientX,t:performance.now()};walk.to=wxPx2P(e.clientX);
   const mv=ev=>{if(ev.pointerId===pid&&walk&&walk.hold)walk.hold.x=ev.clientX},up=ev=>{if(ev.pointerId!==pid)return;removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);
-    if(walk&&walk.hold){const long=performance.now()-walk.hold.t>320;walk.hold=null;if(long)walk.to=null}};
+    // 按得久是“按住走”，松手就收脚停下；一下轻点是“走到那儿”，点得远就跑过去
+    if(walk&&walk.hold){const long=performance.now()-walk.hold.t>320;walk.hold=null;walk.hrun=false;if(long)walk.to=null;else if(walk.to!=null)walk.run=Math.abs(walk.to-walk.p)*wxQ.D>wxQ.W*.45}};
   addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)}
+/* 键盘：←→ / A D 走，按着 Shift 跑，Enter / 空格 / E 拿身边的东西 */
 function wxKey(e,down){if(!walk||view!=='wild'||!$('#modal').hidden||e.target.closest?.('input,textarea'))return;const k=e.key;
-  if(k==='ArrowLeft'||k==='a'||k==='A'){walk.keys=down?-1:walk.keys<0?0:walk.keys;walk.to=down?null:walk.p;walk.goal=-1;e.preventDefault()}
-  else if(k==='ArrowRight'||k==='d'||k==='D'){walk.keys=down?1:walk.keys>0?0:walk.keys;walk.to=down?null:walk.p;walk.goal=-1;e.preventDefault()}
+  if(k==='Shift'){walk.shift=down;return}
+  if(k==='ArrowLeft'||k==='a'||k==='A'){walk.keys=down?-1:walk.keys<0?0:walk.keys;walk.to=null;walk.goal=-1;e.preventDefault()}
+  else if(k==='ArrowRight'||k==='d'||k==='D'){walk.keys=down?1:walk.keys>0?0:walk.keys;walk.to=null;walk.goal=-1;e.preventDefault()}
   else if(down&&(k==='Enter'||k===' '||k==='e'||k==='E')&&walk.near>=0&&!e.repeat&&!e.target.closest?.('button')){e.preventDefault();wxGoUse(walk.near)}}
 addEventListener('keydown',e=>wxKey(e,true));addEventListener('keyup',e=>wxKey(e,false));
 $('#wild').addEventListener('pointerdown',e=>{if(e.target.closest('.pano.wx'))wxPoint(e)});
@@ -3346,7 +3384,7 @@ const WXP={pick:[[0,130],[1,380],[2,620],[1,130],[0,110]],bush:[[0,130],[1,420]]
 const WXHIT={pick:2,wave:1};
 let wxSeqT=0;
 function wxFrame(f){const w=wxQ&&wxQ.walker;if(!w)return;let ps=$('.ps',w);if(!ps){ps=document.createElement('i');ps.className='ps';w.appendChild(ps)}
-  w.classList.toggle('pose',f>=0);if(f>=0)ps.style.backgroundPositionX=(f/11*100).toFixed(4)+'%'}
+  w.classList.toggle('pose',f>=0);w.dataset.f=f;if(f>=0)ps.style.backgroundPositionX=(f/11*100).toFixed(4)+'%'}
 function wxCut(){clearTimeout(wxSeqT);if(walk){walk.soft=false;walk.busy=false}wxQ&&wxQ.pano.classList.remove('acting')}
 /* 播一段动作。hit 在“手碰到”那一帧调用，done 在播完后调用；soft 的小动作一走路就打断 */
 function wxPlay(name,hit,done,soft){wxCut();const seq=WXP[name];if(!walk||!wxQ||!seq){hit&&hit();done&&done();return}
@@ -3359,7 +3397,7 @@ function wxPlay(name,hit,done,soft){wxCut();const seq=WXP[name];if(!walk||!wxQ||
 /* 走到东西旁边、正好伸手够得着的地方再动手；乡邻站远一点说话 */
 const wxStand=s=>wxQ.walker.offsetWidth*(s.k==='npc'?.95:s.k==='flower'||s.k==='bush'?.55:.45);
 function wxGoUse(i){if(!walk||!wxQ||walk.busy)return;const s=walk.spots[i];if(!s||s.done)return;const d=(s.t-walk.p)*wxQ.D,want=wxStand(s);
-  walk.hold=null;walk.keys=0;if(Math.abs(d)<=want+16)return wxUse(i);walk.to=clamp(s.t-Math.sign(d)*want/wxQ.D,0,1);walk.goal=i}
+  walk.hold=null;walk.keys=0;if(Math.abs(d)<=want+16)return wxUse(i);walk.to=clamp(s.t-Math.sign(d)*want/wxQ.D,0,1);walk.goal=i;walk.run=Math.abs(d)>wxQ.W*.45}
 /* 拾起的东西画一道弧飞进左下角的背包 */
 function wxFly(el){const bag=$('#wbag');if(!bag||!el.animate||!$('#modal').hidden||matchMedia('(prefers-reduced-motion:reduce)').matches)return false;
   const r=el.getBoundingClientRect(),b=bag.getBoundingClientRect();if(!r.width)return false;const c=el.cloneNode(true),x=r.left+r.width/2,y=r.top+r.height;

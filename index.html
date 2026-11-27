@@ -639,7 +639,8 @@ main{position:absolute;inset:0;flex:none;z-index:2}
 @media (max-width:700px){.tb{left:var(--xm);top:var(--ym)}.npc{z-index:var(--zm)}.npc::before{width:calc(min(46px,6vh)*var(--dm,1))}.npc .chibi{width:calc(min(50px,6.5vh)*var(--s,1)*var(--dm,1))}}
 .talk{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(94%,680px);display:flex;gap:12px;align-items:flex-end;background:#fffdf6 var(--grain);border-radius:22px;padding:14px 16px 14px 10px;box-shadow:0 14px 34px rgba(20,40,40,.3),inset 0 0 0 2px rgba(255,255,255,.8);z-index:4;animation:talkin .3s cubic-bezier(.2,1.3,.4,1)}
 /* 小镇整图：世界层按地平线以下的空间缩放；手机上比屏幕宽，左右滑动看 */
-.tscroll{position:absolute;inset:0 0 calc(-1*var(--dock-room));overflow:auto;overscroll-behavior:contain;scrollbar-width:none;touch-action:pan-x pan-y}
+/* 人物按站位给的 z-index（几十）只在整图内部比前后，isolation 把整图关成一层，对话框（.talk）才能盖在所有人物上面 */
+.tscroll{position:absolute;inset:0 0 calc(-1*var(--dock-room));isolation:isolate;z-index:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:none;touch-action:pan-x pan-y}
 /* 装裱：画四周是宣纸，画本身一圈细木色边和投影 */
 #app[data-at=town] .scene{background:#efe5cf var(--grain) center/384px}
 .tworld.mount{border-radius:4px;box-shadow:0 0 0 1px rgba(120,86,52,.35),0 0 0 7px #f7f0e0,0 0 0 8px rgba(120,86,52,.25),0 14px 34px rgba(70,48,24,.28)}

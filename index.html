@@ -1257,6 +1257,11 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 /* 跑起来落脚扬起的一小团土 */
 .wx-dust{position:absolute;bottom:18%;width:4cqh;height:1.8cqh;border-radius:50%;translate:-50% 30%;background:radial-gradient(closest-side,rgba(190,164,118,.55),rgba(190,164,118,0));pointer-events:none;animation:wxdust .7s ease-out forwards}
 @keyframes wxdust{from{transform:scale(.35);opacity:.95}to{transform:translate(var(--dx),-70%) scale(1.5);opacity:0}}
+/* 点地面的落点：地上漾开两圈淡淡的涟漪，一下就散，不留标记 */
+.wx-goal{position:absolute;bottom:18%;width:9cqh;height:2.6cqh;translate:-50% 50%;border-radius:50%;pointer-events:none}
+.wx-goal::before,.wx-goal::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(255,250,232,.9);box-shadow:0 0 4px rgba(255,244,214,.7);animation:wxgoal .85s ease-out forwards}
+.wx-goal::after{animation-delay:.16s;opacity:0}
+@keyframes wxgoal{from{transform:scale(.2);opacity:1}to{transform:scale(1);opacity:0}}
 /* 从花丛、草丛边走过：枝叶被带得晃一下；跑着冲过去，蝴蝶惊起再落回 */
 .xs.brush>img,.xs.brush>.ico,.xs.brush>svg{animation:wxbrush .95s ease-out}
 .xs.brush>img,.xs.brush>.ico{transform-origin:50% 100%}
@@ -3377,8 +3382,11 @@ function wxBrush(now){const q=wxQ,lim=q.walker.offsetWidth*.34,fast=Math.abs(wal
     el.classList.remove('brush','stir');void el.offsetWidth;el.classList.add('brush');if(s.k==='bfly'&&fast)el.classList.add('stir');
     clearTimeout(el._bt);el._bt=setTimeout(()=>el.classList.remove('brush','stir'),1500)})}
 function wxPx2P(clientX){const q=wxQ,r=q.pano.getBoundingClientRect();return clamp((clientX-r.left+wxCam()-q.W*.28)/q.D,0,1)}
+/* 点下去的地方，地上漾开一圈，告诉你她要往哪儿去 */
+function wxGoal(p){const q=wxQ;if(!q||wxRM())return;const g=document.createElement('i');g.className='wx-goal';g.style.left=(q.W*.28+q.D*p)+'px';q.spots.appendChild(g);setTimeout(()=>g.remove(),900)}
 function wxPoint(e){if(!walk||!wxQ||e.button>0)return;
   if(e.target.closest('.xs,button,.walk-top,.walk-bot'))return;const pid=e.pointerId;walk.goal=-1;walk.run=false;walk.hold={x:e.clientX,t:performance.now()};walk.to=wxPx2P(e.clientX);
+  if(Math.abs(walk.to-walk.p)*wxQ.D>20)wxGoal(walk.to);
   const mv=ev=>{if(ev.pointerId===pid&&walk&&walk.hold)walk.hold.x=ev.clientX},up=ev=>{if(ev.pointerId!==pid)return;removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);
     // 按得久是“按住走”，松手就收脚停下；一下轻点是“走到那儿”，点得远就跑过去
     if(walk&&walk.hold){const long=performance.now()-walk.hold.t>320;walk.hold=null;walk.hrun=false;if(long)walk.to=null;else if(walk.to!=null)walk.run=Math.abs(walk.to-walk.p)*wxQ.D>wxQ.W*.45}};
